@@ -29,3 +29,8 @@ Open http://localhost:3000.
 ## Current scope
 
 The repository contains the initial responsive dashboard and a story-intake prototype. Live news feeds, user authentication, publishing integrations and deployment are not yet connected.
+
+
+## AI coding context (ChatGPT + Claude Code)
+
+This repository includes a shared token-efficient workflow and Code Review Graph integration. See [AI Context Workflow](docs/AI_CONTEXT_WORKFLOW.md), [AGENTS.md](AGENTS.md), and [CLAUDE.md](CLAUDE.md). On Windows, run `powershell -ExecutionPolicy Bypass -File scripts/setup-code-review-graph.ps1` to install the local Claude Code MCP server and build the graph. Pull requests receive an advisory structural review comment through GitHub Actions.
