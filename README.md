@@ -34,3 +34,10 @@ The repository contains the initial responsive dashboard and a story-intake prot
 ## AI coding context (ChatGPT + Claude Code)
 
 This repository includes a shared token-efficient workflow and Code Review Graph integration. See [AI Context Workflow](docs/AI_CONTEXT_WORKFLOW.md), [AGENTS.md](AGENTS.md), and [CLAUDE.md](CLAUDE.md). On Windows, run `powershell -ExecutionPolicy Bypass -File scripts/setup-code-review-graph.ps1` to install the local Claude Code MCP server and build the graph. Pull requests receive an advisory structural review comment through GitHub Actions.
+
+
+## Mobile + desktop AI Context Pocket
+
+Open `/ai-context` from the dashboard to create a compact task handover for ChatGPT or Claude on mobile or desktop. Copy the generated prompt or download a JSON pack. Optional notes remain local to that browser/device.
+
+The local coding-agent toolkit also configures Code Review Graph, Context Saver and RTK. Run `powershell -ExecutionPolicy Bypass -File scripts/setup-code-review-graph.ps1` on Windows to install the local tools. See [AI Context Workflow](docs/AI_CONTEXT_WORKFLOW.md). Local MCP tools do not automatically connect to ChatGPT mobile.
