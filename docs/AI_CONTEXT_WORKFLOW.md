@@ -1,77 +1,60 @@
 # Shared AI context and token-efficient coding workflow
 
-This project integrates **code-review-graph** (MIT-licensed upstream project: https://github.com/tirth8205/code-review-graph) as a local structural index and pull-request review assistant.
+This project uses a small, layered toolkit rather than installing every token-related repository.
 
-## What it does
-- Parses source structure (functions, classes, imports, calls and tests) into a local SQLite graph.
-- Uses incremental updates and targeted MCP queries to reduce repeated whole-repository reads.
-- Provides change-impact analysis and a sticky risk-scored review comment on GitHub pull requests.
-- Keeps the local graph database on the developer's machine; it is not committed or uploaded by the local MCP server.
+## Selected integrations
 
-The upstream project's benchmarks are workload-dependent. Its published ~63x median compares graph retrieval with a whole-corpus baseline; against a more realistic grep-and-read baseline it reports a smaller ~6.65x median. Small one-file changes may not save tokens. These are upstream benchmark results, not a measured saving for GLOBAL FUNN.
+### Code Review Graph
+Upstream: https://github.com/tirth8205/code-review-graph (MIT). Builds a local structural index and supports targeted context, dependency impact and PR review comments. Run `uvx code-review-graph status` and `uvx code-review-graph update` locally.
 
-## Claude Code on Windows
-From the repository root, open PowerShell and run:
+### Headroom
+Upstream: https://github.com/headroomlabs-ai/headroom (Apache-2.0). Added to project `.mcp.json` as an MCP server. It exposes `headroom_compress`, `headroom_retrieve` and `headroom_stats`. For on-demand compression, ask the agent to compress large repetitive logs, JSON or tool outputs, then retrieve the original when necessary.
+
+The Windows setup script installs Headroom with `uv tool install --python 3.13 "headroom-ai[all]"` and runs `headroom doctor`. For automatic supported Claude API traffic compression, start the proxy in one PowerShell window:
+
+```powershell
+headroom proxy
+```
+
+Then start Claude Code in a second PowerShell window:
+
+```powershell
+$env:ANTHROPIC_BASE_URL="http://127.0.0.1:8787"
+claude
+```
+
+Use `headroom_stats` or `headroom dashboard` to inspect compression. The proxy is optional and only affects clients deliberately routed through it. It does not intercept the ChatGPT mobile app.
+
+## Windows setup
+
+From the repository root:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/setup-code-review-graph.ps1
 ```
 
-The setup script installs `uv` for the current Python user, installs the Claude Code MCP configuration and update hooks using the upstream installer, builds the local graph and prints its status. Restart Claude Code and run `/mcp`; the server should list `code-review-graph`.
+Restart Claude Code, open this repository and run `/mcp`. Confirm both `code-review-graph` and `headroom` appear. If either is missing, report the actual error; do not assume installation succeeded.
 
-Useful commands:
+## ChatGPT desktop and mobile
 
-```powershell
-uvx code-review-graph status
-uvx code-review-graph update
-uvx code-review-graph detect-changes --brief
-uvx code-review-graph visualize
-```
+ChatGPT's mobile app and website cannot directly access the local stdio MCP server, desktop terminal hooks, private files or local graph database. The project therefore includes the `/ai-context` AI Context Pocket:
+- Open the route from the newsroom dashboard (once the Next.js app is deployed to an approved HTTPS host).
+- Enter one bounded task and any short handover notes.
+- Copy the compact task prompt or download a JSON context pack.
+- Paste it into ChatGPT mobile/desktop or Claude.
 
-The generated graph database is local and ignored by Git. Do not commit `.code-review-graph/`.
+Optional notes are stored only in that browser/device's localStorage. There is no cloud sync or deployment in this build. Until the app is deployed, use `docs/AI_CONTEXT_INDEX.md` directly from GitHub on mobile and copy its short project context into the chat.
 
-## ChatGPT workflow
-ChatGPT's custom MCP connection support is plan/workspace-dependent, and ChatGPT cannot connect directly to a developer machine's local stdio MCP server. A remote MCP endpoint or supported Secure MCP Tunnel is needed for direct MCP access; availability depends on the ChatGPT plan and workspace permissions.
+## Why not install every repository?
 
-For this repository's current ChatGPT workflow:
-1. Use the connected GitHub repository integration to read `docs/AI_CONTEXT_INDEX.md` first, then `AGENTS.md` and this short guide only if needed.
-2. Start from the requested feature or changed file; do not ask ChatGPT to ingest the entire repository.
-3. For pull-request reviews, read the Code Review Graph sticky comment on the PR. It contains structural risk, impact and test-gap findings that ChatGPT can interpret without a full source dump.
-4. Ask ChatGPT to fetch only the files named by the review, then verify the implementation and tests.
+RTK (https://github.com/rtk-ai/rtk) is a lightweight terminal-output alternative. Context Mode (https://github.com/mksglu/context-mode) is an alternative for MCP output sandboxing and session continuity. Claude Context Saver (https://github.com/dongnh311/claude-context-saver) is not selected because its current released Windows support note says WSL only. Stacking overlapping tools may add startup cost, MCP schemas, latency and context overhead. Evaluate alternatives only with matched-task tests.
 
-This gives ChatGPT and Claude Code a shared repository policy and a shared GitHub review artifact, without pretending that the local MCP server is directly connected to ChatGPT.
+## Token and quality measurement
 
-## Pull-request review
-`.github/workflows/code-review-graph.yml` runs the upstream Code Review Graph GitHub Action on non-draft pull requests. It posts or updates a sticky PR comment with risk, impact and test-gap sections. It uses the repository's `GITHUB_TOKEN`, requests only `contents: read` and `pull-requests: write`, and does not fail a PR based on risk by default.
+No savings percentage is promised for GLOBAL FUNN until a baseline and after-install sample are measured on the same tasks. Upstream benchmarks differ by workload and baseline; they are not a guarantee of total model-token or subscription-usage reduction.
 
-## Token-saving habits
-- Ask one bounded task at a time.
-- Use the graph's minimal context before opening source files.
-- Prefer a small patch and targeted tests over re-reading the entire app.
-- Keep `AGENTS.md` and `CLAUDE.md` short; put long reference material in docs and open it only when needed.
-- Avoid pasting full logs: share the failing job, exact error and relevant lines.
-- A graph reduces context retrieval, not the model's underlying token limit or subscription usage. It cannot guarantee zero token use or eliminate rate limits.
+For 5–10 representative tasks, compare provider-reported input/cache/output tokens, tool-output bytes, files read, build/test outcome and answer quality. Preserve exact compiler errors, security warnings, source evidence and editorial facts. Provider quotas and rate limits cannot be bypassed.
 
-## Security and limitations
-- The local graph is structural metadata; it does not prove code is safe or correct.
-- The GitHub Action analyzes PR diffs on GitHub-hosted runners and posts a review comment. It is separate from the local MCP database.
-- Review comments are advisory. A human must verify findings and test changes.
-- No API key, Anthropic key, OpenAI key or other model credential is needed for the default graph build and PR review.
+## GitHub PR review
 
-
-## Additional token-saving integrations (Build 32)
-
-### RTK — terminal output compression
-Upstream: https://github.com/rtk-ai/rtk (MIT). RTK rewrites supported shell commands and filters their output before a coding agent receives it. It supports Claude Code and several other coding agents; native Windows hooks are documented by the project. Install on Windows with the included setup script, or manually install RTK and run `rtk init -g --hook-only`. This is a developer-machine tool, not a ChatGPT mobile plugin.
-
-### Headroom — compact logs and symbol-level file reads
-Upstream: https://github.com/headroomlabs-ai/headroom. Added to project `.mcp.json` as `context-saver`, alongside Code Review Graph. It starts through `npx` when Claude Code loads the project; restart Claude Code and verify with `/mcp`. This MCP is currently a Claude Code/local coding-agent path, not a direct ChatGPT mobile integration.
-
-### Mobile + desktop context handover
-The `/ai-context` route is the AI Context Pocket. It creates a short project context + task prompt, offers copy and JSON export, and stores optional notes only in that browser's localStorage. Open the route from the dashboard on a phone or desktop, copy the prompt, and paste it into ChatGPT or Claude. This is a portable handover, not automatic cross-device sync and not a connection to the PC's local MCP process.
-
-### Why not install every token repository?
-RTK, Headroom and Code Review Graph target different bottlenecks: shell output, log/source reads, and dependency-aware file selection. Headroom (https://github.com/Agenta-AI/headroom) and Context Mode (https://github.com/mksglu/context-mode) are credible alternatives for MCP/tool-output compression and session memory, but stacking multiple overlapping proxies can increase latency, break tool compatibility, and sometimes consume more tokens. They are documented for future controlled testing, not enabled by default.
-
-### Measurement discipline
-No savings percentage is promised for this project until a baseline and after-install sample are measured on the same task. Token compression can remove noise but must not remove source evidence, error lines, security warnings or editorial context. Provider rate limits and subscription quotas cannot be bypassed.
+The Code Review Graph Action posts advisory risk, impact and test-gap comments to qualifying pull requests. It does not block a PR by risk by default; a human must verify the findings and run the build.
