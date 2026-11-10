@@ -42,3 +42,10 @@ Before non-trivial feature work, consult the relevant local skill:
 - Use Code Review Graph for dependency-aware file selection and Context Saver for compact logs/symbol reads when their MCP servers are available.
 - Do not stack additional overlapping compression proxies without a matched-task quality and token comparison.
 - The mobile `/ai-context` route creates a manual copy/paste handover. It does not connect to desktop MCP or sync data across devices.
+
+
+## Token-saving integrations
+- Start with `docs/AI_CONTEXT_INDEX.md`; open `docs/TOKEN_TOOLKIT_RESEARCH.md` only for tool selection or evaluation.
+- Use Headroom for local context compression/retrieval and optional supported API proxy mode; use Code Review Graph for dependency-aware file selection and impact analysis.
+- Do not stack additional overlapping compression proxies without a matched-task quality and token comparison.
+- The mobile `/ai-context` route creates a manual copy/paste handover. It does not connect to desktop MCP or sync data across devices.
