@@ -64,14 +64,14 @@ This gives ChatGPT and Claude Code a shared repository policy and a shared GitHu
 ### RTK — terminal output compression
 Upstream: https://github.com/rtk-ai/rtk (MIT). RTK rewrites supported shell commands and filters their output before a coding agent receives it. It supports Claude Code and several other coding agents; native Windows hooks are documented by the project. Install on Windows with the included setup script, or manually install RTK and run `rtk init -g --hook-only`. This is a developer-machine tool, not a ChatGPT mobile plugin.
 
-### Context Saver — compact logs and symbol-level file reads
-Upstream: https://github.com/dongnh311/claude-context-saver. Added to project `.mcp.json` as `context-saver`, alongside Code Review Graph. It starts through `npx` when Claude Code loads the project; restart Claude Code and verify with `/mcp`. This MCP is currently a Claude Code/local coding-agent path, not a direct ChatGPT mobile integration.
+### Headroom — compact logs and symbol-level file reads
+Upstream: https://github.com/headroomlabs-ai/headroom. Added to project `.mcp.json` as `context-saver`, alongside Code Review Graph. It starts through `npx` when Claude Code loads the project; restart Claude Code and verify with `/mcp`. This MCP is currently a Claude Code/local coding-agent path, not a direct ChatGPT mobile integration.
 
 ### Mobile + desktop context handover
 The `/ai-context` route is the AI Context Pocket. It creates a short project context + task prompt, offers copy and JSON export, and stores optional notes only in that browser's localStorage. Open the route from the dashboard on a phone or desktop, copy the prompt, and paste it into ChatGPT or Claude. This is a portable handover, not automatic cross-device sync and not a connection to the PC's local MCP process.
 
 ### Why not install every token repository?
-RTK, Context Saver and Code Review Graph target different bottlenecks: shell output, log/source reads, and dependency-aware file selection. Headroom (https://github.com/Agenta-AI/headroom) and Context Mode (https://github.com/mksglu/context-mode) are credible alternatives for MCP/tool-output compression and session memory, but stacking multiple overlapping proxies can increase latency, break tool compatibility, and sometimes consume more tokens. They are documented for future controlled testing, not enabled by default.
+RTK, Headroom and Code Review Graph target different bottlenecks: shell output, log/source reads, and dependency-aware file selection. Headroom (https://github.com/Agenta-AI/headroom) and Context Mode (https://github.com/mksglu/context-mode) are credible alternatives for MCP/tool-output compression and session memory, but stacking multiple overlapping proxies can increase latency, break tool compatibility, and sometimes consume more tokens. They are documented for future controlled testing, not enabled by default.
 
 ### Measurement discipline
 No savings percentage is promised for this project until a baseline and after-install sample are measured on the same task. Token compression can remove noise but must not remove source evidence, error lines, security warnings or editorial context. Provider rate limits and subscription quotas cannot be bypassed.
