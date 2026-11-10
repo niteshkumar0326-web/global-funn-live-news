@@ -200,3 +200,13 @@ Updated: 2026-11-10
 - Supports reopening/editing a saved daily report, searching/filtering the register, and exporting JSON or CSV.
 - Stores reports locally under `global-funn-reporter-dsr-v1`; no staff login, GPS tracking, photo scanning, WhatsApp delivery, cloud sync or automatic reminders are connected.
 - Activity notes and evidence links are user-entered; the workspace does not independently verify facts, visits or submitted media.
+
+
+## Build 30 — Newsroom Performance & Daily Review Centre
+- Added `components/PerformanceReview.tsx` and route `/performance`; linked from the main dashboard.
+- Reads reporter DSR records from `global-funn-reporter-dsr-v1` and story assignments from `global-funn-live-assignments-v1`.
+- Provides 7/30/90-day and all-record filters, reporter-wise DSR/activity/completed/pending/blocker summary, desk-wise assignment workload, overdue deadlines and recorded follow-up list.
+- Includes manual refresh and CSV export of the reporter summary.
+- All metrics are derived from browser-local records. Empty local data is not interpreted as zero real-world newsroom activity.
+- No cross-device aggregation, staff ranking, payroll scoring, GPS monitoring, automatic reminders, cloud sync or publication approval is provided.
+- Activity counts are operational indicators only and must not be treated as a measure of accuracy, quality or individual productivity.
