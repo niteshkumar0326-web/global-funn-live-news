@@ -12,6 +12,8 @@ export default function BroadcastRundown(){
   const [title,setTitle]=useState("GLOBAL FUNN — Daily News Bulletin");
   const [anchor,setAnchor]=useState("GLOBAL FUNN presenter");
   const [message,setMessage]=useState("");
+  const [teleprompterId,setTeleprompterId]=useState<string|null>(null);
+  const [fontScale,setFontScale]=useState(1);
   useEffect(()=>{
     try{
       const savedStories=localStorage.getItem(STORY_KEY);
@@ -21,6 +23,7 @@ export default function BroadcastRundown(){
     }catch{setMessage("Saved browser data could not be read.");}
   },[]);
   const total=useMemo(()=>segments.reduce((sum,s)=>sum+(Number(s.duration)||0),0),[segments]);
+  const activeSegment=segments.find(s=>s.id===teleprompterId)||null;
   function persist(next:Segment[],nextTitle=title,nextAnchor=anchor){
     setSegments(next);
     try{localStorage.setItem(RUNDOWN_KEY,JSON.stringify({title:nextTitle,anchor:nextAnchor,segments:next,updatedAt:new Date().toISOString()}));setMessage("Rundown saved in this browser. Not synced to cloud.");}
@@ -55,10 +58,15 @@ export default function BroadcastRundown(){
         <div className="proof"><div className="stat">{Math.floor(total/60)}:{String(total%60).padStart(2,"0")}</div><div className="statlabel">Estimated duration</div></div>
         <div className="proof"><div className="stat">{stories.length}</div><div className="statlabel">Available story drafts</div></div>
       </div>
+      {activeSegment&&<section className="proof" aria-live="polite" style={{padding:20,borderStyle:"solid",borderColor:"#d4af37",display:"grid",gap:14}}>
+        <div className="rowline"><div><div className="eyebrow">PRESENTER TELEPROMPTER</div><strong>{activeSegment.title}</strong></div><button type="button" style={button} onClick={()=>setTeleprompterId(null)}>Close reader</button></div>
+        <div style={{fontSize:Math.round(25*fontScale),lineHeight:1.7,whiteSpace:"pre-wrap",color:"#fff",fontWeight:600,minHeight:120}}>{activeSegment.presenterScript||"No presenter script entered yet."}</div>
+        <div className="rowline"><span className="muted" style={{fontSize:11}}>Read from the verified source; this screen does not validate the script.</span><div style={{display:"flex",gap:6}}><button type="button" style={button} onClick={()=>setFontScale(v=>Math.max(.75,v-.1))}>A−</button><button type="button" style={button} onClick={()=>setFontScale(v=>Math.min(1.6,v+.1))}>A+</button></div></div>
+      </section>}
       <div className="rowline"><h3 style={{margin:0}}>Programme order</h3><div style={{display:"flex",gap:8,flexWrap:"wrap"}}><button type="button" style={button} onClick={addManual}>+ Add segment</button><button type="button" style={button} onClick={exportRun} disabled={!segments.length}>Export presenter rundown</button></div></div>
       {!segments.length&&<div className="proof">No segments yet. Add a saved story or create a manual segment to start the programme.</div>}
       {segments.map((s,i)=><article className="story" key={s.id} style={{display:"grid",gap:10}}>
-        <div className="rowline"><strong>{String(i+1).padStart(2,"0")} · {s.title}</strong><div style={{display:"flex",gap:5}}><button style={button} type="button" onClick={()=>move(i,-1)} disabled={i===0}>↑</button><button style={button} type="button" onClick={()=>move(i,1)} disabled={i===segments.length-1}>↓</button><button style={button} type="button" onClick={()=>remove(s.id)}>Remove</button></div></div>
+        <div className="rowline"><strong>{String(i+1).padStart(2,"0")} · {s.title}</strong><div style={{display:"flex",gap:5}}><button style={button} type="button" onClick={()=>setTeleprompterId(s.id)}>Read script</button><button style={button} type="button" onClick={()=>move(i,-1)} disabled={i===0}>↑</button><button style={button} type="button" onClick={()=>move(i,1)} disabled={i===segments.length-1}>↓</button><button style={button} type="button" onClick={()=>remove(s.id)}>Remove</button></div></div>
         <div className="grid" style={{gridTemplateColumns:"2fr 1fr",gap:10}}>
           <input aria-label="Segment headline" style={input} value={s.title} onChange={e=>edit(s.id,"title",e.target.value)}/>
           <div style={{display:"flex",gap:7}}><input aria-label="Desk" style={input} value={s.desk} onChange={e=>edit(s.id,"desk",e.target.value)}/><input aria-label="Duration seconds" type="number" min="5" max="3600" style={{...input,maxWidth:90}} value={s.duration} onChange={e=>edit(s.id,"duration",Math.max(5,Number(e.target.value)||5))}/></div>
