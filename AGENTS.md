@@ -25,3 +25,12 @@ Before non-trivial feature work, consult the relevant local skill:
 - Do not commit secrets, API keys, personal data, or uploaded media without explicit permission.
 - Verify builds/tests and report their actual status; never claim checks passed without evidence.
 - Browser-local storage must be described accurately and must not be represented as cloud sync.
+
+
+## Token-efficient AI coding workflow
+- Shared ChatGPT / Claude instructions: `docs/AI_CONTEXT_WORKFLOW.md`.
+- If Code Review Graph MCP is connected, call `get_minimal_context_tool` first, then use targeted graph queries with minimal detail; inspect the actual source and tests before changing code.
+- For PR reviews, use the graph's risk / impact / test-gap report rather than scanning the full repository.
+- If MCP is unavailable, use the GitHub repository integration to read this file and only the relevant source files. Never claim the graph is connected or current without checking.
+- Do not load the full project history for routine tasks; consult only the relevant Build entry in `docs/PROJECT_STATUS.md`.
+- Graph context is advisory, not proof of correctness. Keep human editorial approval and normal build verification.
