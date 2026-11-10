@@ -9,7 +9,7 @@ Updated: 2026-11-10
 
 ## Implemented routes
 - `/` — newsroom dashboard and module navigation
-- `/story-intake` — story submission with browser-local persistence
+- `/story-intake` — story submission with browser-local persistence, HTTP(S) primary-source validation and duplicate headline/source blocking
 - `/stories` — local editorial queue, source links, correction recording and JSON export
 - `/verification` — interactive browser-local editorial verification checklist
 - `/regional-desks` — directory for 28 states and 8 Union Territories
@@ -32,6 +32,7 @@ Updated: 2026-11-10
 - The Archive page reads correction records from the same browser-local story store.
 - Deleting a queue item deletes that browser-local record and its attached correction history; export a backup before deletion.
 - Local browser storage is not a server database, not a multi-user system and not a cloud backup.
+- Story intake requires a valid HTTP(S) primary-source URL, validates an optional second URL and blocks likely duplicate headlines or primary-source URLs already in this browser. This is a local duplicate guard, not global deduplication.
 - Stories remain Not Verified by default. A URL alone never makes a story verified. Human editor review is required.
 - Verification checklist progress is also stored locally in the current browser.
 - Dashboard Control Centre counts local drafts, correction records and broadcast segments from this browser; these are not cloud or server totals.
