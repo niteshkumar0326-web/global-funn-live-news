@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 type Story = { id:string; headline:string; desk?:string; location?:string; summary?:string; status?:string };
 type Segment = { id:string; title:string; desk:string; duration:number; presenterScript:string; sourceNotes:string };
 const STORY_KEY="global-funn-newsroom-drafts-v1";
-const RUNDOWN_KEY="global-funn-broadcast-rundown-v1";
+const RUNDOWN_KEY="global-funn-broadcast-rundown-v1";\nconst PRESENTER_KEY="global-funn-presenter-brand-v1";\ntype PresenterProfile={name?:string;role?:string;channel?:string;tagline?:string;photo?:string};
 
 export default function BroadcastRundown(){
   const [stories,setStories]=useState<Story[]>([]);
@@ -13,7 +13,7 @@ export default function BroadcastRundown(){
   const [anchor,setAnchor]=useState("GLOBAL FUNN presenter");
   const [message,setMessage]=useState("");
   const [teleprompterId,setTeleprompterId]=useState<string|null>(null);
-  const [fontScale,setFontScale]=useState(1);
+  const [fontScale,setFontScale]=useState(1);\n  const [presenterProfile,setPresenterProfile]=useState<PresenterProfile>({});
   useEffect(()=>{
     try{
       const savedStories=localStorage.getItem(STORY_KEY);
@@ -53,7 +53,7 @@ export default function BroadcastRundown(){
         <label style={{fontSize:12,color:"#c5d3e5"}}>Programme title<input style={{...input,display:"block",marginTop:6}} value={title} onChange={e=>setTitle(e.target.value)} onBlur={saveSettings}/></label>
         <label style={{fontSize:12,color:"#c5d3e5"}}>Presenter / anchor<input style={{...input,display:"block",marginTop:6}} value={anchor} onChange={e=>setAnchor(e.target.value)} onBlur={saveSettings}/></label>
       </div>
-      <div className="grid" style={{gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10}}>
+      {presenterProfile.name&&<div className="proof" style={{display:"flex",alignItems:"center",gap:12}}>{presenterProfile.photo&&<img src={presenterProfile.photo} alt="Presenter profile" style={{width:48,height:48,borderRadius:"50%",objectFit:"cover",border:"1px solid #d4af37"}}/>}<div><strong>Presenter profile connected: {presenterProfile.name}</strong><div className="muted" style={{fontSize:11}}>{presenterProfile.channel||"GLOBAL FUNN"}{presenterProfile.role?" • "+presenterProfile.role:""} — name prefilled from Presenter Studio; you can change it here.</div></div></div>}\n      <div className="grid" style={{gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10}}>
         <div className="proof"><div className="stat">{segments.length}</div><div className="statlabel">Segments</div></div>
         <div className="proof"><div className="stat">{Math.floor(total/60)}:{String(total%60).padStart(2,"0")}</div><div className="statlabel">Estimated duration</div></div>
         <div className="proof"><div className="stat">{stories.length}</div><div className="statlabel">Available story drafts</div></div>
