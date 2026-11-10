@@ -19,6 +19,8 @@ The GitHub application is built, but no Supabase project is currently connected 
 - `story_reviews`: story ID, reviewer, decision, notes, reviewed_at.
 - `story_revisions`: append-only correction/update history with author and timestamp.
 
+An initial draft migration is committed at `supabase/migrations/0001_initial_schema_draft.sql`. It currently uses `user_profiles`, `user_roles`, `news_stories`, `story_sources`, and `story_corrections`; this is a working draft and supersedes the conceptual names above for implementation planning. It has not been applied to any database.
+
 ## Security requirements before enabling data access
 - Enable RLS on every exposed table.
 - Reporters may create and view their permitted submissions; they must not approve or publish.
@@ -29,4 +31,4 @@ The GitHub application is built, but no Supabase project is currently connected 
 - Verify policies with authenticated and unauthenticated test cases before launch.
 
 ## Current limitations
-No database project, tables, auth providers, credentials, migration, live sync, or deployment environment is connected yet. Story Queue and Broadcast Desk remain browser-local until the database integration is implemented and tested.
+No database project, tables, auth providers, credentials, live sync, or deployment environment is connected yet. The SQL migration in the repository is a draft only; it has not been run or security-tested against a live Supabase project. Story Queue and Broadcast Desk remain browser-local until the database integration is implemented and tested.
