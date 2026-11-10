@@ -71,3 +71,13 @@ Updated: 2026-11-10
 - Upstream MIT license notice is retained at `.agents/skills/SUPERPOWERS-LICENSE`.
 - Repository-level instructions are in `AGENTS.md`; integration notes are in `docs/SUPERPOWERS-INTEGRATION.md`.
 - This is a source-level skill integration only. It does not install a running agent into the deployed website, add AI news verification, or enable automated publishing. The imported set is selected, not a complete upstream mirror.
+
+
+## Build 18 — Presenter & Brand Identity Studio
+- Added `components/PresenterBrandStudio.tsx` and route `/presenter`.
+- Editable presenter name, role, channel name, location and tagline.
+- User-selected JPG/PNG/WebP image (900 KB maximum) shown in a live preview; no generated or substituted face.
+- Three layouts: landscape broadcast, vertical presenter card and square channel identity.
+- Exports an editable SVG layout. Review image rights, crop, spelling and editorial approval before use.
+- Profile and selected image are stored in the current browser's localStorage only; no server upload or cross-device sync.
+- Does not create a talking avatar, generate video, record, verify identity or publish to social platforms.
