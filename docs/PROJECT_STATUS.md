@@ -181,3 +181,13 @@ Updated: 2026-11-10
 - Shows open/done counts and a manually derived task completion percentage.
 - Saves to browser-local storage under `global-funn-shift-handover-v1`; exports JSON and readable TXT for transfer to the incoming shift.
 - No staff accounts, automatic assignments, notifications, cloud sync or external messaging are connected. The receiving editor must verify current story facts and task status.
+
+
+## Build 28 — Live Assignment Desk
+- Added `components/AssignmentDesk.tsx` and route `/assignments`; linked from the main dashboard.
+- Creates reporting assignments with headline, desk, location, reporter, assigning editor, priority, deadline, follow-up, source URL and assignment brief.
+- Can link an assignment to an existing story draft in the current browser.
+- Tracks Assigned, In progress, Awaiting update, Completed and On hold states, with editor-recorded status history.
+- Shows active, overdue and completed counts and supports search/filter plus JSON export.
+- Stores assignments locally under `global-funn-live-assignments-v1`. This is not a staff account system and does not send messages, notifications, GPS tracking or cross-device updates.
+- Assignment completion is not fact verification or publication approval; human evidence review and editor sign-off remain required.
