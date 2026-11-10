@@ -15,6 +15,7 @@ Updated: 2026-11-10
 - `/regional-desks` — directory for 28 states and 8 Union Territories
 - `/international` — six regional international desks
 - `/archive` — correction/update register prototype\n- `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, timing and text export
+- `/cloud` — server-side environment readiness check for the planned Supabase connection
 
 ## Project assets and safeguards
 - Next.js App Router, React, TypeScript, Tailwind CSS and Lucide icons
@@ -32,6 +33,7 @@ Updated: 2026-11-10
 
 ## Not implemented / not connected
 - Broadcast rundowns are also saved in browser localStorage on the current device only.\n- No production database or durable server-side story storage
+- Supabase cloud setup guide and safe `.env.example` template added; no Supabase project or credentials are connected
 - No authentication, reporter/editor roles or access controls
 - No automated source verification or fact-checking
 - No live news API/feed connection
@@ -41,7 +43,8 @@ Updated: 2026-11-10
 - No Dropbox or OneDrive project mirror configured
 
 ## Next milestones
-1. Connect a secure database and authentication provider.
+1. Create/select a Supabase project and configure deployment environment variables; see `docs/CLOUD_SETUP.md`.
+2. Connect a secure database and authentication provider.
 2. Implement server-side story records, evidence references and immutable audit trail.
 3. Add reporter/editor roles and explicit approval transitions.
 4. Add source-link checks and human review tools; never auto-label a story verified solely because a URL exists.
