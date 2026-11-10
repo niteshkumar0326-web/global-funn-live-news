@@ -15,6 +15,8 @@ type Story = {
   id:string; headline:string; desk:string; location:string; summary:string;
   source1:string; source2:string; status:string; editor:string; createdAt:string;
   corrections?:Correction[];
+  workflowState?: "Draft" | "Submitted for Review" | "Approved" | "Rejected";
+  workflowHistory?: {id:string;from:string;to:string;editor:string;reason:string;at:string}[];
 };
 const KEY="global-funn-newsroom-drafts-v1";
 
@@ -27,6 +29,8 @@ export default function StoryQueue(){
  const [editor,setEditor]=useState("");
  const [sourceUrl,setSourceUrl]=useState("");
  const [message,setMessage]=useState("");
+ const [workflowEditor,setWorkflowEditor]=useState("");
+ const [workflowReason,setWorkflowReason]=useState("");
 
  useEffect(()=>{
   try{
@@ -40,6 +44,17 @@ export default function StoryQueue(){
   setItems(next);
   try{localStorage.setItem(KEY,JSON.stringify(next));setMessage("Saved in this browser only. Export a backup regularly.")}
   catch{setMessage("Browser storage is unavailable or full. Your change may not persist; export a backup if possible.")}
+ }
+ function changeWorkflow(story:Story,nextState:"Submitted for Review"|"Approved"|"Rejected"){
+  if(!workflowEditor.trim()){setMessage("Enter the responsible editor name before changing workflow state.");return;}
+  if(nextState==="Rejected"&&workflowReason.trim().length<10){setMessage("Add a rejection reason of at least 10 characters.");return;}
+  if(nextState==="Approved"&&(!story.source1||!/^https?:\\/\\//i.test(story.source1)||story.status==="Disputed")){setMessage("Approval blocked: check the primary source and resolve any disputed status first.");return;}
+  const current=story.workflowState||"Draft";
+  if(nextState==="Approved"&&current!=="Submitted for Review"){setMessage("Only stories submitted for review can be approved.");return;}
+  if(nextState==="Rejected"&&current!=="Submitted for Review"){setMessage("Only stories submitted for review can be rejected.");return;}
+  const entry={id:crypto.randomUUID(),from:current,to:nextState,editor:workflowEditor.trim(),reason:workflowReason.trim(),at:new Date().toISOString()};
+  persist(items.map(item=>item.id===story.id?{...item,workflowState:nextState,workflowHistory:[...(item.workflowHistory||[]),entry]}:item));
+  setWorkflowReason("");
  }
  function remove(id:string){
   if(!window.confirm("Delete this local draft and its correction history? Export a backup first if you need to keep it."))return;
@@ -73,13 +88,27 @@ export default function StoryQueue(){
  }
  const field:React.CSSProperties={width:"100%",background:"#08182c",border:"1px solid #355071",borderRadius:9,padding:"10px 12px",color:"#f8fafc",fontSize:13};
  const label:React.CSSProperties={display:"block",fontSize:12,color:"#c5d3e5",marginBottom:6,fontWeight:700};
+ const buttonStyle:React.CSSProperties={border:"1px solid #d4af37",borderRadius:8,padding:"8px 11px",background:"#10233d",color:"#f5d98c",fontSize:12,fontWeight:800};
  return <section className="panel">
   <div className="rowline"><h2>Editorial story queue</h2><button type="button" onClick={exportData} disabled={!items.length} style={{border:"1px solid #d4af37",borderRadius:8,padding:"9px 12px",background:"transparent",color:"#f5d98c",fontWeight:800}}>Export backup</button></div>
   <p className="muted" style={{fontSize:12,lineHeight:1.7}}>Browser-local records only. This queue is not shared with other users or devices. Every item remains Not Verified until an editor checks its evidence.</p>
   {!ready?<p className="muted">Loading local records…</p>:items.length===0?<div className="proof">No saved drafts found in this browser. <a href="/story-intake" style={{color:"#d4af37"}}>Add a story →</a></div>:items.map(s=><article className="story" key={s.id}>
-   <div className="rowline"><span className="tag">{s.desk} • {s.location||"LOCATION NOT SET"}</span><span className="status warn">NOT VERIFIED</span></div>
+   <div className="rowline"><span className="tag">{s.desk} • {s.location||"LOCATION NOT SET"}</span><span className="status warn">{s.workflowState||"DRAFT"} • {s.status||"NOT VERIFIED"}</span></div>
    <h3>{s.headline}</h3><p className="muted" style={{fontSize:12,lineHeight:1.7}}>{s.summary}</p>
    <div className="proof"><strong>References</strong><p><a href={s.source1} target="_blank" rel="noreferrer" style={{color:"#d4af37"}}>Primary source</a>{s.source2&&<> • <a href={s.source2} target="_blank" rel="noreferrer" style={{color:"#d4af37"}}>Second source</a></>}</p><small>Submitted: {new Date(s.createdAt).toLocaleString()} • Editor: {s.editor||"Unassigned"}</small></div>
+   <div className="proof" style={{marginTop:12,display:"grid",gap:10}}>
+    <strong>Editorial workflow — local prototype</strong>
+    <div className="rowline"><span className="muted" style={{fontSize:12}}>Workflow: {s.workflowState||"Draft"}</span><span className="muted" style={{fontSize:12}}>Verification: {s.status||"Not Verified"}</span></div>
+    <label style={label}>Responsible editor<input style={field} value={workflowEditor} onChange={e=>setWorkflowEditor(e.target.value)} placeholder="Editor name"/></label>
+    {(s.workflowState||"Draft")==="Submitted for Review"&&<label style={label}>Decision note / rejection reason<textarea style={{...field,minHeight:65}} value={workflowReason} onChange={e=>setWorkflowReason(e.target.value)} placeholder="Required for rejection; optional for approval"/></label>}
+    <div className="rowline" style={{justifyContent:"flex-start"}}>
+     {(s.workflowState||"Draft")==="Draft"&&<button type="button" onClick={()=>changeWorkflow(s,"Submitted for Review")} style={{...buttonStyle,background:"#d4af37",color:"#071426"}}>Submit for editor review</button>}
+     {(s.workflowState||"Draft")==="Submitted for Review"&&<><button type="button" onClick={()=>changeWorkflow(s,"Approved")} style={buttonStyle}>Approve editorially</button><button type="button" onClick={()=>changeWorkflow(s,"Rejected")} style={{...buttonStyle,borderColor:"#8b4248",color:"#fecaca"}}>Reject with reason</button></>}
+     {(s.workflowState||"Draft")==="Rejected"&&<button type="button" onClick={()=>changeWorkflow(s,"Submitted for Review")} style={buttonStyle}>Resubmit for review</button>}
+    </div>
+    {s.workflowHistory?.length?<div><strong>Decision history</strong>{s.workflowHistory.map(h=><p key={h.id} className="muted" style={{fontSize:11}}>{h.from} → {h.to} • {h.editor} • {new Date(h.at).toLocaleString()} {h.reason? "• "+h.reason:""}</p>)}</div>:null}
+    <p className="muted" style={{fontSize:11,margin:0}}>Approval here is a local editorial workflow marker only. It does not verify facts, publish the story or create an authenticated audit trail.</p>
+   </div>
    <div className="rowline" style={{marginTop:12}}>
     <span className="muted" style={{fontSize:12}}>{s.corrections?.length||0} correction record(s)</span>
     <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
