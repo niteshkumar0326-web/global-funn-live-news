@@ -40,5 +40,8 @@ Most newsroom workflows use browser localStorage. Media Library uses browser Ind
 ## Token-efficient work
 If Code Review Graph MCP is connected, begin with `get_minimal_context_tool`, then ask targeted graph queries with minimal detail. Verify findings in actual source and tests. If MCP is unavailable, use the connected GitHub repository integration and read only relevant files. Never claim a local graph is built or connected until verified.
 
+## Research and evaluation
+- Curated repository comparison and stack decisions: `docs/TOKEN_TOOLKIT_RESEARCH.md`.
+
 ## Current project milestone
 Build 32 adds RTK + Context Saver configuration and the mobile-friendly AI Context Pocket. See Build 31–32 in `docs/PROJECT_STATUS.md`.
