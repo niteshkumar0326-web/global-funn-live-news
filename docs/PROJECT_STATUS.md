@@ -114,3 +114,15 @@ Updated: 2026-11-10
 - Project name and subtitle cues save in browser localStorage; media files stay in browser IndexedDB.
 - No final video rendering, clip concatenation, transcoding, automatic speech recognition, translation, AI voice synthesis, cloud sync or social publishing.
 - The exported CSV/SRT are production hand-off files, not a finished video or verified captions.
+
+
+## Build 22 — Voice & Pronunciation Studio
+- Added `components/VoiceStudio.tsx` and route `/voice-studio`.
+- Presenter voice-over script editor with title, word count and estimated read time.
+- Browser speech preview using available device/browser voices, language selection, rate, pitch and volume controls.
+- Pronunciation dictionary applies user-defined spelling substitutions to preview/export text while preserving the original script.
+- Exports a TXT voice-over script and CSV pronunciation guide.
+- Project data is stored in browser localStorage on this device only.
+- Browser speech preview is not a hosted AI voice service and does not create a downloadable audio recording.
+- No automatic transcription, voice cloning, identity imitation, audio generation file, cloud sync or social publishing.
+- Editorial checklist is a manual reminder only; human review and sign-off remain mandatory.
