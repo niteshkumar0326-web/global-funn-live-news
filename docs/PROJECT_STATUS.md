@@ -138,3 +138,15 @@ Updated: 2026-11-10
 - No generated/talking avatar, face alteration, voice-to-lip synchronisation, video rendering, AI image generation, cloud sync or social publishing.
 - Presenter profile and scene plan remain in browser-local storage; user-selected photo is not uploaded to GitHub or a server.
 - Every scene remains an editorial draft and requires human review of facts, image rights and attribution.
+
+
+## Build 24 — Newsroom Storyboard & Shot Planner
+- Added `components/StoryboardPlanner.tsx` and route `/storyboard`.
+- Creates an ordered shot list with scene name, visual/camera description, source or media asset, narration, on-screen text, duration, manual status and production notes.
+- Includes a starter four-shot news bulletin, add/remove/reorder controls, total runtime estimate and manual Ready count.
+- Reads a read-only preview of available English/Hindi Script Studio text from the same browser.
+- Saves the plan in browser localStorage and exports a CSV shot list plus a TXT director's brief.
+- Dashboard navigation now links to Newsroom Storyboard.
+- This is a production planning and hand-off tool only; it does not fetch footage, render/edit video, validate source claims or image rights, record audio, generate AI voice, sync lips or publish.
+- The Ready status is manually selected and is not an automated editorial, factual or rights approval. Human editor sign-off remains mandatory.
+- Storyboard data stays in the current browser and is not cloud synced.
