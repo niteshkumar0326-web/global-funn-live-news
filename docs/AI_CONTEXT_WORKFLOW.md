@@ -58,3 +58,8 @@ For 5–10 representative tasks, compare provider-reported input/cache/output to
 ## GitHub PR review
 
 The Code Review Graph Action posts advisory risk, impact and test-gap comments to qualifying pull requests. It does not block a PR by risk by default; a human must verify the findings and run the build.
+
+
+## Benchmark before claiming savings
+
+Use the dashboard route `/token-benchmark` to enter provider-reported input tokens and tool-output byte counts for the same task before and after compression. Record answer quality for both runs. Export CSV/JSON for analysis. These are manual measurements; the app does not connect to account usage meters. Do not advertise an overall percentage until multiple comparable tasks have been recorded.
