@@ -33,7 +33,12 @@ Most newsroom workflows use browser localStorage. Media Library uses browser Ind
 - Change impact: `uvx code-review-graph detect-changes --brief`
 
 ## Token-efficient work
+- Mobile / desktop handover: open `/ai-context` (AI Context Pocket) to create and copy a small task-specific context pack; local drafts remain on that browser/device.
+- Claude MCPs: Code Review Graph + `@dongnh311/claude-context-saver`; RTK rewrites supported terminal commands to compact output on configured local coding agents.
+- ChatGPT mobile uses the copy/paste context pack and GitHub repository access; it does not connect to the phone's or PC's local stdio MCP server.
+
+## Token-efficient work
 If Code Review Graph MCP is connected, begin with `get_minimal_context_tool`, then ask targeted graph queries with minimal detail. Verify findings in actual source and tests. If MCP is unavailable, use the connected GitHub repository integration and read only relevant files. Never claim a local graph is built or connected until verified.
 
 ## Current project milestone
-Build 31 integrates Code Review Graph config, Windows setup, shared AI rules and GitHub PR review workflow. See the Build 31 entry in `docs/PROJECT_STATUS.md` for exact commit and verification status.
+Build 32 adds RTK + Context Saver configuration and the mobile-friendly AI Context Pocket. See Build 31–32 in `docs/PROJECT_STATUS.md`.
