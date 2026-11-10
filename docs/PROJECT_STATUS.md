@@ -172,3 +172,12 @@ Updated: 2026-11-10
 - Media Library original files are not embedded; download originals separately from Media Library. Its exported JSON index is metadata only.
 - Export/import does not create cloud sync, authentication, encryption-at-rest, multi-user access or cross-device restore. Restore must run on the same application origin where browser data is stored.
 - Browser storage capacity and partial restore failures remain possible; create a fresh backup before restore and verify each workspace after import.
+
+
+## Build 27 — Editorial Shift Handover
+- Added `components/ShiftHandover.tsx` and route `/shift-handover`; linked from the main dashboard.
+- Records shift date/type, outgoing editor, top priority and free-form handover notes.
+- Adds desk tasks with owner, priority, due note, status and task context; supports status updates and removal.
+- Shows open/done counts and a manually derived task completion percentage.
+- Saves to browser-local storage under `global-funn-shift-handover-v1`; exports JSON and readable TXT for transfer to the incoming shift.
+- No staff accounts, automatic assignments, notifications, cloud sync or external messaging are connected. The receiving editor must verify current story facts and task status.
