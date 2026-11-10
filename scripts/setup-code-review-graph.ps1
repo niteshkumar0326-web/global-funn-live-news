@@ -21,8 +21,14 @@ if (-not (Get-Command uvx -ErrorAction SilentlyContinue)) {
 
 Write-Host "Installing Headroom local context compression gateway..." -ForegroundColor Yellow
 uv tool install --python 3.13 "headroom-ai[all]"
-$toolScripts = py -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"
-if ($toolScripts -and (Test-Path $toolScripts)) { $env:Path = "$toolScripts;$env:Path" }
+$toolBin = uv tool dir --bin
+if ($toolBin -and (Test-Path $toolBin)) {
+  $env:Path = "$toolBin;$env:Path"
+  $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+  if (($userPath -split ";") -notcontains $toolBin) {
+    [Environment]::SetEnvironmentVariable("Path", (($userPath.TrimEnd(";") + ";" + $toolBin).Trim(";")), "User")
+  }
+}
 if (Get-Command headroom -ErrorAction SilentlyContinue) {
   headroom doctor
   headroom mcp status
