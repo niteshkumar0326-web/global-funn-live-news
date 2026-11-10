@@ -15,7 +15,7 @@ Updated: 2026-11-10
 - `/regional-desks` — directory for 28 states and 8 Union Territories
 - `/international` — six regional international desks
 - `/archive` — browser-local correction register connected to Story Queue records
-- `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, timing and text export
+- `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, adjustable-font teleprompter mode, timing and text export
 - `/cloud` — server-side environment readiness check for the planned Supabase connection
 
 ## Project assets and safeguards
@@ -45,6 +45,7 @@ Updated: 2026-11-10
 - Supabase setup guide, safe `.env.example`, and initial SQL/RLS draft are committed; no Supabase project or credentials are connected.
 - No authentication, reporter/editor roles or access controls.
 - No automated source verification or fact-checking.
+- Broadcast Desk includes a browser-local teleprompter reader with adjustable text size; it is a script display aid only and does not fact-check, record video/audio or transmit.
 - No live news API/feed connection or correspondent/field reporting ingestion.
 - No public story publishing or social publishing workflow.
 - No hosting/deployment configured or verified.
