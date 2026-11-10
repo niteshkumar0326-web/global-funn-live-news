@@ -223,12 +223,12 @@ Updated: 2026-11-10
 
 
 ## Build 32 — Cross-device Token Saver Toolkit
-- Added `@dongnh311/claude-context-saver` to project `.mcp.json` alongside Code Review Graph. It compresses tool logs and supports symbol-level source reads for Claude Code/local MCP clients.
-- Extended the Windows setup script to install RTK via winget when available and configure its global hook-only integration. RTK filters supported shell command output before it enters coding-agent context.
+- Added `headroom-ai` as a project MCP server alongside Code Review Graph. It provides local compression, retrieval and session stats; optional proxy mode can compress supported Claude API traffic.
+- Extended the Windows setup script to install Headroom with `uv tool install --python 3.13 "headroom-ai[all]"`, run its health check and retain Code Review Graph setup. Full proxy mode is documented separately so it is not silently enabled.
 - Added `/ai-context` — AI Context Pocket, a responsive mobile/desktop handover screen. Users can write a bounded task, add optional local notes, copy a compact context prompt, and download a JSON context pack.
 - Added dashboard navigation and updated the compact project index and shared workflow documentation.
 - Mobile usage: open the hosted app's `/ai-context` route, copy the task prompt and paste it into ChatGPT mobile or Claude. Optional notes stay in that device/browser's localStorage; no cross-device sync is active.
 - ChatGPT mobile does not gain direct access to local PC MCP servers, local terminal hooks, or private desktop files. Context Pocket provides a manual portable bridge, not a hidden connection.
-- Selected integrations target different bottlenecks: RTK (terminal output), Context Saver (logs and symbol reads), Code Review Graph (dependency/impact context). Headroom and Context Mode remain alternatives for controlled evaluation, not stacked by default.
+- Selected integrations target different bottlenecks: Headroom (local compression/retrieval/proxy) and Code Review Graph (dependency/impact context). RTK and Context Mode remain alternatives; Context Saver is not enabled because its current Windows support note says WSL only.
 - No token-savings percentage is claimed for GLOBAL FUNN until measured on matched tasks. Token quotas and provider rate limits cannot be bypassed.
 - Windows setup script updated; actual local installation and MCP connectivity still require running the script on the user's computer and verifying `/mcp`.
