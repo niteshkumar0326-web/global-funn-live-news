@@ -11,7 +11,7 @@ Updated: 2026-11-10
 - `/` — newsroom dashboard and module navigation
 - `/story-intake` — story submission with browser-local persistence
 - `/stories` — local editorial queue, source links and JSON export
-- `/verification` — human editorial verification checklist and sample proof card
+- `/verification` — interactive browser-local editorial verification checklist with progress indicator and sample proof card
 - `/regional-desks` — directory for 28 states and 8 Union Territories
 - `/international` — six regional international desks
 - `/archive` — correction/update register prototype\n- `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, timing and text export
