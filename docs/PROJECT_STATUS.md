@@ -17,6 +17,7 @@ Updated: 2026-11-10
 - `/archive` — browser-local correction register connected to Story Queue records
 - `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, adjustable-font teleprompter mode, timing and text export
 - `/graphics` — local News Graphics Studio with square, landscape and vertical headline templates, live preview and SVG export
+- `/research` — claim-by-claim evidence worksheet with source details, supporting/contradicting/context/unclear assessments and JSON export
 - `/cloud` — server-side environment readiness check for the planned Supabase connection
 
 ## Project assets and safeguards
@@ -45,6 +46,7 @@ Updated: 2026-11-10
 - No production database or durable server-side story storage.
 - Supabase setup guide, safe `.env.example`, and initial SQL/RLS draft are committed; no Supabase project or credentials are connected.
 - No authentication, reporter/editor roles or access controls.
+- Research Desk records human-entered claim assessments only; it does not fetch URLs, compare documents, verify sources or perform AI fact-checking. Notes are browser-local and exportable as JSON.
 - No automated source verification or fact-checking.
 - Broadcast Desk includes a browser-local teleprompter reader with adjustable text size; it is a script display aid only and does not fact-check, record video/audio or transmit.
 - No live news API/feed connection or correspondent/field reporting ingestion.
