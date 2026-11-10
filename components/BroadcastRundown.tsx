@@ -33,7 +33,7 @@ export default function BroadcastRundown(){
   function addManual(){
     persist([...segments,{id:crypto.randomUUID(),title:"New bulletin segment",desk:"News",duration:45,presenterScript:"Write a concise, factual presenter introduction. Attribute claims and avoid unsupported statements.",sourceNotes:"Add source links and editor sign-off before broadcast."}]);
   }
-  function edit(id:string,key:keyof Segment,value:string|number){persist(segments.map(s=>s.id===id?{...s,[key]:value}:s));}
+  function edit<K extends keyof Segment>(id:string,key:K,value:Segment[K]){persist(segments.map(s=>s.id===id?{...s,[key]:value}:s));}
   function move(index:number,delta:number){const next=[...segments];const target=index+delta;if(target<0||target>=next.length)return;[next[index],next[target]]=[next[target],next[index]];persist(next);}
   function remove(id:string){persist(segments.filter(s=>s.id!==id));}
   function saveSettings(){persist(segments,title,anchor);}
