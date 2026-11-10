@@ -16,6 +16,7 @@ Updated: 2026-11-10
 - `/international` — six regional international desks
 - `/archive` — browser-local correction register connected to Story Queue records
 - `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, adjustable-font teleprompter mode, timing and text export
+- `/graphics` — local News Graphics Studio with square, landscape and vertical headline templates, live preview and SVG export
 - `/cloud` — server-side environment readiness check for the planned Supabase connection
 
 ## Project assets and safeguards
@@ -47,6 +48,7 @@ Updated: 2026-11-10
 - No automated source verification or fact-checking.
 - Broadcast Desk includes a browser-local teleprompter reader with adjustable text size; it is a script display aid only and does not fact-check, record video/audio or transmit.
 - No live news API/feed connection or correspondent/field reporting ingestion.
+- News Graphics Studio exports editable SVG design files only. Its source reference field is a label, not a source validator; every graphic remains an editorial preview until a human editor checks facts, evidence and rights.
 - No public story publishing or social publishing workflow.
 - No hosting/deployment configured or verified.
 - Dropbox and OneDrive project folders, where present, are not verified full source backups.
