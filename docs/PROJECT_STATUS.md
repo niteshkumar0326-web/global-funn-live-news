@@ -33,7 +33,7 @@ Updated: 2026-11-10
 
 ## Not implemented / not connected
 - Broadcast rundowns are also saved in browser localStorage on the current device only.\n- No production database or durable server-side story storage
-- Supabase cloud setup guide and safe `.env.example` template added; no Supabase project or credentials are connected
+- Supabase cloud setup guide, safe `.env.example`, and an initial SQL schema/RLS draft are committed; no Supabase project or credentials are connected
 - No authentication, reporter/editor roles or access controls
 - No automated source verification or fact-checking
 - No live news API/feed connection
@@ -43,11 +43,11 @@ Updated: 2026-11-10
 - No Dropbox or OneDrive project mirror configured
 
 ## Next milestones
-1. Create/select a Supabase project and configure deployment environment variables; see `docs/CLOUD_SETUP.md`.
-2. Connect a secure database and authentication provider.
-2. Implement server-side story records, evidence references and immutable audit trail.
-3. Add reporter/editor roles and explicit approval transitions.
-4. Add source-link checks and human review tools; never auto-label a story verified solely because a URL exists.
-5. Add safe, permissioned news-feed integrations and monitoring.
-6. Add backups to approved cloud destinations.
-7. Confirm CI build status and resolve any reported errors before deployment.
+1. Obtain explicit owner approval for the Supabase organization and any project cost; then create/select a project and configure deployment environment variables.
+2. Review and test the draft migration in `supabase/migrations/0001_initial_schema_draft.sql` before applying it; then connect authentication.
+3. Implement server-side story records, evidence references and immutable audit trail.
+4. Add reporter/editor roles and explicit approval transitions.
+5. Add source-link checks and human review tools; never auto-label a story verified solely because a URL exists.
+6. Add safe, permissioned news-feed integrations and monitoring.
+7. Add backups to approved cloud destinations.
+8. Confirm CI build status and resolve any reported errors before deployment.
