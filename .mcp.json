@@ -4,9 +4,10 @@
       "command": "uvx",
       "args": ["code-review-graph", "serve"]
     },
-    "context-saver": {
-      "command": "npx",
-      "args": ["-y", "@dongnh311/claude-context-saver@latest"]
+    "headroom": {
+      "type": "stdio",
+      "command": "headroom",
+      "args": ["mcp", "serve"]
     }
   }
 }
