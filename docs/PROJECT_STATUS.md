@@ -103,3 +103,14 @@ Updated: 2026-11-10
 - Completion is a self-attested checklist only; it does not verify evidence, authorise publication, record video or publish to any platform.
 - Production data remains in the current browser and is not synced across devices or newsroom users.
 - Dashboard navigation now links to Video Production.
+
+
+## Build 21 — Video & Audio Studio
+- Added `components/VideoAudioStudio.tsx` and route `/video-studio`.
+- Browser-local video/audio media bin with IndexedDB file storage (100 MB maximum per file).
+- Preview for media supported by the user's browser, editable source in/out points, clip sequence ordering and production notes.
+- Export a CSV edit decision list with clip order and trim-point metadata.
+- Draft time-coded subtitle / voice-over cues and export SubRip (.srt).
+- Project name and subtitle cues save in browser localStorage; media files stay in browser IndexedDB.
+- No final video rendering, clip concatenation, transcoding, automatic speech recognition, translation, AI voice synthesis, cloud sync or social publishing.
+- The exported CSV/SRT are production hand-off files, not a finished video or verified captions.
