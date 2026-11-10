@@ -55,3 +55,8 @@ Compare baseline against the selected stack on the same tasks. Do not compress s
 - Context Mode: https://github.com/mksglu/context-mode
 - Code Review Graph: https://github.com/tirth8205/code-review-graph
 - Context engineering tools directory: https://github.com/aglio-lab/context-engineering-tools
+
+
+## Build 33 measurement instrumentation
+
+The app now includes a browser-local benchmark at `/token-benchmark`. Enter same-task baseline and after-tool token counts, tool-output byte counts and quality scores. The dashboard calculates observed reductions and exports CSV/JSON. This does not automatically collect usage data from ChatGPT or Claude. Use 5–10 comparable runs before making a project-specific savings claim.
