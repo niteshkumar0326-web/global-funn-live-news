@@ -150,3 +150,14 @@ Updated: 2026-11-10
 - This is a production planning and hand-off tool only; it does not fetch footage, render/edit video, validate source claims or image rights, record audio, generate AI voice, sync lips or publish.
 - The Ready status is manually selected and is not an automated editorial, factual or rights approval. Human editor sign-off remains mandatory.
 - Storyboard data stays in the current browser and is not cloud synced.
+
+
+## Build 25 — Newsroom Control & Quality Dashboard
+- Expanded `components/NewsroomControlCentre.tsx` into an operations overview embedded on the main dashboard.
+- Reads browser-local story draft count, correction count, broadcast segment count and storyboard shot count.
+- Adds quick links to editorial, verification, research, script, media, presenter, storyboard and production workspaces.
+- Adds a manual refresh control and displays the local refresh time.
+- Adds a human quality-gate reminder for evidence, names/dates/locations, rights, corrections and editor sign-off.
+- Browser-local counts are activity indicators only; they are not verified-story counts, live server metrics, quality scores or publication approvals.
+- Media Library IndexedDB assets are not counted; other devices and users are not included. Same-tab changes may require manual refresh.
+- No new cloud storage, authentication, automatic fact-checking or publishing connection was added.
