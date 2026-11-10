@@ -232,3 +232,13 @@ Updated: 2026-11-10
 - Selected integrations target different bottlenecks: Headroom (local compression/retrieval/proxy) and Code Review Graph (dependency/impact context). RTK and Context Mode remain alternatives; Context Saver is not enabled because its current Windows support note says WSL only.
 - No token-savings percentage is claimed for GLOBAL FUNN until measured on matched tasks. Token quotas and provider rate limits cannot be bypassed.
 - Windows setup script updated; actual local installation and MCP connectivity still require running the script on the user's computer and verifying `/mcp`.
+
+
+## Build 33 — Token Savings Benchmark
+- Added `/token-benchmark` and a responsive manual benchmark dashboard for matched baseline vs compressed tasks.
+- Captures model/workflow, input-token counts, tool-output bytes, answer-quality scores and notes; calculates total token reduction, output-byte reduction and quality delta.
+- Added model filtering, per-sample deletion, CSV export and JSON backup.
+- Data stays in browser localStorage; no ChatGPT/Claude account usage meter, API key or remote analytics connection is accessed.
+- A token reduction is not counted as a quality win if the recorded answer-quality score falls. Compare like-for-like tasks and same model when possible.
+- Build 32 final workflow documentation and shared AI rules saved; Build 32 build check and source archive passed on `fe04237f353553b47a17c2194477b5e5ff29b9bd`.
+- Build 33 code commits: component `a2b6727b28a52d2b1499b05abdb32b2328546c0e`; route `dab124339ecf35ebc0988c1236e77ac490a0bce8`. Dashboard/docs commit follows.
