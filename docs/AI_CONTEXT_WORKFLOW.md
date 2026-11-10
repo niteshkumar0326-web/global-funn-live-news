@@ -34,7 +34,7 @@ The generated graph database is local and ignored by Git. Do not commit `.code-r
 ChatGPT's custom MCP connection support is plan/workspace-dependent, and ChatGPT cannot connect directly to a developer machine's local stdio MCP server. A remote MCP endpoint or supported Secure MCP Tunnel is needed for direct MCP access; availability depends on the ChatGPT plan and workspace permissions.
 
 For this repository's current ChatGPT workflow:
-1. Use the connected GitHub repository integration to open this repository and read `AGENTS.md` plus this short guide.
+1. Use the connected GitHub repository integration to read `docs/AI_CONTEXT_INDEX.md` first, then `AGENTS.md` and this short guide only if needed.
 2. Start from the requested feature or changed file; do not ask ChatGPT to ingest the entire repository.
 3. For pull-request reviews, read the Code Review Graph sticky comment on the PR. It contains structural risk, impact and test-gap findings that ChatGPT can interpret without a full source dump.
 4. Ask ChatGPT to fetch only the files named by the review, then verify the implementation and tests.
