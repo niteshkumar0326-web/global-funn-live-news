@@ -126,3 +126,15 @@ Updated: 2026-11-10
 - Browser speech preview is not a hosted AI voice service and does not create a downloadable audio recording.
 - No automatic transcription, voice cloning, identity imitation, audio generation file, cloud sync or social publishing.
 - Editorial checklist is a manual reminder only; human review and sign-off remain mandatory.
+
+
+## Build 23 — Presenter Scene Studio
+- Added `components/PresenterSceneStudio.tsx` and route `/presenter-scenes`.
+- Reads the saved presenter identity and selected photo from Presenter Studio's browser-local profile; can show/hide the photo in the preview.
+- Four scene formats: studio anchor, vertical presenter, square update and headline-only; four background themes.
+- Editable headline and supporting line, live scene preview, SVG export and ordered scene rundown.
+- Scene rundown supports duration, lower-third, ticker and production notes; exports CSV.
+- Reads the existing Script Studio English presenter copy for a read-only hand-off preview.
+- No generated/talking avatar, face alteration, voice-to-lip synchronisation, video rendering, AI image generation, cloud sync or social publishing.
+- Presenter profile and scene plan remain in browser-local storage; user-selected photo is not uploaded to GitHub or a server.
+- Every scene remains an editorial draft and requires human review of facts, image rights and attribution.
