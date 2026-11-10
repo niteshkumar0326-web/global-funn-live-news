@@ -29,7 +29,7 @@ A search for "GLOBAL FUNN LIVE NEWS" returned no matching Dropbox folder. Folder
 - Editorial policy and project status
 - GitHub Actions Next.js build workflow
 
-## Workflow validation\n- GitHub source archive workflow run completed successfully on 2026-11-10.\n- Build check initially failed at Node setup because npm cache was configured without a lockfile; the CI workflow was adjusted to remove the lockfile cache requirement. A fresh build result is pending.\n\n## Data and security status
+## Workflow validation\n- A production build exposed malformed JSX in the Story Queue; this has been corrected.\n- Next.js and React dependencies were upgraded to patched releases after the CI install reported vulnerable dependency versions.\n- GitHub source archive workflow run completed successfully on 2026-11-10.\n- Build check initially failed at Node setup because npm cache was configured without a lockfile; the CI workflow was adjusted to remove the lockfile cache requirement. A fresh build result is pending.\n\n## Data and security status
 Story drafts remain in browser localStorage until a server database and authentication are connected. Browser-local drafts do not sync to OneDrive or Dropbox. The GitHub repository is public. No news feed, automated verification, production publishing, or deployment is configured.
 
 ## Backup rule
