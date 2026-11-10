@@ -34,6 +34,7 @@ Updated: 2026-11-10
 - Local browser storage is not a server database, not a multi-user system and not a cloud backup.
 - Stories remain Not Verified by default. A URL alone never makes a story verified. Human editor review is required.
 - Verification checklist progress is also stored locally in the current browser.
+- Dashboard Control Centre counts local drafts, correction records and broadcast segments from this browser; these are not cloud or server totals.
 
 ## Important limitations
 - Correction history is browser-local and can be changed through browser storage; it is not a tamper-proof audit log or public transparency register.
