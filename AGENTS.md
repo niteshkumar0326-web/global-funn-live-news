@@ -28,24 +28,9 @@ Before non-trivial feature work, consult the relevant local skill:
 
 
 ## Token-efficient AI coding workflow
-- Shared ChatGPT / Claude instructions: `docs/AI_CONTEXT_WORKFLOW.md`.
-- If Code Review Graph MCP is connected, call `get_minimal_context_tool` first, then use targeted graph queries with minimal detail; inspect the actual source and tests before changing code.
-- For PR reviews, use the graph's risk / impact / test-gap report rather than scanning the full repository.
-- If MCP is unavailable, use the GitHub repository integration to read this file and only the relevant source files. Never claim the graph is connected or current without checking.
-- Do not load the full project history for routine tasks; consult only the relevant Build entry in `docs/PROJECT_STATUS.md`.
-- Graph context is advisory, not proof of correctness. Keep human editorial approval and normal build verification.
-
-
-## Token-saving integrations
 - Start with `docs/AI_CONTEXT_INDEX.md`; open `docs/TOKEN_TOOLKIT_RESEARCH.md` only for tool selection or evaluation.
-- On supported local coding-agent shells, RTK rewrites noisy command output; preserve exact error/security lines when reviewing.
-- Use Code Review Graph for dependency-aware file selection and Context Saver for compact logs/symbol reads when their MCP servers are available.
-- Do not stack additional overlapping compression proxies without a matched-task quality and token comparison.
-- The mobile `/ai-context` route creates a manual copy/paste handover. It does not connect to desktop MCP or sync data across devices.
-
-
-## Token-saving integrations
-- Start with `docs/AI_CONTEXT_INDEX.md`; open `docs/TOKEN_TOOLKIT_RESEARCH.md` only for tool selection or evaluation.
-- Use Headroom for local context compression/retrieval and optional supported API proxy mode; use Code Review Graph for dependency-aware file selection and impact analysis.
-- Do not stack additional overlapping compression proxies without a matched-task quality and token comparison.
-- The mobile `/ai-context` route creates a manual copy/paste handover. It does not connect to desktop MCP or sync data across devices.
+- If Code Review Graph MCP is available, request minimal task context and impact results; verify against source and tests.
+- Use Headroom MCP to compress large outputs on demand. Optional proxy mode compresses supported Claude API traffic; see the workflow guide.
+- Avoid whole-repository reads and repeated full build-history dumps. Preserve exact compiler errors, security warnings, evidence and editorial facts.
+- Do not stack overlapping compression proxies without matched-task quality and token measurements.
+- The mobile `/ai-context` route creates a manual copy/paste handover; it does not connect to desktop MCP or sync notes across devices.
