@@ -210,3 +210,13 @@ Updated: 2026-11-10
 - All metrics are derived from browser-local records. Empty local data is not interpreted as zero real-world newsroom activity.
 - No cross-device aggregation, staff ranking, payroll scoring, GPS monitoring, automatic reminders, cloud sync or publication approval is provided.
 - Activity counts are operational indicators only and must not be treated as a measure of accuracy, quality or individual productivity.
+
+
+## Build 31 — Code Review Graph & Shared AI Context Integration
+- Integrated the MIT-licensed upstream `tirth8205/code-review-graph` through a project MCP config, graph ignore rules, shared `AGENTS.md` guidance, concise `CLAUDE.md`, and Windows PowerShell setup script.
+- Added a GitHub Actions pull-request workflow using upstream action `tirth8205/code-review-graph@v2.4.0`; it posts advisory risk, impact and test-gap comments. Risk does not fail or block PRs by default.
+- Added `docs/AI_CONTEXT_WORKFLOW.md` explaining the Claude Code local MCP path and the ChatGPT GitHub-connector / PR-comment path.
+- Local graph database `.code-review-graph/` is Git-ignored; no model API keys, paid embedding service, cloud database or remote MCP server are required for local graph indexing.
+- ChatGPT cannot directly connect to a developer machine's local stdio MCP server. Direct custom MCP access depends on plan/workspace support and requires a remote endpoint or supported Secure MCP Tunnel. The documented ChatGPT workflow therefore uses the connected GitHub integration and PR review comment rather than claiming a direct MCP connection.
+- Upstream token-efficiency benchmarks are not a measured GLOBAL FUNN saving; actual savings depend on task and repository size. Token limits and provider usage limits are not eliminated.
+- Build 30 CI failure diagnosed as a TypeScript CSV-export callback type mismatch and corrected in `components/PerformanceReview.tsx`; verification is pending on the corrected commit.
