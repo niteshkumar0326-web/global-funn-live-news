@@ -1,0 +1,22 @@
+# Generated / dependency folders
+node_modules/**
+.next/**
+out/**
+dist/**
+build/**
+coverage/**
+.vercel/**
+# Static assets and large generated media are not source dependencies
+*.map
+*.min.js
+*.min.css
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.mp4
+*.mov
+# Local/private data and environment files
+.env*
+*.log
