@@ -2,8 +2,8 @@
 import {useCallback,useEffect,useState} from "react";
 type Snapshot={stories:number,corrections:number,segments:number,shots:number,productionDone:number,productionTotal:number,mediaAssets:number,loaded:boolean,problem:string};
 const KEYS={stories:"global-funn-newsroom-drafts-v1",rundown:"global-funn-broadcast-rundown-v1",storyboard:"global-funn-storyboard-v1",production:"global-funn-video-production-checklist-v1"};
-function readArray(value:string|null):any[]{if(!value)return[];const parsed=JSON.parse(value);return Array.isArray(parsed)?parsed:[]}
-function readObject(value:string|null):any{if(!value)return{};const parsed=JSON.parse(value);return parsed&&typeof parsed==="object"&&!Array.isArray(parsed)?parsed:{}}
+function readArray(value:string|null):any[]{if(!value)return[];try{const parsed=JSON.parse(value);return Array.isArray(parsed)?parsed:[]}catch{return[]}}
+function readObject(value:string|null):any{if(!value)return{};try{const parsed=JSON.parse(value);return parsed&&typeof parsed==="object"&&!Array.isArray(parsed)?parsed:{}}catch{return{}}}
 export default function NewsroomControlCentre(){
  const [data,setData]=useState<Snapshot>({stories:0,corrections:0,segments:0,shots:0,productionDone:0,productionTotal:0,mediaAssets:0,loaded:false,problem:""});
  const [refreshed,setRefreshed]=useState("");
