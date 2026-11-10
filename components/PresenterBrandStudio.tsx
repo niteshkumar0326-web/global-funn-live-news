@@ -63,7 +63,7 @@ export default function PresenterBrandStudio() {
     }
   }, [profile, ready]);
 
-  const update = <K extends keyof Profile>(key: K, value: Profile[K]) =>
+  const update = <K extends keyof Profile,>(key: K, value: Profile[K]) =>
     setProfile((current) => ({ ...current, [key]: value }));
 
   function uploadPhoto(event: React.ChangeEvent<HTMLInputElement>) {
