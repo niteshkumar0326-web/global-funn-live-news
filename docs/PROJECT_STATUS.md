@@ -93,3 +93,13 @@ Updated: 2026-11-10
 - Users can still edit the broadcast anchor independently.
 - Both integrations read browser-local profile data from the same browser and device. This does not sync between devices or upload personal photos to the server.
 - Existing graphics and broadcast editorial review safeguards remain in place; linking a presenter profile does not approve a story or authorise publication.
+
+
+## Build 20 — Unified Video Production Workspace
+- Added `components/VideoProductionWorkspace.tsx` and route `/production`.
+- One production brief for programme title, producer/editor and production notes.
+- Nine-step checklist links Story Queue, Research Desk, Verification, Script Studio, Broadcast Desk, Presenter Studio, Graphics Studio and Media Library.
+- Progress indicator, local browser save and TXT production-sheet export.
+- Completion is a self-attested checklist only; it does not verify evidence, authorise publication, record video or publish to any platform.
+- Production data remains in the current browser and is not synced across devices or newsroom users.
+- Dashboard navigation now links to Video Production.
