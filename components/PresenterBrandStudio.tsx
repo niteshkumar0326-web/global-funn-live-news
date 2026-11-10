@@ -63,7 +63,7 @@ export default function PresenterBrandStudio() {
     }
   }, [profile, ready]);
 
-  const update = (key: keyof Profile, value: string) =>
+  const update = <K extends keyof Profile>(key: K, value: Profile[K]) =>
     setProfile((current) => ({ ...current, [key]: value }));
 
   function uploadPhoto(event: React.ChangeEvent<HTMLInputElement>) {
@@ -143,7 +143,7 @@ ${image}
       <label style={labelStyle}>Channel tagline<input style={inputStyle} value={profile.tagline} onChange={e => update("tagline", e.target.value)} maxLength={90}/></label>
       <label style={labelStyle}>Your presenter photo<input style={{ ...inputStyle, padding: 8 }} type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadPhoto}/><span className="muted">JPG, PNG or WebP • maximum 900 KB • use a photo you own or have permission to use.</span></label>
       {profile.photo && <div className="rowline" style={{ justifyContent: "flex-start", flexWrap: "wrap" }}><img src={profile.photo} alt="Selected presenter preview" style={{ width: 84, height: 84, objectFit: "cover", borderRadius: 12, border: "1px solid #d4af37" }}/><button type="button" style={buttonStyle} onClick={() => setProfile(current => ({ ...current, photo: "" }))}>Remove photo</button></div>}
-      <label style={labelStyle}>Layout<select style={inputStyle} value={profile.layout} onChange={e => update("layout", e.target.value)}><option value="lower-third">Landscape broadcast (16:9)</option><option value="portrait">Vertical presenter card (9:16)</option><option value="avatar">Square channel identity (1:1)</option></select></label>
+      <label style={labelStyle}>Layout<select style={inputStyle} value={profile.layout} onChange={e => update("layout", e.target.value as Profile["layout"])}><option value="lower-third">Landscape broadcast (16:9)</option><option value="portrait">Vertical presenter card (9:16)</option><option value="avatar">Square channel identity (1:1)</option></select></label>
       <div className="rowline" style={{ flexWrap: "wrap" }}><strong>{layoutName}</strong><button type="button" style={buttonStyle} onClick={exportSvg}>Export editable SVG</button></div>
       <div className="proof" role="status">{notice}</div>
     </section>
