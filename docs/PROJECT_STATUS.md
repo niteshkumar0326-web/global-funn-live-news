@@ -14,7 +14,7 @@ Updated: 2026-11-10
 - `/verification` — human editorial verification checklist and sample proof card
 - `/regional-desks` — directory for 28 states and 8 Union Territories
 - `/international` — six regional international desks
-- `/archive` — correction/update register prototype
+- `/archive` — correction/update register prototype\n- `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, timing and text export
 
 ## Project assets and safeguards
 - Next.js App Router, React, TypeScript, Tailwind CSS and Lucide icons
@@ -31,7 +31,7 @@ Updated: 2026-11-10
 - Stories remain Not Verified by default. A URL alone never makes a story verified. Human editor review is required.
 
 ## Not implemented / not connected
-- No production database or durable server-side story storage
+- Broadcast rundowns are also saved in browser localStorage on the current device only.\n- No production database or durable server-side story storage
 - No authentication, reporter/editor roles or access controls
 - No automated source verification or fact-checking
 - No live news API/feed connection
