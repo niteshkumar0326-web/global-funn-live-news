@@ -34,7 +34,7 @@ Most newsroom workflows use browser localStorage. Media Library uses browser Ind
 
 ## Token-efficient work
 - Mobile / desktop handover: open `/ai-context` (AI Context Pocket) to create and copy a small task-specific context pack; local drafts remain on that browser/device.
-- Claude MCPs: Code Review Graph + `@dongnh311/claude-context-saver`; RTK rewrites supported terminal commands to compact output on configured local coding agents.
+- Claude MCPs: Code Review Graph + Headroom. Headroom can run as an on-demand MCP compressor or local proxy; see the workflow guide.
 - ChatGPT mobile uses the copy/paste context pack and GitHub repository access; it does not connect to the phone's or PC's local stdio MCP server.
 
 ## Token-efficient work
