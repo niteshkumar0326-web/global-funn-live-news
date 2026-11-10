@@ -63,3 +63,11 @@ Updated: 2026-11-10
 5. Add safe, permissioned news-feed integrations and source review tools.
 6. Add backups to approved cloud destinations.
 7. Verify CI and deploy only after production configuration and security review.
+
+
+## Superpowers development workflow integration
+- Selected upstream `obra/superpowers` skills are stored in `.agents/skills/`.
+- Included: using-superpowers, brainstorming, writing-plans, test-driven-development, systematic-debugging, requesting-code-review, receiving-code-review and finishing-a-development-branch.
+- Upstream MIT license notice is retained at `.agents/skills/SUPERPOWERS-LICENSE`.
+- Repository-level instructions are in `AGENTS.md`; integration notes are in `docs/SUPERPOWERS-INTEGRATION.md`.
+- This is a source-level skill integration only. It does not install a running agent into the deployed website, add AI news verification, or enable automated publishing. The imported set is selected, not a complete upstream mirror.
