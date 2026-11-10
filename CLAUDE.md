@@ -1,6 +1,6 @@
 # GLOBAL FUNN — Claude Code project notes
 
-Read `AGENTS.md` for shared rules. Consult `docs/PROJECT_STATUS.md` only for the relevant build history; avoid loading the full history on routine tasks.
+Start with `docs/AI_CONTEXT_INDEX.md`, then read `AGENTS.md` for shared rules. Consult only the relevant `docs/PROJECT_STATUS.md` entry when build history is needed; never load the full history for routine tasks.
 
 ## Token-saving default
 Use Code Review Graph MCP first when connected:
