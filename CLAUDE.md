@@ -20,7 +20,7 @@ If the MCP server is not connected, say so and use targeted file reads. Never as
 
 
 ## Token-saver tools
-- RTK: supported shell command output is rewritten by its hook; use `rtk init --show` to verify after Windows setup.
-- MCPs: verify both `code-review-graph` and `context-saver` in `/mcp`; if one is missing, report that rather than pretending it is active.
+- Headroom: use `headroom_compress` for large outputs; for full proxy compression, start `headroom proxy` and launch Claude with `$env:ANTHROPIC_BASE_URL="http://127.0.0.1:8787"; claude`. Use `headroom_stats` to inspect savings.
+- MCPs: verify both `code-review-graph` and `headroom` in `/mcp`; if one is missing, report that rather than pretending it is active.
 - Start from the task-specific context pack at `/ai-context` when a handover is useful; do not paste the full build history.
 - Avoid stacking Headroom / Context Mode / SQZ with the selected stack until an A/B test proves extra value.
