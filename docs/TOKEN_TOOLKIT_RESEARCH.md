@@ -7,9 +7,9 @@ Research snapshot: 10 November 2026. This is a curated implementation decision, 
 | Repository | What it targets | Decision for GLOBAL FUNN |
 |---|---|---|
 | https://github.com/tirth8205/code-review-graph | Dependency graph, targeted code context, change impact and PR review | Already integrated in Build 31 |
-| https://github.com/rtk-ai/rtk | Compresses terminal output before coding agents read it; hooks for Claude Code and other coding agents | Added to Windows setup script in Build 32 |
-| https://github.com/dongnh311/claude-context-saver | Compresses logs and reads source by symbol through MCP | Added as project MCP server in Build 32 |
-| https://github.com/headroomlabs-ai/headroom | Library/proxy/MCP for compressing tool outputs, logs, files and RAG chunks | Strong alternative; not stacked with Context Saver yet |
+| https://github.com/headroomlabs-ai/headroom | Local compression gateway, MCP tools, retrieval and optional proxy for coding agents | Selected for Build 32; MCP config + Windows setup |
+| https://github.com/rtk-ai/rtk | Compresses terminal output before coding agents read it; hooks for Claude Code and other coding agents | Alternative; not stacked with Headroom |
+| https://github.com/dongnh311/claude-context-saver | Compresses logs and reads source by symbol through MCP | Not enabled: current README says WSL-only for Windows in released versions |
 | https://github.com/mksglu/context-mode | MCP tool-output sandboxing and session continuity / retrieval | Strong alternative; evaluate only if session-history overhead remains high |
 | https://github.com/AzozzALFiras/claude-context-optimizer | Smart reads, log compression, cache and checkpoints | Alternative; overlapping with selected Context Saver |
 | https://github.com/ojuschugh1/sqz | Rust context compression and deduplication for coding-agent tool output | Alternative; benchmark before adding another output filter |
@@ -26,7 +26,7 @@ Installing several overlapping MCP servers and shell proxies can add startup ove
 3. **Context Saver:** verbose logs and broad source reads through MCP.
 4. **AI Context Pocket:** reusable compact handover for ChatGPT/Claude on mobile or desktop, without requiring a local MCP connection.
 
-Headroom, Context Mode and SQZ remain alternatives for an A/B test, not extra layers enabled simultaneously.
+RTK, Context Mode and SQZ remain alternatives for an A/B test, not extra layers enabled simultaneously.
 
 ## Mobile reality
 
