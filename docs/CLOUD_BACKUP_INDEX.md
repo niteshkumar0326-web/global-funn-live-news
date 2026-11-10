@@ -25,11 +25,11 @@ A search for "GLOBAL FUNN LIVE NEWS" returned no matching Dropbox folder. Folder
 - Human verification checklist
 - India state and Union Territory directory
 - International desks
-- Corrections/archive prototype
+- Corrections/archive prototype\n- Broadcast rundown builder with local segment ordering, scripts, duration estimates and text export
 - Editorial policy and project status
 - GitHub Actions Next.js build workflow
 
-## Data and security status
+## Workflow validation\n- GitHub source archive workflow run completed successfully on 2026-11-10.\n- Build check initially failed at Node setup because npm cache was configured without a lockfile; the CI workflow was adjusted to remove the lockfile cache requirement. A fresh build result is pending.\n\n## Data and security status
 Story drafts remain in browser localStorage until a server database and authentication are connected. Browser-local drafts do not sync to OneDrive or Dropbox. The GitHub repository is public. No news feed, automated verification, production publishing, or deployment is configured.
 
 ## Backup rule
