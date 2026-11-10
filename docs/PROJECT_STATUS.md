@@ -17,7 +17,7 @@ Updated: 2026-11-10
 - `/archive` — browser-local correction register connected to Story Queue records
 - `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, adjustable-font teleprompter mode, timing and text export
 - `/graphics` — local News Graphics Studio with square, landscape and vertical headline templates, live preview and SVG export
-- `/research` — claim-by-claim evidence worksheet with source details, supporting/contradicting/context/unclear assessments and JSON export
+- `/scripts` — bilingual English/Hindi presenter script workspace, YouTube copy and subtitle drafting with local save and TXT export\n- `/research` — claim-by-claim evidence worksheet with source details, supporting/contradicting/context/unclear assessments and JSON export
 - `/cloud` — server-side environment readiness check for the planned Supabase connection
 
 ## Project assets and safeguards
