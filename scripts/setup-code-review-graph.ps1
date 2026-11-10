@@ -19,21 +19,15 @@ if (-not (Get-Command uvx -ErrorAction SilentlyContinue)) {
   throw "uvx was not found after installing uv. Close and reopen PowerShell, then run this script again."
 }
 
-# RTK compresses terminal command output before Claude Code reads it.
-if (Get-Command winget -ErrorAction SilentlyContinue) {
-  if (-not (Get-Command rtk -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing RTK command-output compressor..." -ForegroundColor Yellow
-    winget install --id rtk-ai.rtk --exact --silent --accept-package-agreements --accept-source-agreements
-  }
-  $env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")
-  if (Get-Command rtk -ErrorAction SilentlyContinue) {
-    rtk init -g --hook-only
-    rtk --version
-  } else {
-    Write-Warning "RTK installation was not detected in this PowerShell session. Reopen PowerShell and run: rtk init -g --hook-only"
-  }
+Write-Host "Installing Headroom local context compression gateway..." -ForegroundColor Yellow
+uv tool install --python 3.13 "headroom-ai[all]"
+$toolScripts = py -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"
+if ($toolScripts -and (Test-Path $toolScripts)) { $env:Path = "$toolScripts;$env:Path" }
+if (Get-Command headroom -ErrorAction SilentlyContinue) {
+  headroom doctor
+  headroom mcp status
 } else {
-  Write-Warning "winget not found. Install RTK manually from https://github.com/rtk-ai/rtk then run: rtk init -g --hook-only"
+  Write-Warning "Headroom command is not on PATH yet. Reopen PowerShell and run: headroom doctor"
 }
 
 Write-Host "Installing Code Review Graph local index..." -ForegroundColor Yellow
@@ -41,5 +35,8 @@ uvx code-review-graph install --platform claude-code --yes
 uvx code-review-graph build
 uvx code-review-graph status
 
-Write-Host "Context Saver is configured in the repository .mcp.json and will be fetched by npx when Claude Code starts." -ForegroundColor Yellow
-Write-Host "Restart Claude Code, open this repository, and run /mcp to check code-review-graph and context-saver." -ForegroundColor Green
+Write-Host "The project .mcp.json registers Headroom + Code Review Graph for Claude Code." -ForegroundColor Yellow
+Write-Host "Restart Claude Code and run /mcp to verify both servers." -ForegroundColor Green
+Write-Host "Optional full proxy mode: Terminal 1: headroom proxy" -ForegroundColor Cyan
+Write-Host 'Terminal 2: $env:ANTHROPIC_BASE_URL="http://127.0.0.1:8787"; claude' -ForegroundColor Cyan
+Write-Host "The AI Context Pocket /ai-context is the manual mobile copy/paste bridge; it does not connect to local MCP." -ForegroundColor Green
