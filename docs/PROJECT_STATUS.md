@@ -220,3 +220,15 @@ Updated: 2026-11-10
 - ChatGPT cannot directly connect to a developer machine's local stdio MCP server. Direct custom MCP access depends on plan/workspace support and requires a remote endpoint or supported Secure MCP Tunnel. The documented ChatGPT workflow therefore uses the connected GitHub integration and PR review comment rather than claiming a direct MCP connection.
 - Upstream token-efficiency benchmarks are not a measured GLOBAL FUNN saving; actual savings depend on task and repository size. Token limits and provider usage limits are not eliminated.
 - Build 30 CI failure diagnosed as a TypeScript CSV-export callback type mismatch and corrected in `components/PerformanceReview.tsx`; verification is pending on the corrected commit.
+
+
+## Build 32 — Cross-device Token Saver Toolkit
+- Added `@dongnh311/claude-context-saver` to project `.mcp.json` alongside Code Review Graph. It compresses tool logs and supports symbol-level source reads for Claude Code/local MCP clients.
+- Extended the Windows setup script to install RTK via winget when available and configure its global hook-only integration. RTK filters supported shell command output before it enters coding-agent context.
+- Added `/ai-context` — AI Context Pocket, a responsive mobile/desktop handover screen. Users can write a bounded task, add optional local notes, copy a compact context prompt, and download a JSON context pack.
+- Added dashboard navigation and updated the compact project index and shared workflow documentation.
+- Mobile usage: open the hosted app's `/ai-context` route, copy the task prompt and paste it into ChatGPT mobile or Claude. Optional notes stay in that device/browser's localStorage; no cross-device sync is active.
+- ChatGPT mobile does not gain direct access to local PC MCP servers, local terminal hooks, or private desktop files. Context Pocket provides a manual portable bridge, not a hidden connection.
+- Selected integrations target different bottlenecks: RTK (terminal output), Context Saver (logs and symbol reads), Code Review Graph (dependency/impact context). Headroom and Context Mode remain alternatives for controlled evaluation, not stacked by default.
+- No token-savings percentage is claimed for GLOBAL FUNN until measured on matched tasks. Token quotas and provider rate limits cannot be bypassed.
+- Windows setup script updated; actual local installation and MCP connectivity still require running the script on the user's computer and verifying `/mcp`.
