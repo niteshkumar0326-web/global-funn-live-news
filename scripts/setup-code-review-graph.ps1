@@ -10,6 +10,10 @@ py -m pip install --user --upgrade uv
 $scripts = py -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"
 if ($scripts -and (Test-Path $scripts)) {
   $env:Path = "$scripts;$env:Path"
+  $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+  if (($userPath -split ";") -notcontains $scripts) {
+    [Environment]::SetEnvironmentVariable("Path", (($userPath.TrimEnd(";") + ";" + $scripts).Trim(";")), "User")
+  }
 }
 if (-not (Get-Command uvx -ErrorAction SilentlyContinue)) {
   throw "uvx was not found after installing uv. Close and reopen PowerShell, then run this script again."
