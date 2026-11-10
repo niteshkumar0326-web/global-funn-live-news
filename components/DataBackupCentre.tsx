@@ -1,5 +1,5 @@
 "use client";
-import {useMemo,useState} from "react";
+import {useEffect,useState} from "react";
 type Entry={key:string,label:string,description:string};
 const ENTRIES:Entry[]=[
  {key:"global-funn-newsroom-drafts-v1",label:"Story queue & corrections",description:"Story drafts, workflow history and correction records"},
@@ -18,7 +18,8 @@ export default function DataBackupCentre(){
  const [includeEmpty,setIncludeEmpty]=useState(false),[notice,setNotice]=useState("Choose an action to create or restore a backup."),[summary,setSummary]=useState<string[]>([]),[busy,setBusy]=useState(false),[fileName,setFileName]=useState("");
  const [preview,setPreview]=useState<Backup|null>(null),[replace,setReplace]=useState(false);
  const [confirmText,setConfirmText]=useState("");
- const status=useMemo(()=>{try{return ENTRIES.map(e=>({ ...e,present:localStorage.getItem(e.key)!==null}));}catch{return ENTRIES.map(e=>({...e,present:false}));}},[notice]);
+ const [status,setStatus]=useState(ENTRIES.map(e=>({...e,present:false})));
+ useEffect(()=>{try{setStatus(ENTRIES.map(e=>({...e,present:localStorage.getItem(e.key)!==null})));}catch{/* Browser storage may be unavailable. */}},[notice]);
  function exportBackup(){
   setBusy(true);try{
    const records:Backup["records"]={};const lines:string[]=[];
