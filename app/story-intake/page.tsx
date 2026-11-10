@@ -1,0 +1,4 @@
+import StoryIntakeForm from "@/components/StoryIntakeForm";
+export default function StoryIntakePage() {
+ return <main className="shell"><header className="topbar"><a href="/" style={{color:"#d4af37",textDecoration:"none",fontWeight:800}}>← GLOBAL FUNN NEWSROOM</a><span className="pill">EDITORIAL WORKFLOW</span></header><section className="hero"><div className="eyebrow">NEWSROOM • STORY INTAKE</div><h1>Build a story with <span className="gold">proof.</span></h1><p className="muted" style={{maxWidth:680,lineHeight:1.7}}>Capture the claim, source references and editorial status in one place. New submissions start as Not Verified and are not published automatically.</p></section><StoryIntakeForm/><footer className="footer"><span>GLOBAL FUNN LIVE NEWS • KHABAR HAR PAL, NAZAR GLOBAL</span><span>Editorial approval required before publication</span></footer></main>;
+}
