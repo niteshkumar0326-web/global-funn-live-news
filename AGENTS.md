@@ -34,3 +34,11 @@ Before non-trivial feature work, consult the relevant local skill:
 - If MCP is unavailable, use the GitHub repository integration to read this file and only the relevant source files. Never claim the graph is connected or current without checking.
 - Do not load the full project history for routine tasks; consult only the relevant Build entry in `docs/PROJECT_STATUS.md`.
 - Graph context is advisory, not proof of correctness. Keep human editorial approval and normal build verification.
+
+
+## Token-saving integrations
+- Start with `docs/AI_CONTEXT_INDEX.md`; open `docs/TOKEN_TOOLKIT_RESEARCH.md` only for tool selection or evaluation.
+- On supported local coding-agent shells, RTK rewrites noisy command output; preserve exact error/security lines when reviewing.
+- Use Code Review Graph for dependency-aware file selection and Context Saver for compact logs/symbol reads when their MCP servers are available.
+- Do not stack additional overlapping compression proxies without a matched-task quality and token comparison.
+- The mobile `/ai-context` route creates a manual copy/paste handover. It does not connect to desktop MCP or sync data across devices.
