@@ -191,3 +191,12 @@ Updated: 2026-11-10
 - Shows active, overdue and completed counts and supports search/filter plus JSON export.
 - Stores assignments locally under `global-funn-live-assignments-v1`. This is not a staff account system and does not send messages, notifications, GPS tracking or cross-device updates.
 - Assignment completion is not fact verification or publication approval; human evidence review and editor sign-off remain required.
+
+
+## Build 29 — Reporter Daily Plan & DSR
+- Added `components/ReporterDSR.tsx` and route `/reporter-dsr`; linked from the main dashboard.
+- Captures daily date, reporter, beat/territory, target, morning plan, blockers and end-of-day summary.
+- Adds field activity entries for visits, interviews, source verification, media capture, follow-up calls and other work, with outcome, story notes and optional evidence URL.
+- Supports reopening/editing a saved daily report, searching/filtering the register, and exporting JSON or CSV.
+- Stores reports locally under `global-funn-reporter-dsr-v1`; no staff login, GPS tracking, photo scanning, WhatsApp delivery, cloud sync or automatic reminders are connected.
+- Activity notes and evidence links are user-entered; the workspace does not independently verify facts, visits or submitted media.
