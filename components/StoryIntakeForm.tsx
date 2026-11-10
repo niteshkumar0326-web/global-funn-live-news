@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 type Draft = { id:string; headline:string; desk:string; location:string; summary:string; source1:string; source2:string; status:string; editor:string; createdAt:string };
 const KEY="global-funn-newsroom-drafts-v1";
-const empty={headline:"",desk:"India",location:"",summary:"",source1:"",source2:"",status:"Not Verified",editor:""};
+type DraftInput={headline:string;desk:string;location:string;summary:string;source1:string;source2:string;status:string;editor:string};
+const empty:DraftInput={headline:"",desk:"India",location:"",summary:"",source1:"",source2:"",status:"Not Verified",editor:""};
 export default function StoryIntakeForm(){
- const [draft,setDraft]=useState(empty); const [items,setItems]=useState<Draft[]>([]); const [message,setMessage]=useState("");
+ const [draft,setDraft]=useState<DraftInput>(empty); const [items,setItems]=useState<Draft[]>([]); const [message,setMessage]=useState("");
  useEffect(()=>{try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed))setItems(parsed)}}catch{setMessage("Saved browser data could not be read.")}},[]);
  const links=[draft.source1,draft.source2].filter(x=>/^https?:\/\//i.test(x.trim()));
  const valid=draft.headline.trim().length>5&&draft.summary.trim().length>20&&links.length>=1;
