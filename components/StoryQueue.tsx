@@ -48,7 +48,7 @@ export default function StoryQueue(){
  function changeWorkflow(story:Story,nextState:"Submitted for Review"|"Approved"|"Rejected"){
   if(!workflowEditor.trim()){setMessage("Enter the responsible editor name before changing workflow state.");return;}
   if(nextState==="Rejected"&&workflowReason.trim().length<10){setMessage("Add a rejection reason of at least 10 characters.");return;}
-  if(nextState==="Approved"&&(!story.source1||!/^https?:\\/\\//i.test(story.source1)||story.status==="Disputed")){setMessage("Approval blocked: check the primary source and resolve any disputed status first.");return;}
+  if(nextState==="Approved"&&(!story.source1||!(/^https:\/\//i.test(story.source1)||/^http:\/\//i.test(story.source1))||story.status==="Disputed")){setMessage("Approval blocked: check the primary source and resolve any disputed status first.");return;}
   const current=story.workflowState||"Draft";
   if(nextState==="Approved"&&current!=="Submitted for Review"){setMessage("Only stories submitted for review can be approved.");return;}
   if(nextState==="Rejected"&&current!=="Submitted for Review"){setMessage("Only stories submitted for review can be rejected.");return;}
