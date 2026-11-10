@@ -161,3 +161,14 @@ Updated: 2026-11-10
 - Browser-local counts are activity indicators only; they are not verified-story counts, live server metrics, quality scores or publication approvals.
 - Media Library IndexedDB assets are not counted; other devices and users are not included. Same-tab changes may require manual refresh.
 - No new cloud storage, authentication, automatic fact-checking or publishing connection was added.
+
+
+## Build 26 — Data & Backup Centre
+- Added `components/DataBackupCentre.tsx` and route `/backup`; linked from the main dashboard.
+- Exports recognised browser-local newsroom records as a versioned JSON bundle: story queue/corrections, broadcast rundown, verification checklist, bilingual scripts, presenter profile, storyboard and production checklist, plus optional voice-studio data when present.
+- Includes backup file inspection and explicit confirmation before restore. Merge mode updates records included in the backup; replace mode can also clear recognised keys marked absent.
+- Restore accepts only the known bundle format/version and known storage keys; it is a local browser import, not a server upload.
+- Presenter photo data can be embedded in the JSON bundle. Treat backups as private.
+- Media Library original files are not embedded; download originals separately from Media Library. Its exported JSON index is metadata only.
+- Export/import does not create cloud sync, authentication, encryption-at-rest, multi-user access or cross-device restore. Restore must run on the same application origin where browser data is stored.
+- Browser storage capacity and partial restore failures remain possible; create a fresh backup before restore and verify each workspace after import.
