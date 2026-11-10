@@ -44,8 +44,7 @@ export default function BroadcastRundown(){
   function remove(id:string){persist(segments.filter(s=>s.id!==id));}
   function saveSettings(){persist(segments,title,anchor);}
   function exportRun(){
-    const textOut=[title,anchor,"Estimated duration: "+Math.floor(total/60)+"m "+(total%60)+"s","",...segments.flatMap((s,i)=>[(i+1)+". "+s.title+" ["+s.desk+" • "+s.duration+" sec]","PRESENTER: "+s.presenterScript,"EDITORIAL / SOURCE NOTES: "+s.sourceNotes,""])].join("
-");
+    const textOut=[title,anchor,"Estimated duration: "+Math.floor(total/60)+"m "+(total%60)+"s","",...segments.flatMap((s,i)=>[(i+1)+". "+s.title+" ["+s.desk+" • "+s.duration+" sec]","PRESENTER: "+s.presenterScript,"EDITORIAL / SOURCE NOTES: "+s.sourceNotes,""])].join("\\n");
     const blob=new Blob([textOut],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="global-funn-broadcast-rundown.txt";a.click();URL.revokeObjectURL(url);
   }
   const input:React.CSSProperties={width:"100%",background:"#08182c",border:"1px solid #355071",borderRadius:9,padding:"10px 12px",color:"#f8fafc",fontSize:13};
