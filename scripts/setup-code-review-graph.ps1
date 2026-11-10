@@ -31,7 +31,6 @@ if ($toolBin -and (Test-Path $toolBin)) {
 }
 if (Get-Command headroom -ErrorAction SilentlyContinue) {
   headroom doctor
-  headroom mcp status
 } else {
   Write-Warning "Headroom command is not on PATH yet. Reopen PowerShell and run: headroom doctor"
 }
