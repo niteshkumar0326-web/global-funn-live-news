@@ -17,7 +17,9 @@ Updated: 2026-11-10
 - `/archive` — browser-local correction register connected to Story Queue records
 - `/broadcast` — local programme rundown builder with segment ordering, presenter scripts, adjustable-font teleprompter mode, timing and text export
 - `/graphics` — local News Graphics Studio with square, landscape and vertical headline templates, live preview and SVG export
-- `/media` — browser-local newsroom media library with file previews, category and rights tracking, download and metadata index export\n- `/scripts` — bilingual English/Hindi presenter script workspace, YouTube copy and subtitle drafting with local save and TXT export\n- `/research` — claim-by-claim evidence worksheet with source details, supporting/contradicting/context/unclear assessments and JSON export
+- `/media` — browser-local newsroom media library with file previews, category and rights tracking, download and metadata index export
+- `/scripts` — bilingual English/Hindi presenter script workspace, YouTube copy and subtitle drafting with local save and TXT export
+- `/research` — claim-by-claim evidence worksheet with source details, supporting/contradicting/context/unclear assessments and JSON export
 - `/cloud` — server-side environment readiness check for the planned Supabase connection
 
 ## Project assets and safeguards
@@ -51,7 +53,8 @@ Updated: 2026-11-10
 - Broadcast Desk includes a browser-local teleprompter reader with adjustable text size; it is a script display aid only and does not fact-check, record video/audio or transmit.
 - No live news API/feed connection or correspondent/field reporting ingestion.
 - News Graphics Studio exports editable SVG design files only. Its source reference field is a label, not a source validator; every graphic remains an editorial preview until a human editor checks facts, evidence and rights.
-- Media Library stores selected files in this browser's IndexedDB only; no cloud upload, encrypted access control or cross-device sync. Exported index contains metadata only; original files need separate backup.\n- No public story publishing or social publishing workflow.
+- Media Library stores selected files in this browser's IndexedDB only; no cloud upload, encrypted access control or cross-device sync. Exported index contains metadata only; original files need separate backup.
+- No public story publishing or social publishing workflow.
 - No hosting/deployment configured or verified.
 - Dropbox and OneDrive project folders, where present, are not verified full source backups.
 
@@ -81,3 +84,12 @@ Updated: 2026-11-10
 - Exports an editable SVG layout. Review image rights, crop, spelling and editorial approval before use.
 - Profile and selected image are stored in the current browser's localStorage only; no server upload or cross-device sync.
 - Does not create a talking avatar, generate video, record, verify identity or publish to social platforms.
+
+
+## Build 19 — Shared Presenter Identity
+- News Graphics Studio reads the presenter profile saved by Presenter Studio and uses the channel name as its initial graphic label.
+- The presenter photo is displayed in the graphics preview and embedded in the exported SVG when present.
+- Broadcast Desk reads the same profile, pre-fills the anchor name when the default placeholder is still in use, and displays the selected presenter photo and profile details.
+- Users can still edit the broadcast anchor independently.
+- Both integrations read browser-local profile data from the same browser and device. This does not sync between devices or upload personal photos to the server.
+- Existing graphics and broadcast editorial review safeguards remain in place; linking a presenter profile does not approve a story or authorise publication.
