@@ -23,4 +23,3 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment: "true"
           fail-on-risk: "none"
-          details: "risk,impact,gaps"
