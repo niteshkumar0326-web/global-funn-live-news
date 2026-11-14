@@ -18,9 +18,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run local Code Review Graph analysis
-        uses: tirth8205/code-review-graph@v2.4.0
+        uses: tirth8205/code-review-graph@v2.3.9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment: "true"
           fail-on-risk: "none"
-          details: "risk,impact,gaps"
