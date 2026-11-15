@@ -15,17 +15,19 @@ Before non-trivial feature work, consult the relevant local skill:
 ## GLOBAL FUNN editorial safeguards
 - Do not invent facts, sources, quotes, eyewitness accounts, images, or URLs.
 - Keep evidence links visible; label claims Confirmed, Developing, Disputed, or Not Verified.
-- A URL alone never verifies a claim. Require human editorial approval before publication.
+- A URL alone never verifies a claim. Routine eligible stories may publish automatically only after every configured evidence, attribution, rights, safety, duplicate and media-QC gate passes; no per-video approval is required.
+- Hold sensitive, disputed, unsupported, privacy-invasive or high-consequence stories for human review. Fail closed on missing, stale, conflicting or unavailable evidence.
 - Label AI-generated illustrations; respect privacy, dignity, copyright, and media permissions.
-- Never publish publicly or deploy without explicit user approval.
+- Support an owner-controlled emergency pause. Never bypass YouTube policy, API quota, OAuth consent or copyright restrictions.
 
 ## Engineering safeguards
 - Preserve the existing Next.js App Router architecture and existing newsroom modules.
 - Prefer small, reversible changes; do not replace the application with the upstream skills repository.
-- Do not commit secrets, API keys, personal data, or uploaded media without explicit permission.
+- Do not commit secrets, API keys, personal data, or uploaded media.
 - Verify builds/tests and report their actual status; never claim checks passed without evidence.
 - Browser-local storage must be described accurately and must not be represented as cloud sync.
-
+- Keep credentials in encrypted server-side secrets; never expose privileged keys to browser code.
+- Paid infrastructure provisioning and account OAuth consent require the account owner's authorized action; routine news publication must not require repeated owner approval.
 
 ## Token-efficient AI coding workflow
 - Start with `docs/AI_CONTEXT_INDEX.md`; open `docs/TOKEN_TOOLKIT_RESEARCH.md` only for tool selection or evaluation.
