@@ -35,14 +35,18 @@ select is(
 );
 
 -- No browser-facing role can access worker/audit records directly.
-select ok(not has_table_privilege('anon', 'public.news_feed_sources', 'SELECT'),
+select ok(to_regclass('public.news_feed_sources') is null
+          or not has_table_privilege('anon', to_regclass('public.news_feed_sources'), 'SELECT'),
   'anon cannot read feed registry');
-select ok(not has_table_privilege('authenticated', 'public.news_ingest_runs', 'INSERT'),
+select ok(to_regclass('public.news_ingest_runs') is null
+          or not has_table_privilege('authenticated', to_regclass('public.news_ingest_runs'), 'INSERT'),
   'authenticated clients cannot create ingest runs');
-select ok(not has_table_privilege('authenticated', 'public.news_publication_jobs', 'INSERT'),
+select ok(to_regclass('public.news_publication_jobs') is null
+          or not has_table_privilege('authenticated', to_regclass('public.news_publication_jobs'), 'INSERT'),
   'authenticated clients cannot enqueue publication jobs');
-select ok(not has_table_privilege('authenticated', 'public.news_audit_events', 'UPDATE')
-          and not has_table_privilege('authenticated', 'public.news_audit_events', 'DELETE'),
+select ok(to_regclass('public.news_audit_events') is null
+          or (not has_table_privilege('authenticated', to_regclass('public.news_audit_events'), 'UPDATE')
+              and not has_table_privilege('authenticated', to_regclass('public.news_audit_events'), 'DELETE')),
   'authenticated clients cannot alter or delete audit history');
 
 -- Eligibility must be enforced by a server-side function; its behavior is
