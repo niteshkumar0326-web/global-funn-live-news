@@ -18,9 +18,30 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run local Code Review Graph analysis
-        uses: tirth8205/code-review-graph@v2.4.0
+        id: crg
+        # Pinned to the v2.4.0 release commit. The action's own comment step
+        # calls `gh api user`, which the default GITHUB_TOKEN cannot do, so the
+        # job failed on every PR; we post the comment ourselves below.
+        uses: tirth8205/code-review-graph@b3f1285965a1337b3821e4423da03b65d70ee423 # v2.4.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment: "true"
+          comment: "false"
           fail-on-risk: "none"
           details: "risk,impact,gaps"
+
+      - name: Upsert review comment with the workflow token
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COMMENT_FILE: ${{ steps.crg.outputs.comment-file }}
+        run: |
+          set -euo pipefail
+          marker='<!-- code-review-graph-report -->'
+          comment_id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate \
+            --jq ".[] | select(.user.type == \"Bot\" and (.body | startswith(\"${marker}\"))) | .id" | head -n 1)
+          if [ -n "${comment_id}" ]; then
+            gh api --method PATCH --silent "repos/${GITHUB_REPOSITORY}/issues/comments/${comment_id}" -F body=@"${COMMENT_FILE}"
+          else
+            gh api --method POST --silent "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" -F body=@"${COMMENT_FILE}"
+          fi
