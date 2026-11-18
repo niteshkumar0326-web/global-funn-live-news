@@ -58,15 +58,15 @@ export function parseLatestFromFeed(xml: string): Omit<ChannelVideo, "isLive" | 
 }
 
 export async function getChannelVideo(): Promise<ChannelVideo> {
-  const liveHtml = await fetchText(\`https://www.youtube.com/channel/\${CHANNEL_ID}/live\`);
+  const liveHtml = await fetchText("https://www.youtube.com/channel/" + CHANNEL_ID + "/live");
   const liveId = liveHtml ? parseLivePage(liveHtml) : null;
   if (liveId) return { videoId: liveId, title: null, published: null, isLive: true, source: "live" };
 
-  const liveNewsFeed = await fetchText(\`https://www.youtube.com/feeds/videos.xml?channel_id=\${CHANNEL_ID}\`);
+  const liveNewsFeed = await fetchText("https://www.youtube.com/feeds/videos.xml?channel_id=" + CHANNEL_ID);
   const liveNewsLatest = liveNewsFeed ? parseLatestFromFeed(liveNewsFeed) : null;
   if (liveNewsLatest) return { ...liveNewsLatest, isLive: false, source: "feed" };
 
-  const mainFeed = await fetchText(\`https://www.youtube.com/feeds/videos.xml?channel_id=\${MAIN_CHANNEL_ID}\`);
+  const mainFeed = await fetchText("https://www.youtube.com/feeds/videos.xml?channel_id=" + MAIN_CHANNEL_ID);
   const mainLatest = mainFeed ? parseLatestFromFeed(mainFeed) : null;
   if (mainLatest) return { ...mainLatest, isLive: false, source: "main-fallback" };
 
