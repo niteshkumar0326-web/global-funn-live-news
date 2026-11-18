@@ -27,7 +27,9 @@ Create separate normalized review copies:
 powershell -ExecutionPolicy Bypass -File .\scripts\repair-video-audio.ps1 -InputPath "C:\Newsroom\Exports" -Normalize
 ```
 
-The script checks the audio stream, codec, sample rate, channel count, mean and peak level, then creates a CSV report. With `-Normalize`, it creates new H.264/AAC review copies using loudness normalization targets of -16 LUFS integrated and -1.5 dBTP. It skips files with missing or silent/extremely quiet audio. It never overwrites an original source video, and it avoids replacing an existing normalized output.
+The script checks the audio stream, codec, sample rate, channel count, mean and peak level, then creates a CSV report. With `-Normalize`, it creates new H.264/AAC review copies using loudness normalization targets of -16 LUFS integrated and -1.5 dBTP. It skips files with missing or silent/extremely quiet audio. It never overwrites an original source video, excludes its own output folder on repeat runs, and avoids replacing an existing normalized output.
+
+The normalized MP4 contains the primary video stream and first audio stream; separate subtitle or additional audio tracks are not copied. Keep the original source and verify subtitles in your final editor.
 
 **Human QC is mandatory:** listen on headphones and a phone, verify pronunciation, language, clipping/distortion, background noise, lip-sync, picture, captions and source rights. Do not publish merely because the audio check passed.
 
