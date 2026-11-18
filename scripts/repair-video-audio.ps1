@@ -34,7 +34,16 @@ if (-not $OutputDirectory) {
   $parent = if ($inputItem.PSIsContainer) { $resolvedInput } else { Split-Path -Parent $resolvedInput }
   $OutputDirectory = Join-Path $parent "audio-qc-output"
 }
+$OutputDirectory = [IO.Path]::GetFullPath($OutputDirectory)
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
+
+# Do not re-scan this tool's own output when the output folder is inside the input folder.
+$outputPrefix = $OutputDirectory.TrimEnd([char[]]@([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)) + [IO.Path]::DirectorySeparatorChar
+$items = @($items | Where-Object {
+  $candidatePath = [IO.Path]::GetFullPath($_.FullName)
+  -not $candidatePath.StartsWith($outputPrefix,[StringComparison]::OrdinalIgnoreCase)
+})
+if ($items.Count -eq 0) { throw "No source videos remain after excluding the output folder. Choose a separate output folder." }
 
 $report = foreach ($file in $items) {
   Write-Host ""
@@ -81,6 +90,9 @@ $report = foreach ($file in $items) {
     if (Test-Path -LiteralPath $candidate) {
       $suffix = Get-Date -Format "yyyyMMdd-HHmmss"
       $candidate = Join-Path $OutputDirectory ($base + "_audio_repaired_" + $suffix + ".mp4")
+    }
+    if (Test-Path -LiteralPath $candidate) {
+      $candidate = Join-Path $OutputDirectory ($base + "_audio_repaired_" + [guid]::NewGuid().ToString("N") + ".mp4")
     }
     $output = $candidate
     & $ffmpeg -n -hide_banner -i "$($file.FullName)" -map 0:v:0 -map 0:a:0 -map_metadata 0 -c:v libx264 -preset veryfast -crf 21 -pix_fmt yuv420p -af "loudnorm=I=-16:TP=-1.5:LRA=11" -c:a aac -b:a 192k -movflags +faststart "$output"
