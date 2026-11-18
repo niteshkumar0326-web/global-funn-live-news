@@ -37,7 +37,8 @@ if (-not $OutputDirectory) {
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
 
 $report = foreach ($file in $items) {
-  Write-Host "`nChecking: $($file.Name)" -ForegroundColor Cyan
+  Write-Host ""
+  Write-Host "Checking: $($file.Name)" -ForegroundColor Cyan
   $probeText = & $ffprobe -v error -show_entries "format=duration:stream=index,codec_type,codec_name,sample_rate,channels,channel_layout" -of json "$($file.FullName)" 2>&1
   if ($LASTEXITCODE -ne 0) {
     Write-Warning "ffprobe failed for $($file.Name)"
@@ -45,7 +46,7 @@ $report = foreach ($file in $items) {
     continue
   }
 
-  $probe = ($probeText -join "`n") | ConvertFrom-Json
+  $probe = ($probeText -join "\`n") | ConvertFrom-Json
   $audio = @($probe.streams | Where-Object { $_.codec_type -eq "audio" })
   $duration = if ($probe.format.duration) { [math]::Round([double]$probe.format.duration,2) } else { "" }
 
@@ -57,9 +58,9 @@ $report = foreach ($file in $items) {
 
   $audioInfo = $audio[0]
   $measureText = & $ffmpeg -hide_banner -i "$($file.FullName)" -map 0:a:0 -af volumedetect -f null NUL 2>&1
-  $measure = $measureText -join "`n"
-  $meanMatch = [regex]::Match($measure,'mean_volume:\\s*(-?inf|-?[0-9.]+) dB')
-  $peakMatch = [regex]::Match($measure,'max_volume:\\s*(-?inf|-?[0-9.]+) dB')
+  $measure = $measureText -join "\`n"
+  $meanMatch = [regex]::Match($measure,'mean_volume:\s*(-?inf|-?[0-9.]+) dB')
+  $peakMatch = [regex]::Match($measure,'max_volume:\s*(-?inf|-?[0-9.]+) dB')
   $mean = if ($meanMatch.Success) { $meanMatch.Groups[1].Value } else { "unknown" }
   $peak = if ($peakMatch.Success) { $peakMatch.Groups[1].Value } else { "unknown" }
   $status = "PASS: audio stream detected"
@@ -97,5 +98,6 @@ $report = foreach ($file in $items) {
 
 $reportPath = Join-Path $OutputDirectory "audio-qc-report.csv"
 $report | Export-Csv -NoTypeInformation -Encoding UTF8 -Path $reportPath
-Write-Host "`nAudio QC report: $reportPath" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "Audio QC report: $reportPath" -ForegroundColor Yellow
 $report | Format-Table -AutoSize
