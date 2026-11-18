@@ -14,7 +14,7 @@ export type ChannelVideo = {
   source: "live" | "feed" | "main-fallback" | "fallback";
 };
 
-const VIDEO_ID = /^[\\w-]{11}$/;
+const VIDEO_ID = /^[\w-]{11}$/;
 const TIMEOUT_MS = 6000;
 
 async function fetchText(url: string): Promise<string | null> {
@@ -42,31 +42,31 @@ function decodeXml(s: string): string {
 // A channel's /live URL resolves to the active broadcast while one is on air.
 export function parseLivePage(html: string): string | null {
   if (!/"isLiveNow":true/.test(html)) return null;
-  const canonical = html.match(/<link rel="canonical" href="https:\\/\\/www\\.youtube\\.com\\/watch\\?v=([\\w-]{11})"/);
-  const id = canonical?.[1] ?? html.match(/"videoDetails":\\{"videoId":"([\\w-]{11})"/)?.[1];
+  const canonical = html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})"/);
+  const id = canonical?.[1] ?? html.match(/"videoDetails":\{"videoId":"([\w-]{11})"/)?.[1];
   return id && VIDEO_ID.test(id) ? id : null;
 }
 
 export function parseLatestFromFeed(xml: string): Omit<ChannelVideo, "isLive" | "source"> | null {
-  const entry = xml.match(/<entry>([\\s\\S]*?)<\\/entry>/)?.[1];
+  const entry = xml.match(/<entry>([\s\S]*?)<\/entry>/)?.[1];
   if (!entry) return null;
-  const id = entry.match(/<yt:videoId>([\\w-]{11})<\\/yt:videoId>/)?.[1];
+  const id = entry.match(/<yt:videoId>([\w-]{11})<\/yt:videoId>/)?.[1];
   if (!id) return null;
-  const title = entry.match(/<title>([\\s\\S]*?)<\\/title>/)?.[1];
-  const published = entry.match(/<published>([^<]+)<\\/published>/)?.[1];
+  const title = entry.match(/<title>([\s\S]*?)<\/title>/)?.[1];
+  const published = entry.match(/<published>([^<]+)<\/published>/)?.[1];
   return { videoId: id, title: title ? decodeXml(title.trim()) : null, published: published ?? null };
 }
 
 export async function getChannelVideo(): Promise<ChannelVideo> {
-  const liveHtml = await fetchText(`https://www.youtube.com/channel/${CHANNEL_ID}/live`);
+  const liveHtml = await fetchText(\`https://www.youtube.com/channel/\${CHANNEL_ID}/live\`);
   const liveId = liveHtml ? parseLivePage(liveHtml) : null;
   if (liveId) return { videoId: liveId, title: null, published: null, isLive: true, source: "live" };
 
-  const liveNewsFeed = await fetchText(`https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
+  const liveNewsFeed = await fetchText(\`https://www.youtube.com/feeds/videos.xml?channel_id=\${CHANNEL_ID}\`);
   const liveNewsLatest = liveNewsFeed ? parseLatestFromFeed(liveNewsFeed) : null;
   if (liveNewsLatest) return { ...liveNewsLatest, isLive: false, source: "feed" };
 
-  const mainFeed = await fetchText(`https://www.youtube.com/feeds/videos.xml?channel_id=${MAIN_CHANNEL_ID}`);
+  const mainFeed = await fetchText(\`https://www.youtube.com/feeds/videos.xml?channel_id=\${MAIN_CHANNEL_ID}\`);
   const mainLatest = mainFeed ? parseLatestFromFeed(mainFeed) : null;
   if (mainLatest) return { ...mainLatest, isLive: false, source: "main-fallback" };
 
