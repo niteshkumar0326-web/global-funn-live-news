@@ -46,7 +46,7 @@ $report = foreach ($file in $items) {
     continue
   }
 
-  $probe = ($probeText -join "\`n") | ConvertFrom-Json
+  $probe = ($probeText -join [Environment]::NewLine) | ConvertFrom-Json
   $audio = @($probe.streams | Where-Object { $_.codec_type -eq "audio" })
   $duration = if ($probe.format.duration) { [math]::Round([double]$probe.format.duration,2) } else { "" }
 
@@ -58,7 +58,7 @@ $report = foreach ($file in $items) {
 
   $audioInfo = $audio[0]
   $measureText = & $ffmpeg -hide_banner -i "$($file.FullName)" -map 0:a:0 -af volumedetect -f null NUL 2>&1
-  $measure = $measureText -join "\`n"
+  $measure = $measureText -join [Environment]::NewLine
   $meanMatch = [regex]::Match($measure,'mean_volume:\s*(-?inf|-?[0-9.]+) dB')
   $peakMatch = [regex]::Match($measure,'max_volume:\s*(-?inf|-?[0-9.]+) dB')
   $mean = if ($meanMatch.Success) { $meanMatch.Groups[1].Value } else { "unknown" }
