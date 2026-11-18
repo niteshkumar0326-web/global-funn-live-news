@@ -1,7 +1,9 @@
-// Finds what the /live page should play: the channel's current live broadcast
-// when YouTube reports one, otherwise the newest upload from the channel feed.
-export const CHANNEL_ID = "UCLXPISTr2HJnusqycn4Wyog";
-export const CHANNEL_URL = "https://www.youtube.com/@niteshkumar0326";
+// Finds what the /live page should play: the Live News channel's current broadcast
+// when YouTube reports one, otherwise its newest upload, otherwise the newest
+// upload from the main GLOBAL FUNN channel (while Live News has no videos yet).
+export const CHANNEL_ID = "UCmcZKg3Ab7N2yGsshxrqtgQ"; // GLOBAL FUNN Live News
+export const CHANNEL_URL = "https://www.youtube.com/@GLOBALFUNNLiveNews";
+export const MAIN_CHANNEL_ID = "UCLXPISTr2HJnusqycn4Wyog"; // GLOBAL FUNN (hub)
 export const FALLBACK_VIDEO_ID = "lWrQ_QqjGlc";
 
 export type ChannelVideo = {
@@ -60,9 +62,11 @@ export async function getChannelVideo(): Promise<ChannelVideo> {
   const liveId = liveHtml ? parseLivePage(liveHtml) : null;
   if (liveId) return { videoId: liveId, title: null, published: null, isLive: true, source: "live" };
 
-  const feed = await fetchText(`https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
-  const latest = feed ? parseLatestFromFeed(feed) : null;
-  if (latest) return { ...latest, isLive: false, source: "feed" };
+  for (const id of [CHANNEL_ID, MAIN_CHANNEL_ID]) {
+    const feed = await fetchText(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`);
+    const latest = feed ? parseLatestFromFeed(feed) : null;
+    if (latest) return { ...latest, isLive: false, source: "feed" };
+  }
 
   return { videoId: FALLBACK_VIDEO_ID, title: null, published: null, isLive: false, source: "fallback" };
 }
