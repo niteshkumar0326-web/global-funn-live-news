@@ -62,7 +62,7 @@ export default async function LivePage() {
               : "Broadcast status is checked against YouTube every 2 minutes."}
           </p>
         </section>
-        <footer style={{color:"#64748b",fontSize:12,textAlign:"center",marginTop:24}}>GLOBAL FUNN • KHABAR HAR PAL, NAZAR GLOBAL</footer>
+        <footer style={{color:"#94a3b8",fontSize:12,textAlign:"center",marginTop:24}}>GLOBAL FUNN • KHABAR HAR PAL, NAZAR GLOBAL</footer>
       </div>
     </main>
   );
