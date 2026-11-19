@@ -42,7 +42,7 @@ class PaperEngineTests(unittest.TestCase):
             size_position(self.plan(stop=D("101")))
 
     def test_cannot_afford_one_share_with_risk_cap(self):
-        result = simulate(self.plan(capital=D("100"), risk_fraction=D("0.01")))
+        result = simulate(self.plan(capital=D("100"), risk_fraction=D("0.01")), [])
         self.assertEqual(result["status"], "REJECTED")
 
 
