@@ -13,7 +13,8 @@
 - [x] Add email magic-link sign-in UI and secure session persistence client.
 - [ ] Configure and verify Supabase email provider, Site URL and allowed redirect URLs.
 - [x] Add first-business onboarding RPC (owner role).
-- [ ] Implement invite-only membership management and manager/salesperson role permissions.
+- [x] Add baseline owner/manager/salesperson RLS permissions.
+- [ ] Implement invite-only membership management and safe role assignment/change workflow.
 - [x] Enable tenant-membership RLS policies on all 11 public tables.
 - [ ] Review intentional authenticated SECURITY DEFINER owner-bootstrap RPC warning; anon execution is revoked.
 - [ ] Replace browser localStorage demo state with authenticated server reads/writes.
