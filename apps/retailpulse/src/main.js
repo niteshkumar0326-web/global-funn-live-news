@@ -1,4 +1,5 @@
 import "./style.css";
+import { supabase, supabaseConfigured } from "./lib/supabase.js";
 
 const sample = {
   retailers: [
@@ -22,7 +23,7 @@ const sample = {
   ]
 };
 const saved = JSON.parse(localStorage.getItem("retailpulse-demo") || "{}");
-const state = {tab:"Overview", hindi:false, orders:saved.orders || sample.orders, retailers:saved.retailers || sample.retailers};
+const state = {tab:"Overview", hindi:false, orders:saved.orders || sample.orders, retailers:saved.retailers || sample.retailers, user:null, businessName:"", role:""};
 const money = n => "₹" + Number(n).toLocaleString("en-IN");
 const labels = {
   Overview:["Overview","अवलोकन"], Orders:["Orders","ऑर्डर"], Retailers:["Retailers","रिटेलर्स"], Inventory:["Inventory","स्टॉक"], Collections:["Collections","कलेक्शन"], Team:["Field team","फील्ड टीम"], Reports:["Reports","रिपोर्ट"]
@@ -75,4 +76,48 @@ function newRetailer(){
  const name=prompt("Retailer / shop name:");if(!name)return;const area=prompt("Area / locality:","Dhanbad")||"Dhanbad";
  state.retailers.unshift({name,area,due:0,status:"Active"});persist();render();
 }
-render();
+
+function authGate(message,email){
+ const app=document.getElementById("app");
+ app.innerHTML='<main class="auth-shell"><section class="auth-card"><div class="auth-brand"><div class="brand-mark">R</div><div><b>retail<span>pulse</span></b><small>DISTRIBUTOR SUITE</small></div></div><div class="auth-eyebrow">YOUR BUSINESS, IN CONTROL</div><h1>Welcome to RetailPulse</h1><p class="muted">Sign in securely to set up your distributor workspace.</p><form id="login-form"><label>Email address</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@business.com"/><button class="primary-btn auth-submit" type="submit">Send secure sign-in link</button></form><p class="auth-message" id="auth-message"></p><small class="auth-foot">A secure sign-in link will be sent to your email. No password required.</small></section></main>';
+ const input=document.getElementById("auth-email");if(input&&email)input.value=email;
+ const out=document.getElementById("auth-message");if(out&&message)out.textContent=message;
+ document.getElementById("login-form").addEventListener("submit",async e=>{
+  e.preventDefault();const button=e.currentTarget.querySelector("button");const address=input.value.trim();
+  button.disabled=true;button.textContent="Sending link…";
+  const result=await supabase.auth.signInWithOtp({email:address,options:{emailRedirectTo:window.location.origin}});
+  const target=document.getElementById("auth-message");
+  if(target)target.textContent=result.error?result.error.message:"Check your inbox for the secure sign-in link.";
+  button.disabled=false;button.textContent="Send secure sign-in link";
+ });
+}
+function onboardingGate(user){
+ const app=document.getElementById("app");
+ app.innerHTML='<main class="auth-shell"><section class="auth-card"><div class="auth-brand"><div class="brand-mark">R</div><div><b>retail<span>pulse</span></b><small>DISTRIBUTOR SUITE</small></div></div><div class="auth-eyebrow">FIRST-TIME SETUP</div><h1>Create your business workspace</h1><p class="muted">Your account is signed in. Add the business name to create its private workspace.</p><form id="business-form"><label>Business / distributor name</label><input id="business-name" maxlength="120" minlength="2" required placeholder="e.g. ABC Distributors"/><label>Preferred language</label><select id="business-language"><option value="en">English</option><option value="hi">हिन्दी</option></select><button class="primary-btn auth-submit" type="submit">Create my workspace</button></form><p class="auth-message" id="business-message"></p><button class="text-btn auth-signout" id="auth-signout">Sign out</button></section></main>';
+ document.getElementById("business-form").addEventListener("submit",async e=>{
+  e.preventDefault();const button=e.currentTarget.querySelector("button");const name=document.getElementById("business-name").value.trim();const language=document.getElementById("business-language").value;
+  button.disabled=true;button.textContent="Creating workspace…";
+  const result=await supabase.rpc("create_business_for_current_user",{p_name:name,p_language:language});
+  if(result.error){document.getElementById("business-message").textContent=result.error.message;button.disabled=false;button.textContent="Create my workspace";return;}
+  await loadBusiness(user);
+ });
+ document.getElementById("auth-signout").addEventListener("click",()=>supabase.auth.signOut());
+}
+async function loadBusiness(user){
+ state.user=user;
+ const result=await supabase.from("business_memberships").select("business_id,role,businesses(name)").eq("user_id",user.id).eq("active",true).limit(1).maybeSingle();
+ if(result.error){authGate("Could not load your workspace: "+result.error.message,user.email);return;}
+ if(!result.data){onboardingGate(user);return;}
+ state.businessName=result.data.businesses?.name||"My Business";state.role=result.data.role||"member";render();
+ const ws=document.querySelector(".workspace b"),sub=document.querySelector(".workspace small"),profile=document.querySelector(".profile b"),role=document.querySelector(".profile small");
+ if(ws)ws.textContent=state.businessName;if(sub)sub.textContent="Private workspace";if(profile)profile.textContent=user.email||"Account";if(role)role.textContent=state.role;
+ const actions=document.querySelector(".top-actions");
+ if(actions&&!document.getElementById("auth-signout")){const b=document.createElement("button");b.id="auth-signout";b.className="icon-btn";b.textContent="↪";b.title="Sign out";actions.appendChild(b);b.addEventListener("click",()=>supabase.auth.signOut());}
+}
+async function initRetailPulse(){
+ if(!supabaseConfigured){authGate("Backend setup is incomplete.");return;}
+ const result=await supabase.auth.getSession();const session=result.data?.session;
+ if(session?.user)await loadBusiness(session.user);else authGate();
+ supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user)queueMicrotask(()=>loadBusiness(session.user));else{state.user=null;state.businessName="";state.role="";authGate();}});
+}
+initRetailPulse();
