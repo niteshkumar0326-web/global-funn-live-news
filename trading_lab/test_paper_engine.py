@@ -1,7 +1,9 @@
-import unittest
+import unittest, tempfile, json, io, contextlib, sys
+from pathlib import Path
 from decimal import Decimal as D
+from unittest.mock import patch
 
-from paper_engine import Candle, TradePlan, size_position, simulate
+from paper_engine import Candle, TradePlan, size_position, simulate, read_candles, main
 
 
 class PaperEngineTests(unittest.TestCase):
@@ -44,6 +46,36 @@ class PaperEngineTests(unittest.TestCase):
     def test_cannot_afford_one_share_with_risk_cap(self):
         result = simulate(self.plan(capital=D("100"), risk_fraction=D("0.01")), [])
         self.assertEqual(result["status"], "REJECTED")
+
+    def test_trade_plan_dataclass_defaults_and_decimal_fields(self):
+        plan = TradePlan(capital=D("1200"), entry=D("100"), stop=D("98"), target=D("105"))
+        self.assertEqual(plan.risk_fraction, D("0.01"))
+        self.assertEqual(plan.fee_per_order, D("0"))
+        self.assertEqual(plan.slippage_bps, D("0"))
+
+    def test_read_candles_loads_csv_and_rejects_missing_columns(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"candles.csv"
+            path.write_text("timestamp,open,high,low,close\n2026-01-01,100,105,99,104\n",encoding="utf-8")
+            candles=read_candles(str(path))
+            self.assertEqual(len(candles),1)
+            self.assertEqual(candles[0].close,D("104"))
+            path.write_text("timestamp,open,high,low\n2026-01-01,100,105,99\n",encoding="utf-8")
+            with self.assertRaisesRegex(ValueError,"CSV needs"):
+                read_candles(str(path))
+
+    def test_cli_main_runs_plan_and_candle_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            plan_path=Path(folder)/"plan.json"
+            candles_path=Path(folder)/"candles.csv"
+            plan_path.write_text(json.dumps({"capital":"10000","entry":"100","stop":"95","target":"110","fee_per_order":"5"}),encoding="utf-8")
+            candles_path.write_text("timestamp,open,high,low,close\n2026-01-01,100,111,99,108\n",encoding="utf-8")
+            stdout=io.StringIO()
+            with patch.object(sys,"argv",["paper_engine","--plan",str(plan_path),"--candles",str(candles_path)]), contextlib.redirect_stdout(stdout):
+                main()
+            result=json.loads(stdout.getvalue())
+            self.assertEqual(result["status"],"SIMULATED")
+            self.assertEqual(result["exit_reason"],"TARGET")
 
 
 if __name__ == "__main__":
