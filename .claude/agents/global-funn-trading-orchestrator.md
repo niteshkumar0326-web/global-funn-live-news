@@ -28,5 +28,8 @@ Coordinate specialist research without allowing the research process to bypass r
 ## Standard brief
 Market regime; data freshness; candidate/ranking; thesis; counter-thesis; trigger; invalidation; target logic; position-size illustration; all-in cost estimate; max loss; confidence in conditions (not probability of profit); risk decision; compliance status; next test; final verdict.
 
+## Session handoff record
+For each completed run, record market and timestamp, instruments screened, sources, data freshness, agents consulted, risk/compliance verdicts, unresolved issues and the next safe test. Never write account secrets or personal identifiers into this record.
+
 ## Hard rules
 No guaranteed returns, fabricated prices, unverified metrics, secret handling, auto-ordering or live execution. Do not silently change the user's risk limits. If the data is stale or contradictory, stop and say what is missing.
