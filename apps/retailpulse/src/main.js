@@ -64,7 +64,6 @@ function render(){
  document.getElementById("stock-receipt")?.addEventListener("click",recordStockReceipt);
  document.getElementById("record-payment")?.addEventListener("click",()=>recordCollection());
  document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>recordCollection(b.dataset.payment)));
- document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>alert("Payment collection for "+b.dataset.payment+" will be enabled after secure database setup.")));
  document.getElementById("mobile-menu")?.addEventListener("click",()=>document.querySelector(".sidebar").classList.toggle("show"));
  document.getElementById("export-report")?.addEventListener("click",()=>{const csv="Order, Retailer, Amount, Status\n"+state.orders.map(o=>[o.id,o.retailer,o.amount,o.status].join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="retailpulse-demo-orders.csv";a.click();URL.revokeObjectURL(a.href);});
  document.getElementById("order-search")?.addEventListener("input",e=>{document.querySelectorAll("tbody tr").forEach(r=>r.hidden=!r.innerText.toLowerCase().includes(e.target.value.toLowerCase()));});
@@ -114,8 +113,8 @@ async function logFieldVisit(){
 }
 async function submitDailyReport(){
  if(!state.liveData||!state.user)return alert("Sign in to a business workspace first.");
- const today=new Date().toISOString().slice(0,10),mine=state.dailyReports.find(r=>r.report_date===today&&r.salesperson_id===state.user.id);
- const visits=Number(prompt("Total visits today:",String(mine?.visits_count??state.visits.filter(v=>v.salesperson_id===state.user.id&&v.visited_at?.slice(0,10)===today).length)));
+ const today=localDate(),mine=state.dailyReports.find(r=>r.report_date===today&&r.salesperson_id===state.user.id);
+ const visits=Number(prompt("Total visits today:",String(mine?.visits_count??state.visits.filter(v=>v.salesperson_id===state.user.id&&v.visited_at&&new Date(v.visited_at).toLocaleDateString("en-CA")===today).length)));
  const orders=Number(prompt("Orders booked today:",String(mine?.orders_count??0))),collections=Number(prompt("Collections today (₹):",String(mine?.collection_total??0))),notes=prompt("Day summary / follow-up notes:",mine?.notes||"")||"";
  if(!Number.isInteger(visits)||visits<0||!Number.isInteger(orders)||orders<0||!Number.isFinite(collections)||collections<0)return alert("Enter valid non-negative report figures.");
  const payload={business_id:state.businessId,salesperson_id:state.user.id,report_date:today,visits_count:visits,orders_count:orders,collection_total:collections,notes:notes.slice(0,2000)};
