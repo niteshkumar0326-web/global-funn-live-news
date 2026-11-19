@@ -61,11 +61,11 @@ function render(){
  document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{state.tab=b.dataset.tab;render();}));
  document.getElementById("language")?.addEventListener("click",()=>{state.hindi=!state.hindi;render();});
  document.getElementById("new-order")?.addEventListener("click",newOrder);
- document.getElementById("new-retailer")?.addEventListener("click",newRetailer);
- document.getElementById("new-product")?.addEventListener("click",newProduct);
- document.getElementById("stock-receipt")?.addEventListener("click",recordStockReceipt);
- document.getElementById("record-payment")?.addEventListener("click",()=>recordCollection());
- document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>recordCollection(b.dataset.payment)));
+ document.getElementById("new-retailer")?.addEventListener("click",openRetailerForm);
+ document.getElementById("new-product")?.addEventListener("click",openProductForm);
+ document.getElementById("stock-receipt")?.addEventListener("click",openStockReceiptForm);
+ document.getElementById("record-payment")?.addEventListener("click",()=>openCollectionForm());
+ document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>openCollectionForm(b.dataset.payment)));
  document.getElementById("add-visit")?.addEventListener("click",openVisitForm);
  document.getElementById("team-report")?.addEventListener("click",openDailyReportForm);
  document.getElementById("mobile-menu")?.addEventListener("click",()=>document.querySelector(".sidebar").classList.toggle("show"));
@@ -135,45 +135,34 @@ async function recordCollection(retailerId){
  if(result.error)return alert("Collection failed: "+result.error.message);
  await loadBusinessData();render();alert("Payment receipt recorded for "+retailer.name+".");
 }
-async function recordStockReceipt(){
+function showDataForm({title,eyebrow,description,fields,submitLabel,onSubmit}){
+ const modal=document.createElement("div");modal.id="team-modal";modal.className="modal-backdrop";
+ modal.innerHTML=`<section class="form-modal" role="dialog" aria-modal="true"><div class="modal-heading"><div><span class="eyebrow">${eyebrow}</span><h2>${title}</h2><p class="muted">${description}</p></div><button type="button" class="modal-close" aria-label="Close">×</button></div><form id="data-entry-form">${fields}<div class="modal-actions"><button type="button" class="secondary-btn modal-cancel">Cancel</button><button class="primary-btn" type="submit">${submitLabel}</button></div></form></section>`;
+ document.body.append(modal);modal.querySelector(".modal-close").onclick=closeTeamModal;modal.querySelector(".modal-cancel").onclick=closeTeamModal;modal.addEventListener("click",e=>{if(e.target===modal)closeTeamModal();});
+ modal.querySelector("form").addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget,btn=form.querySelector('[type="submit"]');btn.disabled=true;btn.textContent="Saving…";try{await onSubmit(new FormData(form));closeTeamModal();await loadBusinessData();render();}catch(error){btn.disabled=false;btn.textContent=submitLabel;alert(error.message||String(error));}});
+}
+function openRetailerForm(){
+ if(!state.liveData)return alert("Sign in to a business workspace first.");
+ if(!["owner","manager"].includes(state.role))return alert("Only owner or manager can add retailers.");
+ showDataForm({title:"Add retailer",eyebrow:"CUSTOMER RELATIONSHIPS",description:"Create a retailer account in this business.",submitLabel:"Save retailer",fields:`<label>Shop / retailer name<input name="name" required maxlength="120" placeholder="e.g. Maa Durga Stores"></label><label>Area / locality<input name="area" maxlength="120" placeholder="Bank More, Dhanbad"></label><label>Phone number<input name="phone" type="tel" maxlength="20" placeholder="Retailer contact number"></label>`,onSubmit:async data=>{const name=String(data.get("name")||"").trim();if(!name)throw Error("Enter the retailer name.");const result=await supabase.from("retailers").insert({business_id:state.businessId,name,area:String(data.get("area")||"").trim()||null,phone:String(data.get("phone")||"").trim()||null}).select("id").single();if(result.error)throw result.error;}});
+}
+function openProductForm(){
+ if(!state.liveData)return alert("Sign in to a business workspace first.");
+ if(!["owner","manager"].includes(state.role))return alert("Only owner or manager can add products.");
+ showDataForm({title:"Add product",eyebrow:"PRODUCT CATALOGUE",description:"Set product pricing and stock alert level.",submitLabel:"Save product",fields:`<div class="form-grid"><label>Product name<input name="name" required maxlength="120" placeholder="Product name"></label><label>SKU / code<input name="sku" required maxlength="60" placeholder="Unique code"></label></div><div class="form-grid"><label>Unit<select name="unit"><option>pcs</option><option>box</option><option>pack</option><option>kg</option><option>litre</option><option>case</option></select></label><label>Selling price (₹)<input name="price" type="number" min="0" step="0.01" required value="0"></label></div><div class="form-grid"><label>Purchase price (₹)<input name="purchase" type="number" min="0" step="0.01" value="0"></label><label>Reorder alert quantity<input name="reorder" type="number" min="0" step="0.01" value="0"></label></div>`,onSubmit:async data=>{const name=String(data.get("name")||"").trim(),sku=String(data.get("sku")||"").trim(),price=Number(data.get("price")),purchase=Number(data.get("purchase")),reorder=Number(data.get("reorder"));if(!name||!sku||![price,purchase,reorder].every(Number.isFinite)||price<0||purchase<0||reorder<0)throw Error("Check product details and enter valid non-negative prices and reorder quantity.");const result=await supabase.from("products").insert({business_id:state.businessId,name,sku,unit:data.get("unit"),sale_price:price,purchase_price:purchase,reorder_level:reorder}).select("id").single();if(result.error)throw result.error;}});
+}
+function openStockReceiptForm(){
  if(!state.liveData)return alert("Sign in to a business workspace first.");
  if(!["owner","manager"].includes(state.role))return alert("Only owner or manager can record stock received.");
  const active=state.products.filter(p=>p.active);if(!active.length)return alert("Add an active product first.");
- const list=active.map((p,i)=>`${i+1}. ${p.name} [${p.sku}]`).join("\n");
- const choice=Number(prompt("Choose product:\n"+list,"1"));if(!Number.isInteger(choice)||choice<1||choice>active.length)return;
- const product=active[choice-1],quantity=Number(prompt("Quantity received ("+product.unit+"):", "1"));
- if(!Number.isFinite(quantity)||quantity<=0)return alert("Enter a positive quantity.");
- const note=prompt("Supplier / purchase reference (optional):","")||"";
- const result=await supabase.rpc("record_stock_receipt",{p_business_id:state.businessId,p_product_id:product.id,p_quantity:quantity,p_note:note});
- if(result.error)return alert("Stock receipt failed: "+result.error.message);
- await loadBusinessData();render();alert("Stock receipt recorded for "+product.name+".");
+ showDataForm({title:"Receive stock",eyebrow:"WAREHOUSE",description:"Record an incoming stock movement.",submitLabel:"Record receipt",fields:`<label>Product<select name="product" required>${active.map(p=>`<option value="${esc(p.id)}">${esc(p.name)} · ${esc(p.sku)}</option>`).join("")}</select></label><label>Quantity received<input name="quantity" type="number" min="0.0001" step="0.0001" required value="1"></label><label>Supplier / purchase reference<textarea name="note" maxlength="500" rows="3" placeholder="Optional reference or note"></textarea></label>`,onSubmit:async data=>{const quantity=Number(data.get("quantity"));if(!Number.isFinite(quantity)||quantity<=0)throw Error("Enter a positive quantity.");const result=await supabase.rpc("record_stock_receipt",{p_business_id:state.businessId,p_product_id:data.get("product"),p_quantity:quantity,p_note:String(data.get("note")||"").trim()});if(result.error)throw result.error;}});
 }
-async function newProduct(){
+function openCollectionForm(retailerId){
  if(!state.liveData)return alert("Sign in to a business workspace first.");
- if(!["owner","manager"].includes(state.role))return alert("Only the business owner or manager can add products.");
- const name=prompt("Product name:");if(!name)return;
- const sku=prompt("Unique SKU / product code:");if(!sku)return;
- const unit=prompt("Unit (pcs, box, pack, kg, litre):","pcs")||"pcs";
- const price=Number(prompt("Selling price in ₹:","0"));
- if(!Number.isFinite(price)||price<0)return alert("Enter a valid selling price.");
- const purchase=Number(prompt("Purchase price in ₹ (optional):","0"));
- if(!Number.isFinite(purchase)||purchase<0)return alert("Enter a valid purchase price.");
- const reorder=Number(prompt("Reorder alert quantity:","0"));
- if(!Number.isFinite(reorder)||reorder<0)return alert("Enter a valid reorder quantity.");
- const result=await supabase.from("products").insert({business_id:state.businessId,name:name.trim(),sku:sku.trim(),unit:unit.trim(),sale_price:price,purchase_price:purchase,reorder_level:reorder}).select("id,sku,name,unit,sale_price,purchase_price,reorder_level,active").single();
- if(result.error)return alert("Product could not be saved: "+result.error.message);
- await loadBusinessData();render();
+ if(!state.retailers.length)return alert("Add a retailer first.");
+ const selected=state.retailers.find(r=>r.id===retailerId)||state.retailers.find(r=>r.due>0)||state.retailers[0];
+ showDataForm({title:"Record collection",eyebrow:"PAYMENT RECEIPT",description:"Record money received from a retailer.",submitLabel:"Save receipt",fields:`<label>Retailer<select name="retailer" required>${state.retailers.map(r=>`<option value="${esc(r.id)}" ${r.id===selected.id?"selected":""}>${esc(r.name)} · due ${money(r.due)}</option>`).join("")}</select></label><label>Amount received (₹)<input name="amount" type="number" min="0.01" step="0.01" required value="${Math.max(0,Number(selected.due)||0)||""}"></label><label>Payment method<select name="method"><option value="upi">UPI</option><option value="cash">Cash</option><option value="bank_transfer">Bank transfer</option><option value="cheque">Cheque</option><option value="other">Other</option></select></label><label>Transaction reference<input name="reference" maxlength="160" placeholder="UPI ref / cheque number (optional)"></label>`,onSubmit:async data=>{const amount=Number(data.get("amount"));if(!Number.isFinite(amount)||amount<=0)throw Error("Enter a positive collection amount.");const result=await supabase.rpc("record_retailer_collection",{p_business_id:state.businessId,p_retailer_id:data.get("retailer"),p_amount:amount,p_method:data.get("method"),p_order_id:null,p_reference:String(data.get("reference")||"").trim()||null});if(result.error)throw result.error;}});
 }
-async function newRetailer(){
- if(!state.liveData)return alert("Sign in to a business workspace first.");
- if(!["owner","manager"].includes(state.role))return alert("Only the business owner or manager can add retailers.");
- const name=prompt("Retailer / shop name:");if(!name)return;
- const area=prompt("Area / locality:","")||null;const phone=prompt("Phone number (optional):","")||null;
- const result=await supabase.from("retailers").insert({business_id:state.businessId,name:name.trim(),area,phone}).select("id,name,area,opening_balance,active").single();
- if(result.error)return alert("Retailer could not be saved: "+result.error.message);
- await loadBusinessData();render();
-}
-
 function authGate(message,email){
  const app=document.getElementById("app");
  app.innerHTML='<main class="auth-shell"><section class="auth-card"><div class="auth-brand"><div class="brand-mark">R</div><div><b>retail<span>pulse</span></b><small>DISTRIBUTOR SUITE</small></div></div><div class="auth-eyebrow">YOUR BUSINESS, IN CONTROL</div><h1>Welcome to RetailPulse</h1><p class="muted">Sign in securely to set up your distributor workspace.</p><form id="login-form"><label>Email address</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@business.com"/><button class="primary-btn auth-submit" type="submit">Send secure sign-in link</button></form><p class="auth-message" id="auth-message"></p><small class="auth-foot">A secure sign-in link will be sent to your email. No password required.</small></section></main>';
