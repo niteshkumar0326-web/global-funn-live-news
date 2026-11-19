@@ -19,16 +19,21 @@ for path in files:
     if len(parts) < 3:
         errors.append(f"{path}: missing YAML frontmatter closing delimiter")
         continue
+
     frontmatter = parts[1]
-    name_match = re.search(r"(?m)^name:\s*([a-z0-9-]+)\s*$", frontmatter)
+    # Existing community agents may use human-readable names with spaces.
+    name_match = re.search(r"(?m)^name:\s*['\"]?(.+?)['\"]?\s*$", frontmatter)
     desc_match = re.search(r"(?m)^description:\s*(.+?)\s*$", frontmatter)
-    if not name_match:
-        errors.append(f"{path}: missing or invalid name field")
+
+    if not name_match or not name_match.group(1).strip():
+        errors.append(f"{path}: missing or empty name field")
     else:
-        name = name_match.group(1)
-        if name in names:
-            errors.append(f"{path}: duplicate agent name '{name}' also in {names[name]}")
-        names[name] = path
+        name = name_match.group(1).strip().strip("\"'")
+        key = name.casefold()
+        if key in names:
+            errors.append(f"{path}: duplicate agent name '{name}' also in {names[key]}")
+        names[key] = path
+
     if not desc_match or not desc_match.group(1).strip():
         errors.append(f"{path}: missing description field")
     if len(text.strip()) < 120:
