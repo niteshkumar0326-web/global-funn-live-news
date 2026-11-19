@@ -1,0 +1,22 @@
+name: Validate Claude Code agents
+
+on:
+  pull_request:
+    paths:
+      - ".claude/agents/**"
+      - "docs/AGENT_*.md"
+      - ".github/workflows/validate-agent-files.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".claude/agents/**"
+      - "docs/AGENT_*.md"
+
+jobs:
+  validate-agent-frontmatter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Validate agent metadata
+        run: python .github/scripts/validate_agents.py
