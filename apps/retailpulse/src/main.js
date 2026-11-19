@@ -22,12 +22,12 @@ const sample = {
     {name:"SoftCare Sanitary Pads",sku:"SC-4100",stock:9,unit:"boxes",tone:"critical"}
   ]
 };
-const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:""};
+const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:"", liveData:false, dataError:""};
 const money = n => "₹" + Number(n).toLocaleString("en-IN");
 const labels = {
   Overview:["Overview","अवलोकन"], Orders:["Orders","ऑर्डर"], Retailers:["Retailers","रिटेलर्स"], Inventory:["Inventory","स्टॉक"], Collections:["Collections","कलेक्शन"], Team:["Field team","फील्ड टीम"], Reports:["Reports","रिपोर्ट"]
 };
-function persist(){if(!state.businessId)return;localStorage.setItem("retailpulse-demo:"+state.businessId,JSON.stringify({orders:state.orders,retailers:state.retailers}));}
+function persist(){/* Live workspace data is stored in Supabase. */}
 function icon(name){
  const paths={grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',box:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="M3 8v9l9 5 9-5V8M12 13v9"/>',wallet:'<rect x="2" y="5" width="20" height="15" rx="2"/><path d="M2 9h20M16 15h2"/>',users2:'<circle cx="9" cy="7" r="4"/><path d="M2 21a7 7 0 0 1 14 0M19 8v6m3-3h-6"/>',chart:'<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-5 5"/>',plus:'<path d="M12 5v14M5 12h14"/>',search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',arrow:'<path d="M5 12h14m-7-7 7 7-7 7"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>'};
  return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(paths[name]||paths.grid)+'</svg>';
@@ -54,7 +54,7 @@ function pageContent(){
  return `<div class="welcome-row"><div><div class="eyebrow">BUSINESS INTELLIGENCE</div><h1>Reports</h1><p class="muted">A clearer view of sales, collections and team productivity.</p></div><button class="primary-btn" id="export-report">Export report</button></div><section class="stats-grid">${stat("Monthly sales",money(482650),"+8.4%","vs last period","chart")}${stat("Gross margin","18.6%","+1.2 pts","vs last period","chart")}${stat("Average order",money(2445),"+6.1%","vs last period","cart")}${stat("Repeat retailers","84%","+3.4 pts","vs last period","users")}</section><section class="panel"><h3>Business snapshot</h3><p class="muted">Reports will become live once your secure business database is connected. This preview uses illustrative sample figures.</p></section>`;
 }
 function render(){
- document.getElementById("app").innerHTML=`<div class="app-shell"><aside class="sidebar"><div class="brand"><div class="brand-mark">R</div><div><b>retail<span>pulse</span></b><small>DISTRIBUTOR SUITE</small></div></div><div class="workspace"><div class="workspace-avatar">LE</div><div><b>My Business</b><small>Demo workspace</small></div><span>⌄</span></div><div class="nav-label">WORKSPACE</div><nav>${nav()}</nav><div class="sidebar-bottom"><div class="help-card"><div class="help-icon">✦</div><b>Need a hand?</b><p>Our team is here to help you grow.</p><button>Visit help centre ${icon("arrow")}</button></div><div class="profile"><div class="profile-avatar">NK</div><div><b>Nitesh Kumar</b><small>Business owner</small></div><span>•••</span></div></div></aside><main class="main"><header class="topbar"><button class="mobile-menu" id="mobile-menu">${icon("menu")}</button><div class="crumb">Workspace <span>/</span> <b>${state.tab}</b></div><div class="top-actions"><button class="icon-btn" id="language">${state.hindi?"EN":"हि"}</button><button class="icon-btn" aria-label="Search">${icon("search")}</button><button class="icon-btn notification" aria-label="Notifications">${icon("bell")}<i></i></button><div class="top-avatar">NK</div></div></header><div class="content">${pageContent()}<footer>© 2026 RetailPulse <span>•</span> Demo workspace — sample data only</footer></div></main></div>`;
+ document.getElementById("app").innerHTML=`<div class="app-shell"><aside class="sidebar"><div class="brand"><div class="brand-mark">R</div><div><b>retail<span>pulse</span></b><small>DISTRIBUTOR SUITE</small></div></div><div class="workspace"><div class="workspace-avatar">LE</div><div><b>My Business</b><small>Demo workspace</small></div><span>⌄</span></div><div class="nav-label">WORKSPACE</div><nav>${nav()}</nav><div class="sidebar-bottom"><div class="help-card"><div class="help-icon">✦</div><b>Need a hand?</b><p>Our team is here to help you grow.</p><button>Visit help centre ${icon("arrow")}</button></div><div class="profile"><div class="profile-avatar">NK</div><div><b>Nitesh Kumar</b><small>Business owner</small></div><span>•••</span></div></div></aside><main class="main"><header class="topbar"><button class="mobile-menu" id="mobile-menu">${icon("menu")}</button><div class="crumb">Workspace <span>/</span> <b>${state.tab}</b></div><div class="top-actions"><button class="icon-btn" id="language">${state.hindi?"EN":"हि"}</button><button class="icon-btn" aria-label="Search">${icon("search")}</button><button class="icon-btn notification" aria-label="Notifications">${icon("bell")}<i></i></button><div class="top-avatar">NK</div></div></header><div class="content">${pageContent()}<footer>© 2026 RetailPulse <span>•</span> ${state.liveData?"Connected business workspace":"Demo preview"}</footer></div></main></div>`;
  document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{state.tab=b.dataset.tab;render();}));
  document.getElementById("language")?.addEventListener("click",()=>{state.hindi=!state.hindi;render();});
  document.getElementById("new-order")?.addEventListener("click",newOrder);
@@ -66,14 +66,25 @@ function render(){
  document.getElementById("order-search")?.addEventListener("input",e=>{document.querySelectorAll("tbody tr").forEach(r=>r.hidden=!r.innerText.toLowerCase().includes(e.target.value.toLowerCase()));});
  document.getElementById("retailer-search")?.addEventListener("input",e=>{document.querySelectorAll("tbody tr").forEach(r=>r.hidden=!r.innerText.toLowerCase().includes(e.target.value.toLowerCase()));});
 }
-function newOrder(){
- const retailer=prompt("Retailer name (demo):","New Retailer");if(!retailer)return;
- const amount=Number(prompt("Order amount in ₹:","5000"));if(!Number.isFinite(amount)||amount<=0)return alert("Enter a valid amount.");
- state.orders.unshift({id:"RP-"+(2049+state.orders.length),retailer,amount,status:"Processing",time:"Just now"});persist();render();
+async function newOrder(){
+ if(!state.liveData)return alert("Sign in to a business workspace first.");
+ const retailerName=prompt("Enter the exact retailer name:");if(!retailerName)return;
+ const retailer=state.retailers.find(r=>r.name.toLowerCase()===retailerName.trim().toLowerCase());
+ if(!retailer)return alert("Retailer not found. Add the retailer first, then create the order.");
+ const amount=Number(prompt("Order total in ₹:","5000"));if(!Number.isFinite(amount)||amount<=0)return alert("Enter a valid positive amount.");
+ const orderNumber="RP-"+Date.now().toString().slice(-8);
+ const result=await supabase.from("orders").insert({business_id:state.businessId,retailer_id:retailer.id,order_number:orderNumber,status:"received",subtotal:amount,discount:0,total:amount,placed_by:state.user.id}).select("id,order_number,status,total,placed_at").single();
+ if(result.error)return alert("Order could not be saved: "+result.error.message);
+ await loadBusinessData();render();
 }
-function newRetailer(){
- const name=prompt("Retailer / shop name:");if(!name)return;const area=prompt("Area / locality:","Dhanbad")||"Dhanbad";
- state.retailers.unshift({name,area,due:0,status:"Active"});persist();render();
+async function newRetailer(){
+ if(!state.liveData)return alert("Sign in to a business workspace first.");
+ if(!["owner","manager"].includes(state.role))return alert("Only the business owner or manager can add retailers.");
+ const name=prompt("Retailer / shop name:");if(!name)return;
+ const area=prompt("Area / locality:","")||null;const phone=prompt("Phone number (optional):","")||null;
+ const result=await supabase.from("retailers").insert({business_id:state.businessId,name:name.trim(),area,phone}).select("id,name,area,opening_balance,active").single();
+ if(result.error)return alert("Retailer could not be saved: "+result.error.message);
+ await loadBusinessData();render();
 }
 
 function authGate(message,email){
@@ -102,12 +113,23 @@ function onboardingGate(user){
  });
  document.getElementById("auth-signout").addEventListener("click",()=>supabase.auth.signOut());
 }
+async function loadBusinessData(){
+ state.dataError="";
+ const results=await Promise.all([
+  supabase.from("retailers").select("id,name,area,opening_balance,active").eq("business_id",state.businessId).eq("active",true).order("name"),
+  supabase.from("orders").select("id,order_number,status,total,placed_at,retailers(name)").eq("business_id",state.businessId).order("placed_at",{ascending:false}).limit(100)
+ ]);
+ const rr=results[0],or=results[1];
+ if(rr.error||or.error){state.dataError=rr.error?.message||or.error?.message||"Unable to load workspace records.";state.retailers=[];state.orders=[];return;}
+ state.retailers=(rr.data||[]).map(r=>({id:r.id,name:r.name,area:r.area||"—",due:Number(r.opening_balance||0),status:"Active"}));
+ state.orders=(or.data||[]).map(o=>({id:o.order_number,retailer:o.retailers?.name||"Retailer",amount:Number(o.total||0),status:o.status,time:new Date(o.placed_at).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}));
+}
 async function loadBusiness(user){
  state.user=user;
  const result=await supabase.from("business_memberships").select("business_id,role,businesses(name)").eq("user_id",user.id).eq("active",true).limit(1).maybeSingle();
  if(result.error){authGate("Could not load your workspace: "+result.error.message,user.email);return;}
  if(!result.data){onboardingGate(user);return;}
- state.businessId=result.data.business_id;state.businessName=result.data.businesses?.name||"My Business";state.role=result.data.role||"member";const saved=JSON.parse(localStorage.getItem("retailpulse-demo:"+state.businessId)||"{}");state.orders=saved.orders||sample.orders;state.retailers=saved.retailers||sample.retailers;render();
+ state.businessId=result.data.business_id;state.businessName=result.data.businesses?.name||"My Business";state.role=result.data.role||"member";state.liveData=true;await loadBusinessData();render();
  const ws=document.querySelector(".workspace b"),sub=document.querySelector(".workspace small"),profile=document.querySelector(".profile b"),role=document.querySelector(".profile small");
  if(ws)ws.textContent=state.businessName;if(sub)sub.textContent="Private workspace";if(profile)profile.textContent=user.email||"Account";if(role)role.textContent=state.role;
  const actions=document.querySelector(".top-actions");
@@ -117,6 +139,6 @@ async function initRetailPulse(){
  if(!supabaseConfigured){authGate("Backend setup is incomplete.");return;}
  const result=await supabase.auth.getSession();const session=result.data?.session;
  if(session?.user)await loadBusiness(session.user);else authGate();
- supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user)queueMicrotask(()=>loadBusiness(session.user));else{state.user=null;state.businessName="";state.role="";authGate();}});
+ supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user)queueMicrotask(()=>loadBusiness(session.user));else{state.user=null;state.businessId="";state.businessName="";state.role="";state.liveData=false;state.orders=[];state.retailers=[];authGate();}});
 }
 initRetailPulse();
