@@ -22,7 +22,7 @@ const sample = {
     {name:"SoftCare Sanitary Pads",sku:"SC-4100",stock:9,unit:"boxes",tone:"critical"}
   ]
 };
-const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:"", liveData:false, dataError:"", products:[], stockBalances:[]};
+const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:"", liveData:false, dataError:"", products:[], stockBalances:[], collections:[]};
 const money = n => "₹" + Number(n).toLocaleString("en-IN");
 const labels = {
   Overview:["Overview","अवलोकन"], Orders:["Orders","ऑर्डर"], Retailers:["Retailers","रिटेलर्स"], Inventory:["Inventory","स्टॉक"], Collections:["Collections","कलेक्शन"], Team:["Field team","फील्ड टीम"], Reports:["Reports","रिपोर्ट"]
