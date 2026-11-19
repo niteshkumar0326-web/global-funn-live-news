@@ -22,7 +22,7 @@ const sample = {
     {name:"SoftCare Sanitary Pads",sku:"SC-4100",stock:9,unit:"boxes",tone:"critical"}
   ]
 };
-const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:"", liveData:false, dataError:""};
+const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:"", liveData:false, dataError:"", products:[]};
 const money = n => "₹" + Number(n).toLocaleString("en-IN");
 const labels = {
   Overview:["Overview","अवलोकन"], Orders:["Orders","ऑर्डर"], Retailers:["Retailers","रिटेलर्स"], Inventory:["Inventory","स्टॉक"], Collections:["Collections","कलेक्शन"], Team:["Field team","फील्ड टीम"], Reports:["Reports","रिपोर्ट"]
@@ -48,7 +48,7 @@ function pageContent(){
  if(state.tab==="Overview")return overview();
  if(state.tab==="Orders")return `<div class="welcome-row"><div><div class="eyebrow">SALES OPERATIONS</div><h1>Orders</h1><p class="muted">Track every retailer order from booking to delivery.</p></div><button class="primary-btn" id="new-order">${icon("plus")} New order</button></div><section class="stats-grid">${stat("Total orders",state.orders.length,"+8.2%","this week","cart")}${stat("Processing","8","4 due today","to dispatch","box")}${stat("Delivered","16","+3","today","chart")}${stat("Order value",money(state.orders.reduce((a,b)=>a+b.amount,0)),"+11%","this week","wallet")}</section><section class="panel table-panel"><div class="panel-head"><div><h3>All orders</h3><p class="muted">Demo records stored on this device</p></div><input class="search" id="order-search" placeholder="Search orders..." /></div>${orderTable()}</section>`;
  if(state.tab==="Retailers")return `<div class="welcome-row"><div><div class="eyebrow">CUSTOMER RELATIONSHIPS</div><h1>Retailers</h1><p class="muted">Your retailer network and account health.</p></div><button class="primary-btn" id="new-retailer">${icon("plus")} Add retailer</button></div><section class="stats-grid">${stat("Total retailers","186","+14","this month","users")}${stat("Active accounts","172","92.5%","of total","chart")}${stat("Credit outstanding",money(89200),"12 accounts","need follow-up","wallet",false)}${stat("New this month","14","+4","vs last month","users2")}</section><section class="panel table-panel"><div class="panel-head"><h3>Retailer directory</h3><input class="search" id="retailer-search" placeholder="Search retailer..." /></div><div class="table-scroll"><table><thead><tr><th>RETAILER</th><th>AREA</th><th>OUTSTANDING</th><th>ACCOUNT</th></tr></thead><tbody>${state.retailers.map(r=>`<tr><td><b>${r.name}</b></td><td class="muted">${r.area}</td><td class="amount">${money(r.due)}</td><td><span class="status ${r.status==="Active"?"delivered":"processing"}">${r.status}</span></td></tr>`).join("")}</tbody></table></div></section>`;
- if(state.tab==="Inventory")return `<div class="welcome-row"><div><div class="eyebrow">WAREHOUSE CONTROL</div><h1>Inventory</h1><p class="muted">Keep your fast-moving products available.</p></div><button class="primary-btn" id="stock-action">${icon("plus")} Stock entry</button></div><section class="stats-grid">${stat("SKUs tracked","248","+12","new items","box")}${stat("Stock value",money(842500),"+5.2%","this month","wallet")}${stat("Low stock items","7","3 critical","need reorder","chart",false)}${stat("Out of stock","2","Action needed","today","box",false)}</section><section class="panel table-panel"><div class="panel-head"><h3>Product stock</h3><input class="search" placeholder="Search products..." /></div><div class="table-scroll"><table><thead><tr><th>PRODUCT</th><th>SKU</th><th>AVAILABLE</th><th>HEALTH</th></tr></thead><tbody>${sample.stock.map(s=>`<tr><td><b>${s.name}</b></td><td class="muted">${s.sku}</td><td>${s.stock} ${s.unit}</td><td><span class="status ${s.tone==="good"?"delivered":"processing"}">${s.tone==="good"?"Healthy":s.tone==="low"?"Low stock":"Critical"}</span></td></tr>`).join("")}</tbody></table></div></section>`;
+ if(state.tab==="Inventory"){const products=state.products;return `<div class="welcome-row"><div><div class="eyebrow">CATALOGUE & WAREHOUSE</div><h1>Products</h1><p class="muted">Manage your business catalogue, SKU, units and selling prices.</p></div><button class="primary-btn" id="new-product">${icon("plus")} Add product</button></div><section class="stats-grid">${stat("Active products",products.length,"Live catalogue","this workspace","box")}${stat("Average selling price",money(products.length?products.reduce((n,p)=>n+Number(p.sale_price||0),0)/products.length:0),"Catalogue","per item","wallet")}${stat("Low stock alerts","—","Stock ledger","not enabled yet","chart",false)}${stat("Inventory valuation","—","Stock ledger","not enabled yet","box",false)}</section><section class="panel table-panel"><div class="panel-head"><h3>Product catalogue</h3><input class="search" id="product-search" placeholder="Search name or SKU..." /></div><div class="table-scroll"><table><thead><tr><th>PRODUCT</th><th>SKU</th><th>UNIT</th><th>SELLING PRICE</th><th>REORDER LEVEL</th><th>STATUS</th></tr></thead><tbody>${products.map(p=>`<tr><td><b>${p.name}</b></td><td class="muted">${p.sku}</td><td>${p.unit}</td><td class="amount">${money(p.sale_price)}</td><td>${p.reorder_level}</td><td><span class="status ${p.active?"delivered":"processing"}">${p.active?"Active":"Inactive"}</span></td></tr>`).join("")||'<tr><td colspan="6" class="muted">No products yet. Add your first product to start building the catalogue.</td></tr>'}</tbody></table></div></section>`;}
  if(state.tab==="Collections")return `<div class="welcome-row"><div><div class="eyebrow">CASH FLOW</div><h1>Collections</h1><p class="muted">Know what is due, what is collected and what needs a follow-up.</p></div><button class="primary-btn" id="record-payment">${icon("plus")} Record payment</button></div><section class="stats-grid">${stat("Collected this month",money(116400),"+18%","vs last month","wallet")}${stat("Pending",money(45200),"₹8,400","due this week","chart",false)}${stat("Overdue",money(18600),"5 retailers","follow-up required","users",false)}${stat("Collection rate","72%","+4.5 pts","this month","chart")}</section><section class="panel"><div class="panel-head"><h3>Follow-up priority</h3><span class="soft-tag">Oldest due first</span></div>${state.retailers.filter(r=>r.due>0).sort((a,b)=>b.due-a.due).map(r=>`<div class="stock-alert"><div class="product-avatar">${r.name.slice(0,1)}</div><div class="stock-name"><b>${r.name}</b><small>${r.area}</small></div><strong class="amount">${money(r.due)}</strong><button class="small-btn" data-payment="${r.name}">Collect</button></div>`).join("")}</section>`;
  if(state.tab==="Team")return `<div class="welcome-row"><div><div class="eyebrow">FIELD OPERATIONS</div><h1>Field team</h1><p class="muted">Attendance and daily route activity.</p></div><button class="primary-btn" id="team-report">${icon("chart")} Daily report</button></div><section class="stats-grid">${stat("Team members","8","6 present","today","users")}${stat("Retail visits","34","+9","vs yesterday","chart")}${stat("Orders booked","28","₹68,450","field sales","cart")}${stat("Collections",money(32400),"+14%","today","wallet")}</section><section class="panel"><div class="panel-head"><h3>Today's attendance</h3><span class="soft-tag">19 Nov 2026</span></div><div class="team-row"><div class="avatar-stack"><span>AK</span><span>RS</span><span>PM</span><span>SK</span></div><div><b>6 team members present</b><small>2 pending check-in</small></div><span class="attendance">75%</span></div><div class="progress-track"><div style="width:75%"></div></div></section>`;
  return `<div class="welcome-row"><div><div class="eyebrow">BUSINESS INTELLIGENCE</div><h1>Reports</h1><p class="muted">A clearer view of sales, collections and team productivity.</p></div><button class="primary-btn" id="export-report">Export report</button></div><section class="stats-grid">${stat("Monthly sales",money(482650),"+8.4%","vs last period","chart")}${stat("Gross margin","18.6%","+1.2 pts","vs last period","chart")}${stat("Average order",money(2445),"+6.1%","vs last period","cart")}${stat("Repeat retailers","84%","+3.4 pts","vs last period","users")}</section><section class="panel"><h3>Business snapshot</h3><p class="muted">Reports will become live once your secure business database is connected. This preview uses illustrative sample figures.</p></section>`;
@@ -59,12 +59,14 @@ function render(){
  document.getElementById("language")?.addEventListener("click",()=>{state.hindi=!state.hindi;render();});
  document.getElementById("new-order")?.addEventListener("click",newOrder);
  document.getElementById("new-retailer")?.addEventListener("click",newRetailer);
+ document.getElementById("new-product")?.addEventListener("click",newProduct);
  document.getElementById("record-payment")?.addEventListener("click",()=>alert("Payment recording will be enabled after secure database setup."));
  document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>alert("Payment collection for "+b.dataset.payment+" will be enabled after secure database setup.")));
  document.getElementById("mobile-menu")?.addEventListener("click",()=>document.querySelector(".sidebar").classList.toggle("show"));
  document.getElementById("export-report")?.addEventListener("click",()=>{const csv="Order, Retailer, Amount, Status\n"+state.orders.map(o=>[o.id,o.retailer,o.amount,o.status].join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="retailpulse-demo-orders.csv";a.click();URL.revokeObjectURL(a.href);});
  document.getElementById("order-search")?.addEventListener("input",e=>{document.querySelectorAll("tbody tr").forEach(r=>r.hidden=!r.innerText.toLowerCase().includes(e.target.value.toLowerCase()));});
  document.getElementById("retailer-search")?.addEventListener("input",e=>{document.querySelectorAll("tbody tr").forEach(r=>r.hidden=!r.innerText.toLowerCase().includes(e.target.value.toLowerCase()));});
+ document.getElementById("product-search")?.addEventListener("input",e=>{document.querySelectorAll("tbody tr").forEach(r=>r.hidden=!r.innerText.toLowerCase().includes(e.target.value.toLowerCase()));});
 }
 async function newOrder(){
  if(!state.liveData)return alert("Sign in to a business workspace first.");
@@ -75,6 +77,22 @@ async function newOrder(){
  const orderNumber="RP-"+Date.now().toString().slice(-8);
  const result=await supabase.from("orders").insert({business_id:state.businessId,retailer_id:retailer.id,order_number:orderNumber,status:"received",subtotal:amount,discount:0,total:amount,placed_by:state.user.id}).select("id,order_number,status,total,placed_at").single();
  if(result.error)return alert("Order could not be saved: "+result.error.message);
+ await loadBusinessData();render();
+}
+async function newProduct(){
+ if(!state.liveData)return alert("Sign in to a business workspace first.");
+ if(!["owner","manager"].includes(state.role))return alert("Only the business owner or manager can add products.");
+ const name=prompt("Product name:");if(!name)return;
+ const sku=prompt("Unique SKU / product code:");if(!sku)return;
+ const unit=prompt("Unit (pcs, box, pack, kg, litre):","pcs")||"pcs";
+ const price=Number(prompt("Selling price in ₹:","0"));
+ if(!Number.isFinite(price)||price<0)return alert("Enter a valid selling price.");
+ const purchase=Number(prompt("Purchase price in ₹ (optional):","0"));
+ if(!Number.isFinite(purchase)||purchase<0)return alert("Enter a valid purchase price.");
+ const reorder=Number(prompt("Reorder alert quantity:","0"));
+ if(!Number.isFinite(reorder)||reorder<0)return alert("Enter a valid reorder quantity.");
+ const result=await supabase.from("products").insert({business_id:state.businessId,name:name.trim(),sku:sku.trim(),unit:unit.trim(),sale_price:price,purchase_price:purchase,reorder_level:reorder}).select("id,sku,name,unit,sale_price,purchase_price,reorder_level,active").single();
+ if(result.error)return alert("Product could not be saved: "+result.error.message);
  await loadBusinessData();render();
 }
 async function newRetailer(){
@@ -117,12 +135,14 @@ async function loadBusinessData(){
  state.dataError="";
  const results=await Promise.all([
   supabase.from("retailers").select("id,name,area,opening_balance,active").eq("business_id",state.businessId).eq("active",true).order("name"),
-  supabase.from("orders").select("id,order_number,status,total,placed_at,retailers(name)").eq("business_id",state.businessId).order("placed_at",{ascending:false}).limit(100)
+  supabase.from("orders").select("id,order_number,status,total,placed_at,retailers(name)").eq("business_id",state.businessId).order("placed_at",{ascending:false}).limit(100),
+  supabase.from("products").select("id,sku,name,unit,sale_price,purchase_price,reorder_level,active").eq("business_id",state.businessId).order("name")
  ]);
- const rr=results[0],or=results[1];
- if(rr.error||or.error){state.dataError=rr.error?.message||or.error?.message||"Unable to load workspace records.";state.retailers=[];state.orders=[];return;}
+ const rr=results[0],or=results[1],pr=results[2];
+ if(rr.error||or.error||pr.error){state.dataError=rr.error?.message||or.error?.message||pr.error?.message||"Unable to load workspace records.";state.retailers=[];state.orders=[];state.products=[];return;}
  state.retailers=(rr.data||[]).map(r=>({id:r.id,name:r.name,area:r.area||"—",due:Number(r.opening_balance||0),status:"Active"}));
  state.orders=(or.data||[]).map(o=>({id:o.order_number,retailer:o.retailers?.name||"Retailer",amount:Number(o.total||0),status:o.status,time:new Date(o.placed_at).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}));
+ state.products=pr.data||[];
 }
 async function loadBusiness(user){
  state.user=user;
