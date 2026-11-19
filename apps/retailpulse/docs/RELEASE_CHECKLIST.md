@@ -9,10 +9,10 @@
 - [x] First Vercel build completed successfully
 
 ## Before real business use
-- [ ] Approve and provision a dedicated database project; do not reuse unrelated Wild Lilly database.
-- [ ] Implement email/phone authentication and secure session handling.
+- [x] Provision a dedicated Supabase database project in Mumbai; existing Wild Lilly database left untouched.
+- [ ] Implement email/phone authentication and secure session handling (schema ready; client login not yet wired).
 - [ ] Implement business onboarding and owner/manager/salesperson roles.
-- [ ] Implement tenant membership checks and RLS on every exposed table.
+- [x] Enable tenant-membership RLS policies on all 11 public tables (security advisor returned no findings).
 - [ ] Replace browser localStorage demo state with authenticated server reads/writes.
 - [ ] Add server-side validation, idempotency and audit trails.
 - [ ] Add backups, restore test, monitoring and error reporting.
