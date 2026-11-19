@@ -1,5 +1,6 @@
 import unittest
-from kanha_risk_gate import evaluate_candidate, validate_daily_plan
+from decimal import Decimal
+from kanha_risk_gate import _positive, evaluate_candidate, validate_daily_plan
 
 class KanhaRiskGateTests(unittest.TestCase):
     def candidate(self,**overrides):
@@ -33,5 +34,13 @@ class KanhaRiskGateTests(unittest.TestCase):
     def test_positive_value_guard_rejects_zero_capital(self):
         with self.assertRaisesRegex(ValueError,"capital must be positive"):
             evaluate_candidate(self.candidate(capital="0"))
+
+    def test_positive_helper_accepts_positive_decimal(self):
+        self.assertEqual(_positive("12.50","capital"),Decimal("12.50"))
+
+    def test_positive_helper_rejects_zero_and_negative(self):
+        for value in ("0","-0.01"):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError,"capital must be positive"):
+                _positive(value,"capital")
 
 if __name__=="__main__": unittest.main()
