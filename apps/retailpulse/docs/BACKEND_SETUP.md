@@ -41,7 +41,11 @@ The schema contains businesses, memberships, retailers, products, orders, order 
 - [ ] Replace prompt-based product entry with validated forms and duplicate-SKU feedback.
 - [x] Add itemised order workflow using order_items and a server-side atomic RPC that validates active business membership, retailer/product ownership, quantities and discount, then calculates line totals from catalogue prices.
 - [ ] Add automated authenticated integration tests for owner, manager, salesperson and cross-tenant denial.
-- [ ] Add inventory movement posting, collections and field-report CRUD.
+- [x] Add owner/manager stock receipt RPC and tenant-scoped live stock-balance view.
+- [x] Automatically post stock-out ledger movements when itemised order lines are created.
+- [ ] Add insufficient-stock prevention / configurable negative-stock policy and stock adjustment workflow.
+- [ ] Add secure collection receipt RPC, payment allocation and live retailer outstanding calculations.
+- [ ] Add field-visit and daily-report CRUD.
 - Test tenant isolation with at least two test accounts/businesses.
 - Add server-side audit logging and validated order/stock/payment workflows.
 - Configure backups, monitoring, rate limits and privacy workflows.
