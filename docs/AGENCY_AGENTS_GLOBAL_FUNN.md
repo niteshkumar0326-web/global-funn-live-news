@@ -2,13 +2,22 @@
 
 ## What this adds
 
-This branch adds five project-scoped Claude Code subagents under `.claude/agents/`:
+This branch adds a coordinated set of project-scoped Claude Code subagents under `.claude/agents/`:
 
 1. `global-funn-news-researcher` — source verification and evidence packs.
 2. `global-funn-hindi-scriptwriter` — spoken Hindi news scripts and voice-over drafts.
 3. `global-funn-shorts-producer` — 9:16 edit plans, storyboard, subtitles and audio/asset checks.
 4. `global-funn-visual-brand-director` — consistent Canva/news graphics and thumbnails.
 5. `global-funn-youtube-growth-editor` — accurate YouTube packaging and analytics review.
+6. `global-funn-studio-orchestrator` — task routing, agent handoffs and approval gates.
+7. `global-funn-trend-researcher` — timely topic discovery and evidence-based scoring.
+8. `global-funn-youtube-seo-strategist` — search-intent-led metadata and topic clusters.
+9. `global-funn-analytics-insights` — performance diagnosis and controlled experiments.
+10. `global-funn-factcheck-compliance` — independent claim, rights and policy review.
+11. `global-funn-content-repurposing` — adaptation of approved assets across formats.
+12. `global-funn-publishing-editor` — books, ebooks, workbooks and newsletters.
+13. `global-funn-saas-product-architect` — customer discovery, MVP scoping and unit economics.
+14. `global-funn-digital-commerce-growth` — offers, acquisition and conversion experiments.
 
 They are adapted for GLOBAL FUNN rather than bulk-copying unrelated agent profiles. They are prompt/configuration files, not a video renderer, autonomous newsroom, or publishing bot.
 
@@ -21,9 +30,13 @@ They are adapted for GLOBAL FUNN rather than bulk-copying unrelated agent profil
 
 These files are not installed into ChatGPT itself and do not automatically connect Canva, YouTube, Metricool, a voice service or an editing application. Those tools retain their own sign-in, permissions and export/publishing steps.
 
-## Why only five
+## Operating manual
 
-GLOBAL FUNN is a small Hindi news and entertainment operation. The selected roles cover the practical production chain: research → script → edit plan/graphics → YouTube packaging. Installing every available role would add noise and does not create additional software capabilities.
+See [`docs/AGENT_OPERATING_SYSTEM.md`](AGENT_OPERATING_SYSTEM.md) for the roster, handoff sequence, release checklist and evidence rules.
+
+## Why a curated roster
+
+GLOBAL FUNN is starting with three pilot channels and a related digital-product roadmap. The selected roles cover research, production, QA, publishing, product discovery, commerce and measurement. This curated roster avoids bulk-installing unrelated agents.
 
 ## Upstream reference
 
