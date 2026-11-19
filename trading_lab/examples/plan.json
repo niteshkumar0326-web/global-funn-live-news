@@ -1,0 +1,9 @@
+{
+  "capital": "10000",
+  "entry": "100",
+  "stop": "95",
+  "target": "110",
+  "risk_fraction": "0.01",
+  "fee_per_order": "5",
+  "slippage_bps": "5"
+}
