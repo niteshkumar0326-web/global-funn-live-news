@@ -48,7 +48,9 @@ The schema contains businesses, memberships, retailers, products, orders, order 
 - [x] Add tenant-scoped retailer outstanding view: opening balance + non-cancelled orders - collections.
 - [x] Add live collection history and retailer-wise due dashboard.
 - [ ] Add order-level payment allocation, refund/credit-note handling and receipt PDF.
-- [ ] Add field-visit and daily-report CRUD.
+- [x] Add live retailer visit logging and visit history.
+- [x] Add daily salesperson reports with one report per person per business day (upsert).
+- [ ] Add GPS check-in, attendance sessions, route plans and manager approval workflow.
 - Test tenant isolation with at least two test accounts/businesses.
 - Add server-side audit logging and validated order/stock/payment workflows.
 - Configure backups, monitoring, rate limits and privacy workflows.
