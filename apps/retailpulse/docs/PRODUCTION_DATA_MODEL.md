@@ -38,7 +38,7 @@ Status: baseline schema applied to the dedicated RetailPulse Supabase project on
 ## RLS policy pattern
 For every business-owned table, SELECT, INSERT, UPDATE and DELETE policies must check that auth.uid() has an active membership for the row's business_id. UPDATE requires both USING and WITH CHECK. Never use TO authenticated without a business-membership predicate.
 
-A membership-management or first-business bootstrap function, if implemented with elevated privileges, must live in a non-exposed schema, set a fixed search_path, explicitly verify auth.uid(), revoke default PUBLIC execution, and grant only the minimum intended role. Prefer invoker-rights functions whenever possible.
+Prefer invoker-rights functions. The initial owner-bootstrap exception is a narrowly scoped public RPC because the browser must call it: it sets a fixed empty search_path, verifies auth.uid(), validates inputs, explicitly revokes PUBLIC and anon execution, grants only authenticated, and writes one business plus owner membership. The Supabase advisor flags authenticated SECURITY DEFINER execution; this is an intentional warning that still requires independent security review, abuse testing and rate limiting before production.
 
 ## Not implemented yet
 No real customer data, database credentials, authentication, billing or tenant onboarding is connected. This document is an implementation contract, not evidence of a secured production system.
