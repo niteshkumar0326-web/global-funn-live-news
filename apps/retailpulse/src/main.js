@@ -77,33 +77,8 @@ function render(){
 async function newOrder(){
  if(!state.liveData)return alert("Sign in to a business workspace first.");
  if(!state.retailers.length)return alert("Add a retailer before creating an order.");
- if(!state.products.length)return alert("Add products to your catalogue before creating an order.");
- const retailerList=state.retailers.map((r,i)=>`${i+1}. ${r.name} — ${r.area}`).join("\n");
- const retailerChoice=Number(prompt("Select retailer by number:\n"+retailerList,"1"));
- if(!Number.isInteger(retailerChoice)||retailerChoice<1||retailerChoice>state.retailers.length)return;
- const retailer=state.retailers[retailerChoice-1];
- const productList=state.products.filter(p=>p.active).map((p,i)=>`${i+1}. ${p.name} [${p.sku}] — ${money(p.sale_price)}/${p.unit}`).join("\n");
- const activeProducts=state.products.filter(p=>p.active);
- if(!activeProducts.length)return alert("No active products found.");
- const selected=prompt("Enter product numbers separated by commas:\n"+productList,"1");
- if(!selected)return;
- const indexes=[...new Set(selected.split(",").map(x=>Number(x.trim())))];
- if(indexes.some(i=>!Number.isInteger(i)||i<1||i>activeProducts.length))return alert("One or more product numbers are invalid.");
- const items=[];
- for(const index of indexes){
-  const product=activeProducts[index-1];
-  const quantity=Number(prompt("Quantity for "+product.name+" ("+product.unit+"):","1"));
-  if(!Number.isFinite(quantity)||quantity<=0)return alert("Every quantity must be a positive number.");
-  items.push({product_id:product.id,quantity});
- }
- const subtotal=items.reduce((sum,item)=>{const p=activeProducts.find(x=>x.id===item.product_id);return sum+Number(p.sale_price)*item.quantity;},0);
- const discount=Number(prompt("Order discount in ₹ (enter 0 if none):","0"));
- if(!Number.isFinite(discount)||discount<0||discount>subtotal)return alert("Enter a valid discount not exceeding the subtotal.");
- const result=await supabase.rpc("create_order_with_items",{p_business_id:state.businessId,p_retailer_id:retailer.id,p_items:items,p_discount:discount});
- if(result.error)return alert("Order could not be saved: "+result.error.message);
- const saved=Array.isArray(result.data)?result.data[0]:result.data;
- await loadBusinessData();render();
- alert("Order "+saved.order_number+" saved. Total: "+money(saved.total));
+ const active=state.products.filter(p=>p.active);if(!active.length)return alert("Add an active product first.");
+ showDataForm({title:"Create sales order",eyebrow:"ORDER MANAGEMENT",description:"Choose a retailer, select products and quantities.",submitLabel:"Create order",fields:`<label>Retailer<select name="retailer" required>${state.retailers.map(r=>`<option value="${esc(r.id)}">${esc(r.name)} · ${esc(r.area||"")}</option>`).join("")}</select></label><div class="order-product-list"><span class="field-caption">ORDER ITEMS</span>${active.map(p=>`<div class="order-product-row"><label class="order-product-choice"><input type="checkbox" name="product" value="${esc(p.id)}"><span><b>${esc(p.name)}</b><small>${esc(p.sku)} · ${money(p.sale_price)} / ${esc(p.unit)}</small></span></label><input class="order-quantity" name="qty_${esc(p.id)}" type="number" min="0.0001" step="0.0001" value="1" aria-label="Quantity for ${esc(p.name)}"></div>`).join("")}</div><label>Discount (₹)<input name="discount" type="number" min="0" step="0.01" value="0"></label><p class="muted form-hint">The server calculates the final price from the saved product catalogue.</p>`,onSubmit:async data=>{const ids=data.getAll("product");if(!ids.length)throw Error("Select at least one product.");const items=ids.map(id=>({product_id:id,quantity:Number(data.get("qty_"+id))}));if(items.some(x=>!Number.isFinite(x.quantity)||x.quantity<=0))throw Error("Enter a positive quantity for every selected product.");const discount=Number(data.get("discount"));if(!Number.isFinite(discount)||discount<0)throw Error("Enter a valid non-negative discount.");const result=await supabase.rpc("create_order_with_items",{p_business_id:state.businessId,p_retailer_id:data.get("retailer"),p_items:items,p_discount:discount});if(result.error)throw result.error;const saved=Array.isArray(result.data)?result.data[0]:result.data;alert("Order "+saved.order_number+" saved. Total: "+money(saved.total));}});
 }
 function closeTeamModal(){document.getElementById("team-modal")?.remove();}
 function openVisitForm(){
