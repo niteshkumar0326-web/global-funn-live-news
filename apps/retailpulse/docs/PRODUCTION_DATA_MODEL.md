@@ -1,6 +1,6 @@
 # RetailPulse production data model (design only)
 
-Status: proposed; NOT applied to any database.
+Status: baseline schema applied to the dedicated RetailPulse Supabase project on 2026-11-19. RLS is enabled on all 11 public tables. This remains a first security baseline, not a production security certification.
 
 ## Isolation model
 - One business is one tenant (businesses).
