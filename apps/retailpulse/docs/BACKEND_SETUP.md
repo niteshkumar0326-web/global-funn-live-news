@@ -35,7 +35,9 @@ The schema contains businesses, memberships, retailers, products, orders, order 
 - Review the owner bootstrap SECURITY DEFINER RPC and test abuse/rate limits; advisor warning is intentional but not a production approval.
 - Implement invite-only membership management and safe role assignment/change workflow.
 - [x] Add email magic-link sign-in UI and first-business onboarding screen (provider and redirect configuration still needs dashboard verification).
-- Connect app screens to real tenant-scoped queries.
+- [x] Connect retailer directory and order register to tenant-scoped Supabase queries.
+- [x] Add retailer creation (owner/manager) and basic order-total creation (owner/manager/salesperson policy).
+- [ ] Add order item/product workflow, inventory movement posting, collections and field-report CRUD.
 - Test tenant isolation with at least two test accounts/businesses.
 - Add server-side audit logging and validated order/stock/payment workflows.
 - Configure backups, monitoring, rate limits and privacy workflows.
