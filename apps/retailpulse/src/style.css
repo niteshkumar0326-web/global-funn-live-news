@@ -39,3 +39,15 @@
 .modal-actions button{min-height:40px}
 .modal-actions button:disabled{opacity:.6;cursor:wait}
 @media(max-width:480px){.modal-backdrop{padding:10px;align-items:end}.form-modal{padding:20px 17px;border-radius:17px 17px 12px 12px;max-height:92vh}.form-grid{grid-template-columns:1fr}.modal-heading h2{font-size:20px}}
+
+.order-product-list{display:grid;gap:8px;padding:12px;border:1px solid #e8edf5;border-radius:12px;background:#fafbfe}
+.field-caption{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#8490a5}
+.order-product-row{display:grid;grid-template-columns:minmax(0,1fr) 94px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #edf0f6}
+.order-product-row:last-child{border-bottom:0}
+.order-product-choice{display:flex!important;align-items:center;gap:9px;min-width:0;cursor:pointer}
+.order-product-choice input{width:16px;height:16px;min-height:16px;accent-color:#657be7;flex:0 0 auto}
+.order-product-choice span{display:grid;gap:3px;min-width:0}
+.order-product-choice b{font-size:11px;color:#263550;overflow:hidden;text-overflow:ellipsis}
+.order-product-choice small{font-size:9px;font-weight:500;color:#8490a5}
+.order-product-row .order-quantity{min-height:36px;padding:7px 9px}
+.form-hint{font-size:10px;line-height:1.5;margin:0}
