@@ -30,4 +30,8 @@ class KanhaRiskGateTests(unittest.TestCase):
     def test_invalid_prices_rejected(self):
         with self.assertRaises(ValueError): evaluate_candidate(self.candidate(stop="101"))
 
+    def test_positive_value_guard_rejects_zero_capital(self):
+        with self.assertRaisesRegex(ValueError,"capital must be positive"):
+            evaluate_candidate(self.candidate(capital="0"))
+
 if __name__=="__main__": unittest.main()
