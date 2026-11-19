@@ -39,7 +39,8 @@ The schema contains businesses, memberships, retailers, products, orders, order 
 - [x] Add retailer creation (owner/manager) and basic order-total creation (owner/manager/salesperson policy).
 - [x] Add tenant-scoped product catalogue reads and product creation (owner/manager), including SKU, unit, sale price, purchase price and reorder level.
 - [ ] Replace prompt-based product entry with validated forms and duplicate-SKU feedback.
-- [ ] Add itemised order workflow using order_items, server-side total calculation and atomic order creation.
+- [x] Add itemised order workflow using order_items and a server-side atomic RPC that validates active business membership, retailer/product ownership, quantities and discount, then calculates line totals from catalogue prices.
+- [ ] Add automated authenticated integration tests for owner, manager, salesperson and cross-tenant denial.
 - [ ] Add inventory movement posting, collections and field-report CRUD.
 - Test tenant isolation with at least two test accounts/businesses.
 - Add server-side audit logging and validated order/stock/payment workflows.
