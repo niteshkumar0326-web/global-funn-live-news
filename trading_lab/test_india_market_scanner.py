@@ -1,6 +1,7 @@
-import csv, tempfile, unittest
+import csv, tempfile, unittest, json, io, contextlib, sys
 from pathlib import Path
-from india_market_scanner import load_bars, analyse_symbol, scan
+from unittest.mock import patch
+from india_market_scanner import load_bars, analyse_symbol, scan, sma, rsi14, main
 
 class ScannerTests(unittest.TestCase):
     def make_csv(self, rows):
@@ -43,5 +44,31 @@ class ScannerTests(unittest.TestCase):
         self.assertIsNone(result["sma20"])
         self.assertIsNone(result["sma50"])
         self.assertIsNone(result["rsi14"])
+
+    def test_sma_direct_period_and_insufficient_history(self):
+        self.assertIsNone(sma([1.0,2.0],3))
+        self.assertEqual(sma([1.0,2.0,3.0,4.0],3),3.0)
+
+    def test_rsi14_direct_rising_falling_and_flat_series(self):
+        self.assertEqual(rsi14([float(i) for i in range(15)]),100.0)
+        self.assertEqual(rsi14([float(15-i) for i in range(15)]),0.0)
+        self.assertEqual(rsi14([10.0]*15),50.0)
+        self.assertIsNone(rsi14([1.0]*14))
+
+    def test_cli_main_writes_json_output(self):
+        rows=[]
+        from datetime import date,timedelta
+        start=date(2026,1,1)
+        for i in range(55):
+            d=start+timedelta(days=i); c=100+i
+            rows.append(["RELIANCE",d.isoformat()+"T09:15:00+05:30",c-1,c+1,c-2,c,1000+i*20])
+        csv_path=self.make_csv(rows)
+        with tempfile.TemporaryDirectory() as folder:
+            out_path=str(Path(folder)/"scan.json")
+            stdout=io.StringIO()
+            with patch.object(sys,"argv",["india_market_scanner","--csv",csv_path,"--out",out_path]), contextlib.redirect_stdout(stdout):
+                main()
+            self.assertEqual(json.loads(stdout.getvalue())["mode"],"OFFLINE_HISTORICAL_CSV")
+            self.assertEqual(json.loads(Path(out_path).read_text(encoding="utf-8"))["symbols_scanned"],1)
 
 if __name__=="__main__": unittest.main()
