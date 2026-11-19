@@ -1,0 +1,27 @@
+name: Kanha Python tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "trading_lab/**"
+      - ".github/workflows/kanha-python-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "trading_lab/**"
+      - ".github/workflows/kanha-python-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run Kanha scanner, risk gate and paper engine tests
+        run: python -m unittest discover -s trading_lab -p "test_*.py" -v
