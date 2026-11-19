@@ -10,9 +10,12 @@
 
 ## Before real business use
 - [x] Provision a dedicated Supabase database project in Mumbai; existing Wild Lilly database left untouched.
-- [ ] Implement email/phone authentication and secure session handling (schema ready; client login not yet wired).
-- [ ] Implement business onboarding and owner/manager/salesperson roles.
-- [x] Enable tenant-membership RLS policies on all 11 public tables (security advisor returned no findings).
+- [x] Add email magic-link sign-in UI and secure session persistence client.
+- [ ] Configure and verify Supabase email provider, Site URL and allowed redirect URLs.
+- [x] Add first-business onboarding RPC (owner role).
+- [ ] Implement invite-only membership management and manager/salesperson role permissions.
+- [x] Enable tenant-membership RLS policies on all 11 public tables.
+- [ ] Review intentional authenticated SECURITY DEFINER owner-bootstrap RPC warning; anon execution is revoked.
 - [ ] Replace browser localStorage demo state with authenticated server reads/writes.
 - [ ] Add server-side validation, idempotency and audit trails.
 - [ ] Add backups, restore test, monitoring and error reporting.
