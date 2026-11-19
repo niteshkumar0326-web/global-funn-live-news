@@ -178,7 +178,7 @@ async function loadBusinessData(){
  state.dataError="";
  const results=await Promise.all([
   supabase.from("retailers").select("id,name,area,opening_balance,active").eq("business_id",state.businessId).eq("active",true).order("name"),
-  supabase.from("orders").select("id,order_number,status,total,placed_at,retailers(name)").eq("business_id",state.businessId).order("placed_at",{ascending:false}).limit(100),
+  supabase.from("orders").select("id,order_number,status,subtotal,discount,total,placed_at,retailers(name)").eq("business_id",state.businessId).order("placed_at",{ascending:false}).limit(100),
   supabase.from("products").select("id,sku,name,unit,sale_price,purchase_price,reorder_level,active").eq("business_id",state.businessId).order("name"),
   supabase.from("product_stock_balances").select("product_id,sku,name,unit,reorder_level,on_hand").eq("business_id",state.businessId).order("name"),
   supabase.from("retailer_outstanding_balances").select("retailer_id,name,phone,area,credit_limit,outstanding,lifetime_orders,lifetime_collections").eq("business_id",state.businessId).order("name"),
