@@ -19,3 +19,23 @@
 .auth-foot{display:block;font-size:9px;line-height:1.6;color:#9aa3b3;margin-top:12px}
 .auth-signout{margin-top:10px}
 @media(max-width:480px){.auth-card{padding:25px 21px;border-radius:17px}.auth-brand{margin-bottom:28px}.auth-card h1{font-size:23px}}
+
+
+/* Field operations modal forms */
+.modal-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:#101a32a8;backdrop-filter:blur(5px)}
+.form-modal{width:min(100%,520px);max-height:min(90vh,760px);overflow:auto;background:#fff;border:1px solid #e7ebf4;border-radius:18px;padding:25px;box-shadow:0 28px 90px #07122e45;animation:modal-in .18s ease-out}
+@keyframes modal-in{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}
+.modal-heading h2{font:800 22px Manrope,sans-serif;letter-spacing:-.7px;color:#1d2a46;margin:5px 0}
+.modal-heading .muted{font-size:11px;margin:0;line-height:1.5}
+.modal-close{width:34px;height:34px;border:1px solid #e7ebf4;border-radius:9px;background:#f8f9fc;color:#596781;font-size:22px;cursor:pointer}
+.form-modal form{display:grid;gap:14px}
+.form-modal label{display:grid;gap:7px;color:#47536c;font-size:11px;font-weight:700}
+.form-modal input,.form-modal select,.form-modal textarea{width:100%;min-height:42px;padding:10px 12px;border:1px solid #e1e6f0;border-radius:9px;background:#fff;color:#263550;font:500 12px "DM Sans",sans-serif;outline:none;transition:border-color .15s,box-shadow .15s}
+.form-modal textarea{resize:vertical;min-height:88px;line-height:1.5}
+.form-modal input:focus,.form-modal select:focus,.form-modal textarea:focus{border-color:#7186ec;box-shadow:0 0 0 3px #7186ec20}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;padding-top:5px}
+.modal-actions button{min-height:40px}
+.modal-actions button:disabled{opacity:.6;cursor:wait}
+@media(max-width:480px){.modal-backdrop{padding:10px;align-items:end}.form-modal{padding:20px 17px;border-radius:17px 17px 12px 12px;max-height:92vh}.form-grid{grid-template-columns:1fr}.modal-heading h2{font-size:20px}}
