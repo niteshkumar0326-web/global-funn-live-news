@@ -24,15 +24,16 @@ The first two database migrations are applied to the dedicated RetailPulse proje
 - `20261119024639_retailpulse_foreign_key_indexes_v1`
 - `20261119024936_retailpulse_secure_owner_onboarding_v1`
 - `20261119025111_retailpulse_restrict_onboarding_rpc_v1`
+- `20261119025310_retailpulse_role_based_access_v1`
+- `20261119025319_retailpulse_order_item_tenant_check_v1`
 
-The schema contains businesses, memberships, retailers, products, orders, order items, collections, stock movements, field visits, daily reports and audit events. RLS is enabled on all 11 public tables. The owner bootstrap RPC creates a business and owner membership for the currently authenticated user. It validates auth.uid(), uses a fixed search_path, and is executable by authenticated users only (anon execution explicitly revoked). Supabase's security advisor still reports the intentional authenticated SECURITY DEFINER RPC as a warning; this requires a focused security review before production.
+The schema contains businesses, memberships, retailers, products, orders, order items, collections, stock movements, field visits, daily reports and audit events. RLS is enabled on all 11 public tables. Role policies now distinguish owner, manager and salesperson permissions: managers maintain master data; salespeople can create their own orders, collections, visits and daily reports; deletion and sensitive updates are restricted. The owner bootstrap RPC creates a business and owner membership for the currently authenticated user. It validates auth.uid(), uses a fixed search_path, and is executable by authenticated users only (anon execution explicitly revoked). Supabase's security advisor still reports the intentional authenticated SECURITY DEFINER RPC as a warning; this requires a focused security review before production.
 
 ## Remaining backend work
 
 - Configure Supabase Auth email provider, Site URL and allowed redirect URLs for the final app domain; verify email link delivery and callback end-to-end.
 - Review the owner bootstrap SECURITY DEFINER RPC and test abuse/rate limits; advisor warning is intentional but not a production approval.
-- Implement invite-only membership management and role-specific permissions.
-- Add role-specific permissions (owner, manager, salesperson).
+- Implement invite-only membership management and safe role assignment/change workflow.
 - [x] Add email magic-link sign-in UI and first-business onboarding screen (provider and redirect configuration still needs dashboard verification).
 - Connect app screens to real tenant-scoped queries.
 - Test tenant isolation with at least two test accounts/businesses.
