@@ -1,0 +1,35 @@
+# RetailPulse release gates
+
+## Current prototype
+- [x] Separate app directory in GitHub
+- [x] Responsive dashboard prototype
+- [x] Demo-only orders, retailers, inventory, collections, field team and reports
+- [x] Local demo persistence and CSV export
+- [x] PWA manifest foundation
+- [x] First Vercel build completed successfully
+
+## Before real business use
+- [ ] Approve and provision a dedicated database project; do not reuse unrelated Wild Lilly database.
+- [ ] Implement email/phone authentication and secure session handling.
+- [ ] Implement business onboarding and owner/manager/salesperson roles.
+- [ ] Implement tenant membership checks and RLS on every exposed table.
+- [ ] Replace browser localStorage demo state with authenticated server reads/writes.
+- [ ] Add server-side validation, idempotency and audit trails.
+- [ ] Add backups, restore test, monitoring and error reporting.
+- [ ] Add export/import, privacy controls and account deletion workflow.
+- [ ] Test tenant A cannot read or mutate tenant B data.
+- [ ] Test role permissions, expired sessions, invalid inputs and concurrency.
+- [ ] Security and performance review before onboarding paying businesses.
+
+## Before charging
+- [ ] Validate the product with 5–10 independent distributors.
+- [ ] Confirm pricing, support workload and unit economics.
+- [ ] Configure subscription entitlements and renewal/cancellation handling.
+- [ ] For Google Play-distributed digital subscriptions, implement compliant Play Billing.
+- [ ] Publish public HTTPS privacy policy and accurate Data Safety declarations.
+- [ ] Complete Play Console account verification and applicable closed testing.
+- [ ] Generate signed Android App Bundle and test on real devices.
+- [ ] Complete store listing, screenshots, content rating, target API and release review.
+
+## Non-negotiable
+Never import Laxmi Enterprises' private records into this product. Never treat sample dashboard figures as real business metrics. Never claim production security or live payment processing until verified.
