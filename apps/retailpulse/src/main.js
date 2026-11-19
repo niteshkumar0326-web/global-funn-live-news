@@ -22,13 +22,12 @@ const sample = {
     {name:"SoftCare Sanitary Pads",sku:"SC-4100",stock:9,unit:"boxes",tone:"critical"}
   ]
 };
-const saved = JSON.parse(localStorage.getItem("retailpulse-demo") || "{}");
-const state = {tab:"Overview", hindi:false, orders:saved.orders || sample.orders, retailers:saved.retailers || sample.retailers, user:null, businessName:"", role:""};
+const state = {tab:"Overview", hindi:false, orders:sample.orders, retailers:sample.retailers, user:null, businessId:"", businessName:"", role:""};
 const money = n => "₹" + Number(n).toLocaleString("en-IN");
 const labels = {
   Overview:["Overview","अवलोकन"], Orders:["Orders","ऑर्डर"], Retailers:["Retailers","रिटेलर्स"], Inventory:["Inventory","स्टॉक"], Collections:["Collections","कलेक्शन"], Team:["Field team","फील्ड टीम"], Reports:["Reports","रिपोर्ट"]
 };
-function persist(){localStorage.setItem("retailpulse-demo",JSON.stringify({orders:state.orders,retailers:state.retailers}));}
+function persist(){if(!state.businessId)return;localStorage.setItem("retailpulse-demo:"+state.businessId,JSON.stringify({orders:state.orders,retailers:state.retailers}));}
 function icon(name){
  const paths={grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',box:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="M3 8v9l9 5 9-5V8M12 13v9"/>',wallet:'<rect x="2" y="5" width="20" height="15" rx="2"/><path d="M2 9h20M16 15h2"/>',users2:'<circle cx="9" cy="7" r="4"/><path d="M2 21a7 7 0 0 1 14 0M19 8v6m3-3h-6"/>',chart:'<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-5 5"/>',plus:'<path d="M12 5v14M5 12h14"/>',search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',arrow:'<path d="M5 12h14m-7-7 7 7-7 7"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>'};
  return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(paths[name]||paths.grid)+'</svg>';
@@ -108,7 +107,7 @@ async function loadBusiness(user){
  const result=await supabase.from("business_memberships").select("business_id,role,businesses(name)").eq("user_id",user.id).eq("active",true).limit(1).maybeSingle();
  if(result.error){authGate("Could not load your workspace: "+result.error.message,user.email);return;}
  if(!result.data){onboardingGate(user);return;}
- state.businessName=result.data.businesses?.name||"My Business";state.role=result.data.role||"member";render();
+ state.businessId=result.data.business_id;state.businessName=result.data.businesses?.name||"My Business";state.role=result.data.role||"member";const saved=JSON.parse(localStorage.getItem("retailpulse-demo:"+state.businessId)||"{}");state.orders=saved.orders||sample.orders;state.retailers=saved.retailers||sample.retailers;render();
  const ws=document.querySelector(".workspace b"),sub=document.querySelector(".workspace small"),profile=document.querySelector(".profile b"),role=document.querySelector(".profile small");
  if(ws)ws.textContent=state.businessName;if(sub)sub.textContent="Private workspace";if(profile)profile.textContent=user.email||"Account";if(role)role.textContent=state.role;
  const actions=document.querySelector(".top-actions");
