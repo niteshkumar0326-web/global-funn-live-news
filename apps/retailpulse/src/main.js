@@ -70,14 +70,34 @@ function render(){
 }
 async function newOrder(){
  if(!state.liveData)return alert("Sign in to a business workspace first.");
- const retailerName=prompt("Enter the exact retailer name:");if(!retailerName)return;
- const retailer=state.retailers.find(r=>r.name.toLowerCase()===retailerName.trim().toLowerCase());
- if(!retailer)return alert("Retailer not found. Add the retailer first, then create the order.");
- const amount=Number(prompt("Order total in ₹:","5000"));if(!Number.isFinite(amount)||amount<=0)return alert("Enter a valid positive amount.");
- const orderNumber="RP-"+Date.now().toString().slice(-8);
- const result=await supabase.from("orders").insert({business_id:state.businessId,retailer_id:retailer.id,order_number:orderNumber,status:"received",subtotal:amount,discount:0,total:amount,placed_by:state.user.id}).select("id,order_number,status,total,placed_at").single();
+ if(!state.retailers.length)return alert("Add a retailer before creating an order.");
+ if(!state.products.length)return alert("Add products to your catalogue before creating an order.");
+ const retailerList=state.retailers.map((r,i)=>`${i+1}. ${r.name} — ${r.area}`).join("\n");
+ const retailerChoice=Number(prompt("Select retailer by number:\n"+retailerList,"1"));
+ if(!Number.isInteger(retailerChoice)||retailerChoice<1||retailerChoice>state.retailers.length)return;
+ const retailer=state.retailers[retailerChoice-1];
+ const productList=state.products.filter(p=>p.active).map((p,i)=>`${i+1}. ${p.name} [${p.sku}] — ${money(p.sale_price)}/${p.unit}`).join("\n");
+ const activeProducts=state.products.filter(p=>p.active);
+ if(!activeProducts.length)return alert("No active products found.");
+ const selected=prompt("Enter product numbers separated by commas:\n"+productList,"1");
+ if(!selected)return;
+ const indexes=[...new Set(selected.split(",").map(x=>Number(x.trim())))];
+ if(indexes.some(i=>!Number.isInteger(i)||i<1||i>activeProducts.length))return alert("One or more product numbers are invalid.");
+ const items=[];
+ for(const index of indexes){
+  const product=activeProducts[index-1];
+  const quantity=Number(prompt("Quantity for "+product.name+" ("+product.unit+"):","1"));
+  if(!Number.isFinite(quantity)||quantity<=0)return alert("Every quantity must be a positive number.");
+  items.push({product_id:product.id,quantity});
+ }
+ const subtotal=items.reduce((sum,item)=>{const p=activeProducts.find(x=>x.id===item.product_id);return sum+Number(p.sale_price)*item.quantity;},0);
+ const discount=Number(prompt("Order discount in ₹ (enter 0 if none):","0"));
+ if(!Number.isFinite(discount)||discount<0||discount>subtotal)return alert("Enter a valid discount not exceeding the subtotal.");
+ const result=await supabase.rpc("create_order_with_items",{p_business_id:state.businessId,p_retailer_id:retailer.id,p_items:items,p_discount:discount});
  if(result.error)return alert("Order could not be saved: "+result.error.message);
+ const saved=Array.isArray(result.data)?result.data[0]:result.data;
  await loadBusinessData();render();
+ alert("Order "+saved.order_number+" saved. Total: "+money(saved.total));
 }
 async function newProduct(){
  if(!state.liveData)return alert("Sign in to a business workspace first.");
