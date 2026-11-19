@@ -1,0 +1,31 @@
+name: RetailPulse build check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/retailpulse/**"
+      - ".github/workflows/retailpulse-check.yml"
+  push:
+    branches: [retailpulse-mvp-v1]
+    paths:
+      - "apps/retailpulse/**"
+      - ".github/workflows/retailpulse-check.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/retailpulse
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/retailpulse/package-lock.json
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build application
+        run: npm run build
