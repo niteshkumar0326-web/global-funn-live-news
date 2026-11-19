@@ -44,7 +44,10 @@ The schema contains businesses, memberships, retailers, products, orders, order 
 - [x] Add owner/manager stock receipt RPC and tenant-scoped live stock-balance view.
 - [x] Automatically post stock-out ledger movements when itemised order lines are created.
 - [ ] Add insufficient-stock prevention / configurable negative-stock policy and stock adjustment workflow.
-- [ ] Add secure collection receipt RPC, payment allocation and live retailer outstanding calculations.
+- [x] Add secure collection receipt RPC for cash, UPI, bank transfer, cheque and other methods.
+- [x] Add tenant-scoped retailer outstanding view: opening balance + non-cancelled orders - collections.
+- [x] Add live collection history and retailer-wise due dashboard.
+- [ ] Add order-level payment allocation, refund/credit-note handling and receipt PDF.
 - [ ] Add field-visit and daily-report CRUD.
 - Test tenant isolation with at least two test accounts/businesses.
 - Add server-side audit logging and validated order/stock/payment workflows.
