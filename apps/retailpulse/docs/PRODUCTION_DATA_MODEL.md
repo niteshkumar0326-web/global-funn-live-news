@@ -40,5 +40,11 @@ For every business-owned table, SELECT, INSERT, UPDATE and DELETE policies must 
 
 Prefer invoker-rights functions. The initial owner-bootstrap exception is a narrowly scoped public RPC because the browser must call it: it sets a fixed empty search_path, verifies auth.uid(), validates inputs, explicitly revokes PUBLIC and anon execution, grants only authenticated, and writes one business plus owner membership. The Supabase advisor flags authenticated SECURITY DEFINER execution; this is an intentional warning that still requires independent security review, abuse testing and rate limiting before production.
 
+## Role policy baseline
+- Owner: full tenant administration; may delete business records where policy permits.
+- Manager: maintain retailer/product master data, orders, collections, stock movements, field visits and daily reports; cannot perform owner-only deletes.
+- Salesperson: read tenant records; create orders and order items only for orders they placed; record collections as themselves; create/update their own field visits and daily reports.
+- All policies remain business-membership scoped. Role assignment/invitations are not yet implemented, so do not manually grant roles to customers until that workflow is reviewed.
+
 ## Not implemented yet
-No real customer data, database credentials, authentication, billing or tenant onboarding is connected. This document is an implementation contract, not evidence of a secured production system.
+No real customer data has been imported. Email auth UI is committed but provider/redirect configuration and end-to-end sign-in are not yet verified. Billing is not connected. This document is an implementation contract, not evidence of a secured production system.
