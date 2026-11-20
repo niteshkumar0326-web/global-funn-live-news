@@ -276,3 +276,10 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Added a step-by-step phone operator handoff covering the nine approved conversions, exact assembly order, filename/download checks, listening QA, attachment handoff and stop conditions: [Zero-Cost Phone TTS Quickstart](GLOBAL_FUNN_PILOT_02_ZERO_COST_PHONE_TTS_QUICKSTART_2026-11-21.md).
 - Fetched the quickstart back from the working branch and verified the no-false-completion boundary.
 - This is an instruction sheet only; no MP3 conversion, download, joining, listening, import, export or publication has occurred.
+
+## Repository / deployment verification — 21 Nov 2026
+- Pull request #16 remains **open and unmerged**; no merge was performed.
+- Latest checked commit: `25e413aa1e0f8fed2c8908f41b7fd678935e6e95`.
+- GitHub commit status reports two Vercel contexts (GLOBAL FUNN and RetailPulse) as **failure: deployment rate limited — retry in 24 hours**. This is a deployment quota/rate-limit blocker, not a successful deployment and not evidence of an application build passing.
+- Do not repeatedly retry deployment or upgrade/pay to clear the limit. Recheck after the stated 24-hour window.
+- Pilot 02 media gate remains unchanged: no verified audio, final thumbnail export, MP4, upload or publication.
