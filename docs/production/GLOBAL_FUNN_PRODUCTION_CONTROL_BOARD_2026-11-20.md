@@ -146,3 +146,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - The script is split into short, manageable files to make phone recording easier and reduce the need for paid AI voice credits.
 - Recording checklist: sound-test first; capture the seven long-form sections and two Shorts; retain original files; attach them in ChatGPT or import them into the existing Descript project.
 - The media production gate is unchanged: no narration audio has been received, and no final edit, export, upload, schedule or publication is claimed.
+
+
+## Production route verification — 20 Nov 2026, 17:55 IST
+- Searched the connected Descript drive for a Pilot 02 Deepfake Safety project, media or audio; no matching Pilot 02 project/media result was returned.
+- The existing Descript project documented above is Pilot 01; it must not be represented as a Pilot 02 edit.
+- Exact-script preservation remains the default production requirement. HeyGen Video Agent may adapt or re-voice the script, so it has not been launched without explicit approval to permit those changes.
+- No new paid generation, video render, public share or upload was initiated in this verification step.
+- **Next executable gate:** receive Pilot 02 narration audio for exact-script editing, or obtain explicit approval for an AI Video Agent version that may adapt the approved wording.
