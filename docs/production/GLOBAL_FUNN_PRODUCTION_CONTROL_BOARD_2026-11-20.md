@@ -139,3 +139,10 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - This is a repository draft only. No live YouTube About text, banner, playlists, trailer, visibility settings or channel configuration were changed.
 - Implementation sequence after owner review: confirm positioning and business email; review existing videos individually; create playlists only where at least three relevant published videos exist; record and approve the trailer; then update the live channel and verify mobile/desktop appearance.
 - Production bottleneck remains Pilot 02 narration audio. Do not claim final edit, export, scheduling or publication until the media exists and passes QA.
+
+
+## Pilot 02 recording handoff simplified — 20 Nov 2026
+- Added a teleprompter-ready Hindi script with seven long-form recording sections and two independent Shorts scripts: [Pilot 02 Teleprompter Recording Script](GLOBAL_FUNN_PILOT_02_TELEPROMPTER_RECORDING_SCRIPT_2026-11-20.md).
+- The script is split into short, manageable files to make phone recording easier and reduce the need for paid AI voice credits.
+- Recording checklist: sound-test first; capture the seven long-form sections and two Shorts; retain original files; attach them in ChatGPT or import them into the existing Descript project.
+- The media production gate is unchanged: no narration audio has been received, and no final edit, export, upload, schedule or publication is claimed.
