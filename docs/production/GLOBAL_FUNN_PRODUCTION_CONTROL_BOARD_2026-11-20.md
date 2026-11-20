@@ -107,3 +107,9 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Added a separate release gate for financial cyber fraud reporting versus other deepfake harms.
 - Verified the refreshed production pack by fetching it from the working branch after commit.
 - Next action remains human voice recording and edit; no recording, final export or publication is claimed.
+
+## Pilot 02 — phone-recording handoff (20 Nov 2026)
+- Added a phone-first Android narration workflow with test-recording guidance, section-by-section file naming, audio QA, Descript import sequence and a publication release gate.
+- Handoff: [Pilot 02 Phone Recording Handoff](GLOBAL_FUNN_PILOT_02_PHONE_RECORDING_HANDOFF_2026-11-20.md)
+- Verified the new handoff exists on this branch and contains the Android recording steps, release gate and explicit not-yet-recorded status.
+- **Current blocker:** user narration/audio files have not yet been supplied or imported. No recording, final export or publication is claimed.
