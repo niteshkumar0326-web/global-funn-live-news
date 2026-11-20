@@ -179,3 +179,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - This avoids dependence on Descript AI credits and does not use fal generation credits.
 - **Current blocker unchanged:** narration files have not been received. No Clipchamp project, synchronized captions, final MP4, upload, schedule or publication is claimed.
 - Next action: record the seven long-form sections and two Shorts on the Android phone using the existing phone-recording handoff, then attach the original audio files for edit preparation.
+
+
+## Pilot 02 zero-cost TTS chunking handoff — 21 Nov 2026
+- Added a free TTS chunking sheet with the approved Main narration divided into three manageable sections, plus independent scripts for Short 1 and Short 2: [Pilot 02 Free TTS Chunking Sheet](GLOBAL_FUNN_PILOT_02_FREE_TTS_CHUNKING_SHEET_2026-11-21.md).
+- The sheet preserves the approved production-pack wording and specifies file names, consistent voice settings, pronunciation/audio acceptance checks, Zera Studio assembly order, and a strict zero-cost rule.
+- Free ClipUtils Hindi TTS is the primary suggested route; TTS Maker is a fallback. These are workflow recommendations only; no service session, audio generation, download or phone import has been verified.
+- **Current blocker unchanged:** no MP3 files have been generated or supplied. No Zera Studio project/import, video export, YouTube upload or publication is claimed.
+- Next action: generate and listen to the five MP3s (Main A/B/C and Shorts 1/2) using a free service; stop if payment or credits are requested. Import only accepted audio into Zera Studio.
