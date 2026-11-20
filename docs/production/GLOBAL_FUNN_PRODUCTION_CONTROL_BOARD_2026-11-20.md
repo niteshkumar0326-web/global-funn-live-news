@@ -218,3 +218,12 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - **Not completed:** text overlay, final thumbnail export and thumbnail QA. The generated artwork must not be represented as a finished YouTube thumbnail.
 - No paid credits, subscriptions, wallet top-ups or external generation service were used for this artwork step.
 - **Next action:** use an already-available free phone image editor to add the specified text, export 1280 × 720 and inspect at small mobile size. If no free editor is available, keep the artwork as an unfinalized asset rather than activating a paid service.
+
+
+## Pilot 02 official reporting wording recheck — 21 Nov 2026
+- Rechecked the National Cyber Crime Reporting Portal and MHA / PIB official releases dated 22 and 28 July 2026.
+- The portal displays 1930 as the 24×7 immediate-reporting helpline for cyber financial fraud. MHA / PIB describes CFCFRMS and 1930 as an immediate financial-fraud reporting mechanism.
+- Added a verified release-day fact-check note with exact safe narration wording and final upload-day recheck requirements: [Pilot 02 Release-Day Reporting Fact Check](GLOBAL_FUNN_PILOT_02_RELEASE_DAY_REPORTING_FACT_CHECK_2026-11-21.md).
+- Fetched the new fact-check note back from the working branch and verified its content.
+- Editorial boundary: keep 1930 explicitly scoped to financial cyber fraud; do not imply it is the exclusive route for all deepfake harms or promise refund/recovery.
+- No audio, final thumbnail export, video edit, MP4 export, upload or publication is claimed.
