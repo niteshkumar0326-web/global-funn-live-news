@@ -100,3 +100,10 @@ Do not label a video viral or successful from views alone. Compare against the c
 ## 9. Next concrete action
 
 Record Pilot 02 using the approved script pack, then conduct a human fact-check and private playback review. Only after those gates pass should the owner approve public upload.
+## 10. Pilot 02 source-refresh status — 20 Nov 2026
+
+- Refreshed the Deepfake Safety production pack against the MeitY / PIB July 2026 framework statement, the MHA / PIB reporting statement, and the CERT-In NCSAM 2026 AI booklet.
+- Added an explicit caution that visual anomalies are not dependable proof of a deepfake; independent callback verification remains the core viewer action.
+- Added a separate release gate for financial cyber fraud reporting versus other deepfake harms.
+- Verified the refreshed production pack by fetching it from the working branch after commit.
+- Next action remains human voice recording and edit; no recording, final export or publication is claimed.
