@@ -201,3 +201,10 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Fetched the new blueprint back from the working branch and verified its content.
 - This is an editorial plan only. No MP3 generation, Zera Studio import, editing timeline, MP4 export, YouTube upload or publication is verified.
 - **Next executable gate:** obtain the five approved MP3 files, listen and verify them, then assemble the main video and two Shorts in the selected free editor. Public release still requires explicit owner approval.
+
+
+## Strict zero-credit production gate — 21 Nov 2026
+- Added an explicit guardrail to the free TTS chunking sheet: do not replace the manual free-TTS path with credit-metered AI voiceover or video rendering. A tool is eligible only if its generation cost is explicitly verified as ₹0 before submission.
+- No wallet funding, paid credits, subscriptions or paid premium voices are authorized for Pilot 02.
+- The five-file audio gate remains open: Main A, Main B, Main C, Short 1 and Short 2. Each file must be downloaded and listened to before Zera Studio import.
+- No audio or video production is newly claimed by this control-board update. The next dependency is still the user's phone-side free TTS generation and file handoff.
