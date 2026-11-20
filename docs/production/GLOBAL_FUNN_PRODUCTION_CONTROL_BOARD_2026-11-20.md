@@ -260,3 +260,9 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Fetched the new caption pack back from the working branch and verified its text and timing gate.
 - This is a text-only caption master. SRT/VTT timestamps and synchronization remain pending until the actual approved narration MP3s are received.
 - No video editing/export/upload/publication is claimed. ₹0 production rule and owner approval gate remain unchanged.
+
+## Shorts upload metadata pack — 21 Nov 2026
+- Added draft titles, descriptions, hashtags, privacy-safe pinned comments and separate release checks for both Shorts: [Shorts Upload Metadata Pack](GLOBAL_FUNN_PILOT_02_SHORTS_UPLOAD_METADATA_PACK_2026-11-21.md).
+- Verified the new metadata file by fetching it back from the working branch.
+- Short 2 keeps 1930 explicitly scoped to financial cyber fraud; neither Short promises detection, refund, fund blocking or recovery.
+- This is copy only. No MP4, thumbnail export, upload or schedule is verified; private review and explicit owner approval remain mandatory.
