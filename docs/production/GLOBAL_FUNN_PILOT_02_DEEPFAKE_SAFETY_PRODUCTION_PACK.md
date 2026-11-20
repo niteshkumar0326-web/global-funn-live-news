@@ -119,3 +119,13 @@ Official guidance: CERT-In (cert-in.org.in), Cyber Swachhta Kendra (csk.gov.in),
 - [ ] Human fact-check, subtitle sync, mobile preview and private/unlisted review before public release.
 
 **Publication status:** This document is a script and production brief only. No recording, finished MP4, upload or publication is claimed.
+## 9. Recording-day source refresh — 20 Nov 2026
+
+Before recording, include the following more recent official government context:
+- PIB / MeitY, 30 Jul 2026: government statement on legal safeguards, platform accountability and citizen protection for AI-generated deepfakes. It describes the 10 Feb 2026 IT Rules amendments, including labelling and traceable metadata requirements for permissible synthetically generated content. Treat this as a government summary, not legal advice: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2291671&lang=1&reg=48
+- PIB / MHA, 5 Aug 2026: official statement says the National Cyber Crime Reporting Portal accepts reports of deepfakes, financial fraud and content misuse; 1930 is functional. Verify the live portal and helpline again on recording day: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295500&lang=1&reg=48
+- CERT-In AI booklet NCSAM 2026, page 5: explicitly recommends hang up and call back, use a secret word, never pay on calls alone, and pause before reacting. This is the clearest on-screen family checklist: https://www.csk.gov.in/documents/CERT-In-AI-Booklet-NCSAM-2026.pdf
+
+**Accuracy correction:** Do not teach viewers to rely on blinking, lip-sync, skin texture, lighting or voice oddities as a dependable deepfake detector. CERT-In's 2024 advisory lists possible signs, but also says deepfakes can be extremely convincing and difficult to detect. In the video, frame those signs only as possible clues; the primary safety method is independent verification through a known channel.
+
+**New release gate:** Confirm the current reporting workflow for financial cyber fraud and non-consensual intimate imagery separately. Do not imply that 1930 is the only route for every kind of deepfake harm; direct viewers to the National Cyber Crime Reporting Portal and local police where appropriate.
