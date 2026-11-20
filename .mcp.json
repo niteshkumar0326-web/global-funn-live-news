@@ -2,7 +2,13 @@
   "mcpServers": {
     "code-review-graph": {
       "command": "uvx",
-      "args": ["code-review-graph[communities]==2.4.0", "serve"],
+      "args": [
+        "code-review-graph[communities]==2.4.0",
+        "serve"
+      ],
+      "env": {
+        "CRG_CONTEXT_HISTORY": "1"
+      },
       "type": "stdio"
     }
   }
