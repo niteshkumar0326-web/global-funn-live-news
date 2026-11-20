@@ -121,3 +121,13 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Added Pilot 02 YouTube upload/release pack with title and description draft, provisional chapters, tags, thumbnail checks, Studio settings, private-review checklist and explicit publication approval gate. Chapter timestamps are not final until synchronized to recorded narration: [Pilot 02 YouTube Upload & Release Pack](GLOBAL_FUNN_PILOT_02_YOUTUBE_UPLOAD_RELEASE_PACK_2026-11-20.md)
 
 - Added a reusable launch and 7-day analytics scorecard covering pre-publish QA, 24h/72h/7d metrics, Shorts-specific measures, retention diagnosis, experiment logging and weekly decisions. It is an empty template; no live channel analytics are claimed: [Video Launch & 7-Day Analytics Scorecard](GLOBAL_FUNN_VIDEO_LAUNCH_7_DAY_ANALYTICS_SCORECARD.md)
+
+
+## Connected channel audit — 20 Nov 2026
+- Read the connected Metricool brand settings and confirmed YouTube channel ID `UCLXPISTr2HJnusqycn4Wyog` is connected.
+- Latest subscriber snapshot returned: **94 subscribers on 19 Nov 2026**.
+- Retrieved the channel's 1–20 Nov published-video listing. It shows a wide mix of news, finance, technology, education, children's, entertainment, devotional, shopping and lifestyle content.
+- Per-video performance fields in that listing were null, and daily analytics had gaps. No individual video winner, complete view total, or monetization claim is made.
+- Added the evidence-bounded audit and 30-day flagship focus plan: [Connected Channel Audit & Focus Plan](GLOBAL_FUNN_CHANNEL_AUDIT_AND_FOCUS_PLAN_2026-11-20.md).
+- Recommended flagship promise: Hindi explainers on India, technology, money and digital life. Hold unrelated future verticals for separate channel concepts; do not mass-delete existing uploads or create additional live channels without review.
+- Next action: obtain populated YouTube Studio analytics and keep Pilot 02 as the next flagship release, pending narration, final edit and owner approval.
