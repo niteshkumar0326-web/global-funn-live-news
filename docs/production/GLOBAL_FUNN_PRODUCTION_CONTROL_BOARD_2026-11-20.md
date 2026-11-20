@@ -171,3 +171,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Checked repository paths: root `package.json` is a Next.js app; `apps/retailpulse/package.json` and `retailpulse/package.json` are not found on the working branch. Therefore changing RetailPulse root directory to repository root would be unsafe and would build the wrong app.
 - Repeated failed RetailPulse deployments on this same repo/branch confirm this is a persistent project/repository mapping or missing-source issue, not just a transient build-rate limit.
 - No Vercel project settings, domain, production deployment, or repository source were changed. Next action requires identifying the correct RetailPulse source repository/path before reconnecting or changing its project configuration.
+
+
+## Pilot 02 Clipchamp route — 21 Nov 2026
+- Added a Clipchamp-specific, phone-first production handoff for a free/manual editing route: [Pilot 02 Clipchamp Editing Handoff](GLOBAL_FUNN_PILOT_02_CLIPCHAMP_EDITING_HANDOFF_2026-11-21.md).
+- It defines 16:9 long-form and 9:16 Shorts canvases, folder structure, narration-first assembly, caption/audio QA, rights and privacy guardrails, and private-review release gates.
+- This avoids dependence on Descript AI credits and does not use fal generation credits.
+- **Current blocker unchanged:** narration files have not been received. No Clipchamp project, synchronized captions, final MP4, upload, schedule or publication is claimed.
+- Next action: record the seven long-form sections and two Shorts on the Android phone using the existing phone-recording handoff, then attach the original audio files for edit preparation.
