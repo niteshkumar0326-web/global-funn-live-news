@@ -227,3 +227,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Fetched the new fact-check note back from the working branch and verified its content.
 - Editorial boundary: keep 1930 explicitly scoped to financial cyber fraud; do not imply it is the exclusive route for all deepfake harms or promise refund/recovery.
 - No audio, final thumbnail export, video edit, MP4 export, upload or publication is claimed.
+
+
+## Pilot 02 two-Shorts edit blueprint — 21 Nov 2026
+- Added a dedicated editing blueprint for both vertical Shorts, including 9:16 / 1080×1920 / 30fps settings, shot order, on-screen text, caption/audio QA and release safeguards: [Pilot 02 Two Shorts Edit Blueprint](GLOBAL_FUNN_PILOT_02_TWO_SHORTS_EDIT_BLUEPRINT_2026-11-21.md).
+- Fetched the new file back from the working branch and verified its content.
+- Short 1 centers on ending the suspicious call and independently calling a previously saved number. Short 2 keeps 1930 scoped to financial cyber fraud and preserves the no-recovery-guarantee warning.
+- This is an editing plan only. No narration MP3, Shorts timeline, final export, upload or publication is claimed.
+- Next dependency remains the five narration MP3 files; after receipt, verify audio and assemble long-form plus Shorts using the saved blueprints.
