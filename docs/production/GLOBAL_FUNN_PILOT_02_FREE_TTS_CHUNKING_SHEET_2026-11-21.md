@@ -13,10 +13,11 @@
 ## Recommended free workflow
 1. Open the ClipUtils Hindi TTS page: https://www.cliputils.com/tools/hindi-text-to-speech
 2. Select Arjun (Male), Hindi, Normal speed.
-3. Generate each chunk below separately and download as MP3.
-4. If ClipUtils is unavailable, test the free TTS Maker route: https://ttsmaker.in/
-5. If either service requests payment, stop. Do not pay or use credits.
-6. Import the downloaded files into Zera Studio in the listed order.
+3. On Android, note that the service says speech is generated on its server; it says the text is not kept. Use it only if you are comfortable with that processing. On desktop, the model runs in the browser.
+4. Generate each chunk below separately and download as MP3. The Hindi page advertises up to 10,000 characters per conversion; keep each chunk below that and verify the actual limit shown on the page.
+5. Alternative: TTS Maker https://ttsmaker.in/ offers free Microsoft Hindi voices (Madhur male, Swara female). Its published free limits are 500 characters per conversion without signup (2,000/day), or 5,000 characters per conversion and 200,000/day with a free account. Avoid its paid/credit-based premium voices.
+6. If either service requests payment or credits for the selected free voice, stop. Do not pay.
+7. Import the downloaded files into Zera Studio in the listed order.
 
 ## Main narration — three chunks
 
@@ -76,3 +77,11 @@ Filename: `GLOBAL_FUNN_SHORT2.mp3`
 - MP3 generation: not performed or verified.
 - Zera Studio project/import: not performed or verified.
 - Video exports/upload/publication: not performed or verified.
+
+
+## Service privacy and free-limit clarification — 21 Nov 2026
+- ClipUtils Hindi page says the model runs in the browser and the text stays local; however its general TTS page explicitly clarifies that on phones speech is generated on its server, while desktop uses browser-side processing. For Android users, do not describe this as fully on-device processing. The service says phone text is not kept.
+- ClipUtils Hindi page advertises up to 10,000 characters per conversion and no signup. Confirm the live page's actual limit before generation.
+- TTS Maker's published free limits: no account up to 500 characters per conversion and 2,000/day; free account up to 5,000 characters per conversion and 200,000/day on Microsoft voices. Hindi free voices listed are Madhur (male) and Swara (female). Premium voices use credits and are excluded from this zero-cost plan.
+- Privacy choice: use ClipUtils on Android only if comfortable with server-side processing; use its browser-local route on desktop if local processing is required. Do not upload private or sensitive personal text to either service.
+- No TTS conversion, MP3 download or device import has been performed or verified by this update.
