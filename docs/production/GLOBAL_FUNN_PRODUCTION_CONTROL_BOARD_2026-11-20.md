@@ -266,3 +266,8 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Verified the new metadata file by fetching it back from the working branch.
 - Short 2 keeps 1930 explicitly scoped to financial cyber fraud; neither Short promises detection, refund, fund blocking or recovery.
 - This is copy only. No MP4, thumbnail export, upload or schedule is verified; private review and explicit owner approval remain mandatory.
+
+## Thumbnail overlay layout handoff — 21 Nov 2026
+- Added exact approved headline line-breaks, supporting line, brand placement, safe margins, typography/contrast guidance and 1280×720 export QA: [Thumbnail Overlay Layout](GLOBAL_FUNN_PILOT_02_THUMBNAIL_OVERLAY_LAYOUT_2026-11-21.md).
+- Fetched the new layout handoff back from the working branch and verified its copy and export dimensions.
+- This is a layout specification only. The headline overlay, final thumbnail export and mobile-size QA remain pending; no rendered thumbnail is claimed.
