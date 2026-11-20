@@ -154,3 +154,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Exact-script preservation remains the default production requirement. HeyGen Video Agent may adapt or re-voice the script, so it has not been launched without explicit approval to permit those changes.
 - No new paid generation, video render, public share or upload was initiated in this verification step.
 - **Next executable gate:** receive Pilot 02 narration audio for exact-script editing, or obtain explicit approval for an AI Video Agent version that may adapt the approved wording.
+
+
+## Repository CI and deployment check — 20 Nov 2026
+- Checked GitHub Actions for the latest production-control-board commit `0cada2124e2965bd14b9aafd5dc2ceb9c373c286`.
+- Passed: Kanha Python tests, Build check, Trading paper engine tests, Code Review Graph, and Validate Claude Code agents. All five workflow runs completed with conclusion `success`.
+- Deployment status checks: both Vercel `retailpulse` and `global-funn-live-news` reported `failure` with a Vercel build-rate-limit upgrade URL. This indicates a deployment/build quota limit, not a successful live deployment.
+- PR #16 has no submitted reviews and no inline review threads in the current check. It remains open and unmerged; no merge was performed.
+- Next technical action: resolve the Vercel build-rate-limit/plan constraint or wait for quota availability, then rerun deployment checks. Do not report either site as newly deployed from this commit.
