@@ -241,3 +241,10 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Fetched the new asset register back from the working branch and verified the five required audio filenames and ₹0 spending gate.
 - Production truth remains unchanged: no MP3s received or verified, no Zera Studio import/timeline, no final thumbnail export, no MP4 export and no YouTube upload/publication.
 - **Next dependency:** owner generates and attaches the five MP3s; review audio before editing. Public release still requires explicit owner approval.
+
+## Pilot 02 TTS fallback limit check — 21 Nov 2026
+- Counted the current narration blocks in the TTS sheet: Main A ~1,005 characters, Main B ~676, Main C ~599, Short 1 ~300 and Short 2 ~282.
+- Clarified that TTS Maker's published 500-character no-signup conversion limit cannot accept any of the three current main blocks as one conversion. If using that route without an account, split each main block into consecutive subchunks of ≤500 characters and join in order; both Shorts fit the stated limit.
+- Free-account 5,000-character allowance may fit each current block, but must be confirmed on the live service page. No account was created and no text was submitted.
+- Updated TTS sheet fetched back and verified: [Free TTS Chunking Sheet](GLOBAL_FUNN_PILOT_02_FREE_TTS_CHUNKING_SHEET_2026-11-21.md).
+- No audio generation or device import is claimed. ₹0 spending gate remains active.
