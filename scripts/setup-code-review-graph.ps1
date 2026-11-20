@@ -35,10 +35,13 @@ if (Get-Command headroom -ErrorAction SilentlyContinue) {
   Write-Warning "Headroom command is not on PATH yet. Reopen PowerShell and run: headroom doctor"
 }
 
-Write-Host "Installing Code Review Graph local index..." -ForegroundColor Yellow
-uvx code-review-graph install --platform claude-code --yes
-uvx code-review-graph build
-uvx code-review-graph status
+Write-Host "Installing pinned Code Review Graph 2.4.0 with communities support..." -ForegroundColor Yellow
+$crgPackage = "code-review-graph[communities]==2.4.0"
+uv tool install --force $crgPackage
+uvx --from $crgPackage code-review-graph install --platform claude-code --yes
+uvx --from $crgPackage code-review-graph build
+uvx --from $crgPackage code-review-graph status
+uvx --from $crgPackage code-review-graph detect-changes --brief
 
 Write-Host "The project .mcp.json registers Headroom + Code Review Graph for Claude Code." -ForegroundColor Yellow
 Write-Host "Restart Claude Code and run /mcp to verify both servers." -ForegroundColor Green
