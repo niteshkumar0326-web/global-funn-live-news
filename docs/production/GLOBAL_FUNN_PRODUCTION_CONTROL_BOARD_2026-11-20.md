@@ -254,3 +254,9 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Checked that joining each narration's text blocks in order reproduces the source narration after whitespace normalization; no wording was intentionally rewritten.
 - The sheet now specifies the seven long-form audio subchunks and two Shorts conversions, with exact filenames and join order. Fetched back and verified: [Free TTS Chunking Sheet](GLOBAL_FUNN_PILOT_02_FREE_TTS_CHUNKING_SHEET_2026-11-21.md).
 - This is a text-preparation step only. No TTS conversion, MP3 download, Zera Studio import, edit, export or upload is claimed. ₹0 rule remains active.
+
+## Pilot 02 Shorts caption text master — 21 Nov 2026
+- Added exact wording/order caption text for Short 1 and Short 2, limited to concise one/two-line cards and without invented timestamps: [Shorts Caption Text Pack](GLOBAL_FUNN_PILOT_02_SHORTS_CAPTION_TEXT_PACK_2026-11-21.md).
+- Fetched the new caption pack back from the working branch and verified its text and timing gate.
+- This is a text-only caption master. SRT/VTT timestamps and synchronization remain pending until the actual approved narration MP3s are received.
+- No video editing/export/upload/publication is claimed. ₹0 production rule and owner approval gate remain unchanged.
