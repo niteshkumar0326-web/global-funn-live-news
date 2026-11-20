@@ -85,3 +85,8 @@ Filename: `GLOBAL_FUNN_SHORT2.mp3`
 - TTS Maker's published free limits: no account up to 500 characters per conversion and 2,000/day; free account up to 5,000 characters per conversion and 200,000/day on Microsoft voices. Hindi free voices listed are Madhur (male) and Swara (female). Premium voices use credits and are excluded from this zero-cost plan.
 - Privacy choice: use ClipUtils on Android only if comfortable with server-side processing; use its browser-local route on desktop if local processing is required. Do not upload private or sensitive personal text to either service.
 - No TTS conversion, MP3 download or device import has been performed or verified by this update.
+
+
+## Additional zero-credit guardrail — 21 Nov 2026
+- Do not substitute connected AI voiceover/video-generation tools for the free browser workflow unless their generation cost is explicitly zero and verified before submission. Credit-metered voiceover or video rendering is outside this pilot's ₹0 budget.
+- The approved path remains a free TTS website chosen by the user on the phone, followed by manual import. No external service has been run from this update.
