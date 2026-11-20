@@ -113,3 +113,5 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Handoff: [Pilot 02 Phone Recording Handoff](GLOBAL_FUNN_PILOT_02_PHONE_RECORDING_HANDOFF_2026-11-20.md)
 - Verified the new handoff exists on this branch and contains the Android recording steps, release gate and explicit not-yet-recorded status.
 - **Current blocker:** user narration/audio files have not yet been supplied or imported. No recording, final export or publication is claimed.
+
+- Added a Hindi narration direction sheet covering delivery tone, pacing, pronunciation of key terms and numbers, section timing, Shorts delivery and editorial guardrails: [Pilot 02 Hindi Narration Direction Sheet](GLOBAL_FUNN_PILOT_02_HINDI_NARRATION_DIRECTION_SHEET_2026-11-20.md)
