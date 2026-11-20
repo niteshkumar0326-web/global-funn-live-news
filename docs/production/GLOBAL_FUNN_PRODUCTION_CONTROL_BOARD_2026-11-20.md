@@ -194,3 +194,10 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Documented TTS Maker's free Microsoft Hindi voice limits (Madhur male, Swara female): 500 characters/conversion and 2,000/day without signup; 5,000 characters/conversion and 200,000/day on a free account. Paid premium voices remain excluded.
 - Updated the TTS chunking sheet with privacy and free-limit details and verified it from the working branch.
 - No text was submitted to either TTS provider; no MP3 was generated, downloaded or imported. No paid usage occurred.
+
+
+## Pilot 02 main video edit blueprint — 21 Nov 2026
+- Added a main-video edit blueprint with nine ordered visual sections, narration chunk order, 16:9 export settings, caption synchronization rules, rights/privacy guardrails and a private-review QA gate: [Pilot 02 Main Video Edit Blueprint](GLOBAL_FUNN_PILOT_02_MAIN_VIDEO_EDIT_BLUEPRINT_2026-11-21.md).
+- Fetched the new blueprint back from the working branch and verified its content.
+- This is an editorial plan only. No MP3 generation, Zera Studio import, editing timeline, MP4 export, YouTube upload or publication is verified.
+- **Next executable gate:** obtain the five approved MP3 files, listen and verify them, then assemble the main video and two Shorts in the selected free editor. Public release still requires explicit owner approval.
