@@ -162,3 +162,12 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Deployment status checks: both Vercel `retailpulse` and `global-funn-live-news` reported `failure` with a Vercel build-rate-limit upgrade URL. This indicates a deployment/build quota limit, not a successful live deployment.
 - PR #16 has no submitted reviews and no inline review threads in the current check. It remains open and unmerged; no merge was performed.
 - Next technical action: resolve the Vercel build-rate-limit/plan constraint or wait for quota availability, then rerun deployment checks. Do not report either site as newly deployed from this commit.
+
+
+## Vercel project configuration investigation — 20 Nov 2026
+- Read-only inspection identified two Vercel projects linked to the same GitHub repository: `global-funn-live-news` (Next.js) and `retailpulse` (Vite).
+- The latest discovered GLOBAL FUNN preview deployment is READY at commit `83b0027c029089005c0a5450b0823389ea295630`: https://global-funn-live-news-kgfq7a5o5-all-9e21.vercel.app . This is a preview, not a verified production release, and it predates the latest production-board commits.
+- RetailPulse preview deployment `dpl_2E34ZZB8csvnnXu5zEGsFd87pPu1` is ERROR. Its build log explicitly says configured Root Directory `apps/retailpulse` does not exist.
+- Checked repository paths: root `package.json` is a Next.js app; `apps/retailpulse/package.json` and `retailpulse/package.json` are not found on the working branch. Therefore changing RetailPulse root directory to repository root would be unsafe and would build the wrong app.
+- Repeated failed RetailPulse deployments on this same repo/branch confirm this is a persistent project/repository mapping or missing-source issue, not just a transient build-rate limit.
+- No Vercel project settings, domain, production deployment, or repository source were changed. Next action requires identifying the correct RetailPulse source repository/path before reconnecting or changing its project configuration.
