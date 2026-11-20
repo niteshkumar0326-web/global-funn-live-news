@@ -187,3 +187,10 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Free ClipUtils Hindi TTS is the primary suggested route; TTS Maker is a fallback. These are workflow recommendations only; no service session, audio generation, download or phone import has been verified.
 - **Current blocker unchanged:** no MP3 files have been generated or supplied. No Zera Studio project/import, video export, YouTube upload or publication is claimed.
 - Next action: generate and listen to the five MP3s (Main A/B/C and Shorts 1/2) using a free service; stop if payment or credits are requested. Import only accepted audio into Zera Studio.
+
+
+## Free TTS service/privacy clarification — 21 Nov 2026
+- Corrected the Pilot 02 TTS handoff: ClipUtils' Hindi page advertises no-signup Hindi MP3 generation, but its general TTS page clarifies that on phones speech is generated on its server; desktop browser processing is local. Do not tell Android users their text stays on-device. The service says phone text is not kept.
+- Documented TTS Maker's free Microsoft Hindi voice limits (Madhur male, Swara female): 500 characters/conversion and 2,000/day without signup; 5,000 characters/conversion and 200,000/day on a free account. Paid premium voices remain excluded.
+- Updated the TTS chunking sheet with privacy and free-limit details and verified it from the working branch.
+- No text was submitted to either TTS provider; no MP3 was generated, downloaded or imported. No paid usage occurred.
