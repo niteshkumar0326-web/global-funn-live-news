@@ -44,7 +44,12 @@ A small, accountable AI-assisted studio for three pilot channels and related dig
 - [ ] Live URL or platform confirmation is recorded after publication.
 
 ## Pilot focus
-Start with GLOBAL FUNN, AI Seekho Hindi and Career Compass Hindi. Keep the remaining proposed channels as a backlog until the pilots show repeatable audience demand and manageable production cost.
+The first three pilots follow the portfolio document:
+1. **GLOBAL FUNN News** — Hindi explainers on important India/world stories.
+2. **Jharkhand Ground Report** — local civic, jobs, development and culture reporting.
+3. **AI Tools Hindi Lab** — practical AI tools and workflows in Hindi.
+
+Do not launch all 25 candidate brands at once. Keep the other channels as a backlog until the pilots show repeatable audience demand and manageable production cost. The first content queue is in [YOUTUBE_PILOT_CONTENT_BACKLOG.md](YOUTUBE_PILOT_CONTENT_BACKLOG.md).
 
 ## Evidence and honesty
 Use only metrics actually retrieved from connected platforms or supplied by the owner. Label estimates and hypotheses. Never claim an agent ran, a tool was installed, a video was uploaded, a product was launched or revenue was earned without verifiable evidence.
