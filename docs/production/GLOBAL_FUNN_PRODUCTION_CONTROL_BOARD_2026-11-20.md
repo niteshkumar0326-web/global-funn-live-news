@@ -248,3 +248,9 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Free-account 5,000-character allowance may fit each current block, but must be confirmed on the live service page. No account was created and no text was submitted.
 - Updated TTS sheet fetched back and verified: [Free TTS Chunking Sheet](GLOBAL_FUNN_PILOT_02_FREE_TTS_CHUNKING_SHEET_2026-11-21.md).
 - No audio generation or device import is claimed. ₹0 spending gate remains active.
+
+## Exact no-signup TTS subchunks prepared — 21 Nov 2026
+- Added sentence-safe copy/paste blocks for TTS Maker's published 500-character no-signup conversion limit: Main A = 3 parts (maximum 481 characters), Main B = 2 parts (maximum 460), Main C = 2 parts (maximum 410). Both Shorts remain single conversions under 500 characters.
+- Checked that joining each narration's text blocks in order reproduces the source narration after whitespace normalization; no wording was intentionally rewritten.
+- The sheet now specifies the seven long-form audio subchunks and two Shorts conversions, with exact filenames and join order. Fetched back and verified: [Free TTS Chunking Sheet](GLOBAL_FUNN_PILOT_02_FREE_TTS_CHUNKING_SHEET_2026-11-21.md).
+- This is a text-preparation step only. No TTS conversion, MP3 download, Zera Studio import, edit, export or upload is claimed. ₹0 rule remains active.
