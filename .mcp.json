@@ -2,12 +2,8 @@
   "mcpServers": {
     "code-review-graph": {
       "command": "uvx",
-      "args": ["code-review-graph", "serve"]
-    },
-    "headroom": {
-      "type": "stdio",
-      "command": "headroom",
-      "args": ["mcp", "serve"]
+      "args": ["code-review-graph[communities]==2.4.0", "serve"],
+      "type": "stdio"
     }
   }
 }
