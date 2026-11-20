@@ -235,3 +235,9 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Short 1 centers on ending the suspicious call and independently calling a previously saved number. Short 2 keeps 1930 scoped to financial cyber fraud and preserves the no-recovery-guarantee warning.
 - This is an editing plan only. No narration MP3, Shorts timeline, final export, upload or publication is claimed.
 - Next dependency remains the five narration MP3 files; after receipt, verify audio and assemble long-form plus Shorts using the saved blueprints.
+
+## Pilot 02 consolidated asset register — 21 Nov 2026
+- Added a single asset register and owner handoff checklist covering approved scripts, existing production blueprints, thumbnail state, five required MP3 filenames, phone-side zero-cost TTS checks, editing order and release gates: [Pilot 02 Asset Register and Handoff](GLOBAL_FUNN_PILOT_02_ASSET_REGISTER_AND_HANDOFF_2026-11-21.md).
+- Fetched the new asset register back from the working branch and verified the five required audio filenames and ₹0 spending gate.
+- Production truth remains unchanged: no MP3s received or verified, no Zera Studio import/timeline, no final thumbnail export, no MP4 export and no YouTube upload/publication.
+- **Next dependency:** owner generates and attaches the five MP3s; review audio before editing. Public release still requires explicit owner approval.
