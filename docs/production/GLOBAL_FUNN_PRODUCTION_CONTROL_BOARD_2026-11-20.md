@@ -117,3 +117,5 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Added a Hindi narration direction sheet covering delivery tone, pacing, pronunciation of key terms and numbers, section timing, Shorts delivery and editorial guardrails: [Pilot 02 Hindi Narration Direction Sheet](GLOBAL_FUNN_PILOT_02_HINDI_NARRATION_DIRECTION_SHEET_2026-11-20.md)
 
 - Added a provisional visual and caption cue sheet for Pilot 02: long-form segment map, two Shorts visual recipes, caption rules, asset-rights guardrails and final synchronization checklist. Timings remain provisional until the actual narration is recorded: [Pilot 02 Visual & Caption Cue Sheet](GLOBAL_FUNN_PILOT_02_VISUAL_CAPTION_CUE_SHEET_2026-11-20.md)
+
+- Added Pilot 02 YouTube upload/release pack with title and description draft, provisional chapters, tags, thumbnail checks, Studio settings, private-review checklist and explicit publication approval gate. Chapter timestamps are not final until synchronized to recorded narration: [Pilot 02 YouTube Upload & Release Pack](GLOBAL_FUNN_PILOT_02_YOUTUBE_UPLOAD_RELEASE_PACK_2026-11-20.md)
