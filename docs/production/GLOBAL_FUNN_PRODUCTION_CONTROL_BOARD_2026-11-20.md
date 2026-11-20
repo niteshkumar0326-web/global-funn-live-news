@@ -283,3 +283,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - GitHub commit status reports two Vercel contexts (GLOBAL FUNN and RetailPulse) as **failure: deployment rate limited — retry in 24 hours**. This is a deployment quota/rate-limit blocker, not a successful deployment and not evidence of an application build passing.
 - Do not repeatedly retry deployment or upgrade/pay to clear the limit. Recheck after the stated 24-hour window.
 - Pilot 02 media gate remains unchanged: no verified audio, final thumbnail export, MP4, upload or publication.
+
+## CI and code-review verification — 21 Nov 2026 (latest PR head)
+- Rechecked GitHub Actions for head commit `f4284cd3876bd6f994afca99c235abb9f9ce2c8d`.
+- **Passed:** Validate Claude Code agents; Trading paper engine tests; Kanha Python tests; Code Review Graph; Build check.
+- Build check job was fetched separately: dependency installation and **Build Next.js app** both completed successfully.
+- Code Review Graph completed successfully but reported **medium overall risk (0.65)** and **9 test gaps**, including untested Kanha dashboard UI symbols. This is a review warning, not a failed build; retain as follow-up QA before treating the whole product as release-ready.
+- Vercel preview/production deployment remains a separate rate-limit failure noted above. A successful GitHub build does not mean a Vercel deployment or public release succeeded.
+- PR #16 remains open and unmerged; no merge or deployment retry was performed.
