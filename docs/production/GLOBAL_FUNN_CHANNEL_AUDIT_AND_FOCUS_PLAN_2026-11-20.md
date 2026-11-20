@@ -74,3 +74,15 @@ Metricool's returned video list for this audit included video IDs and titles, bu
 
 ## 8. Completion boundary
 This is an audit and strategy document. It does not change YouTube settings, edit existing uploads, create channels, publish videos, or claim growth or monetization. All such actions require the appropriate connected account action and owner approval.
+
+
+## 9. Connected-channel snapshot refresh — 20 Nov 2026
+A fresh zero-credit connected-channel lookup confirmed the same channel identity:
+- Channel: **GLOBAL FUNN**
+- Handle: **@niteshkumar0326**
+- Channel ID: `UCLXPISTr2HJnusqycn4Wyog`
+- Subscribers: **94**
+- Lifetime channel views: **8,580**
+- Public video count: **279**
+
+These are channel-level snapshot figures, not a performance breakdown. They do not identify which videos are driving views, how many views are recent, watch time, audience retention, or revenue. The earlier per-video analytics fields were unavailable/null, so the editorial recommendation remains provisional until populated YouTube Studio video-level analytics are available.
