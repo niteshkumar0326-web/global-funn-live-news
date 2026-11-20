@@ -291,3 +291,12 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Code Review Graph completed successfully but reported **medium overall risk (0.65)** and **9 test gaps**, including untested Kanha dashboard UI symbols. This is a review warning, not a failed build; retain as follow-up QA before treating the whole product as release-ready.
 - Vercel preview/production deployment remains a separate rate-limit failure noted above. A successful GitHub build does not mean a Vercel deployment or public release succeeded.
 - PR #16 remains open and unmerged; no merge or deployment retry was performed.
+
+
+## Latest CI recheck — 21 Nov 2026, 02:40 IST
+- Rechecked the current PR #16 head commit: `54ba2df3b6a5f494a9394ba3a2835b6c3e0851b0`.
+- All five GitHub Actions check-runs completed successfully: agent frontmatter validation, structural review, Next.js build, Kanha Python tests, and trading paper-engine tests.
+- The commit status is still **failure** because both Vercel contexts (`global-funn-live-news` and `retailpulse`) report “Deployment rate limited — retry in 24 hours.” Successful GitHub Actions do not mean Vercel deployed either app.
+- PR #16 remains open, unmerged, and marked mergeable but unstable. No merge or paid upgrade was attempted.
+- Follow-up: inspect and close the nine previously reported Kanha UI test gaps before release readiness; separately resolve the RetailPulse source/root-directory mapping rather than pointing it at the wrong app. Retry Vercel only after the rate-limit window and only at ₹0.
+- Pilot 02 media status is unchanged: no verified MP3, final thumbnail export, MP4, upload or publication.
