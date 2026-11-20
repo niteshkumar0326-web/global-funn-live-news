@@ -1,5 +1,3 @@
--- Enforce invoice-level collection limits and serialize concurrent receipts.
--- Existing account-level collections (p_order_id IS NULL) remain supported.
 create or replace function public.record_retailer_collection(
  p_business_id uuid,
  p_retailer_id uuid,
