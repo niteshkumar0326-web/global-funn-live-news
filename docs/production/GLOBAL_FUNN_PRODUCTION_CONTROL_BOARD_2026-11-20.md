@@ -208,3 +208,13 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - No wallet funding, paid credits, subscriptions or paid premium voices are authorized for Pilot 02.
 - The five-file audio gate remains open: Main A, Main B, Main C, Short 1 and Short 2. Each file must be downloaded and listened to before Zera Studio import.
 - No audio or video production is newly claimed by this control-board update. The next dependency is still the user's phone-side free TTS generation and file handoff.
+
+
+## Pilot 02 thumbnail artwork and assembly spec — 21 Nov 2026
+- Generated an original cybersecurity illustration in the current ChatGPT session: anonymous video-call silhouette, audio waveform, warning symbol and protection shield. The image contains no headline text and is not yet a finished thumbnail.
+- Added the thumbnail assembly specification: [Pilot 02 Thumbnail Assembly Specification](GLOBAL_FUNN_PILOT_02_THUMBNAIL_ASSEMBLY_SPEC_2026-11-21.md).
+- Fetched the new specification back from the working branch and verified its content.
+- Required overlay: “आवाज़ असली… या AI?”, “Deepfake Scam से बचें”, and GLOBAL FUNN branding. Target canvas 1280 × 720; preserve mobile readability and keep text clear of the shield.
+- **Not completed:** text overlay, final thumbnail export and thumbnail QA. The generated artwork must not be represented as a finished YouTube thumbnail.
+- No paid credits, subscriptions, wallet top-ups or external generation service were used for this artwork step.
+- **Next action:** use an already-available free phone image editor to add the specified text, export 1280 × 720 and inspect at small mobile size. If no free editor is available, keep the artwork as an unfinalized asset rather than activating a paid service.
