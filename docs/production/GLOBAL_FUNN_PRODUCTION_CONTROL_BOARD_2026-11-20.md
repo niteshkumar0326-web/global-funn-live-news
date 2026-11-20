@@ -271,3 +271,8 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Added exact approved headline line-breaks, supporting line, brand placement, safe margins, typography/contrast guidance and 1280×720 export QA: [Thumbnail Overlay Layout](GLOBAL_FUNN_PILOT_02_THUMBNAIL_OVERLAY_LAYOUT_2026-11-21.md).
 - Fetched the new layout handoff back from the working branch and verified its copy and export dimensions.
 - This is a layout specification only. The headline overlay, final thumbnail export and mobile-size QA remain pending; no rendered thumbnail is claimed.
+
+## Android zero-cost TTS quickstart — 21 Nov 2026
+- Added a step-by-step phone operator handoff covering the nine approved conversions, exact assembly order, filename/download checks, listening QA, attachment handoff and stop conditions: [Zero-Cost Phone TTS Quickstart](GLOBAL_FUNN_PILOT_02_ZERO_COST_PHONE_TTS_QUICKSTART_2026-11-21.md).
+- Fetched the quickstart back from the working branch and verified the no-false-completion boundary.
+- This is an instruction sheet only; no MP3 conversion, download, joining, listening, import, export or publication has occurred.
