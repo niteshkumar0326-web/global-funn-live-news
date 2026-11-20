@@ -131,3 +131,11 @@ Record Pilot 02 using the approved script pack, then conduct a human fact-check 
 - Added the evidence-bounded audit and 30-day flagship focus plan: [Connected Channel Audit & Focus Plan](GLOBAL_FUNN_CHANNEL_AUDIT_AND_FOCUS_PLAN_2026-11-20.md).
 - Recommended flagship promise: Hindi explainers on India, technology, money and digital life. Hold unrelated future verticals for separate channel concepts; do not mass-delete existing uploads or create additional live channels without review.
 - Next action: obtain populated YouTube Studio analytics and keep Pilot 02 as the next flagship release, pending narration, final edit and owner approval.
+
+
+## Channel home and branding readiness — 20 Nov 2026
+- Added the channel homepage and branding pack: [Channel Home & Branding Pack](GLOBAL_FUNN_CHANNEL_HOME_AND_BRANDING_PACK_2026-11-20.md).
+- It includes draft About copy, homepage section order, playlist descriptions, a 30-second Hindi trailer script, visual consistency rules and an owner-review checklist.
+- This is a repository draft only. No live YouTube About text, banner, playlists, trailer, visibility settings or channel configuration were changed.
+- Implementation sequence after owner review: confirm positioning and business email; review existing videos individually; create playlists only where at least three relevant published videos exist; record and approve the trailer; then update the live channel and verify mobile/desktop appearance.
+- Production bottleneck remains Pilot 02 narration audio. Do not claim final edit, export, scheduling or publication until the media exists and passes QA.
