@@ -26,9 +26,13 @@ Open http://localhost:3000.
 - Require final editor approval before publication.
 - Attribute official statements; do not treat them as independently proven facts.
 
+## Free newsroom lead collector
+
+A standard-library Python RSS/Atom collector is available at [tools/news_desk](tools/news_desk/README.md). Run `py -3 tools/news_desk/rss_brief.py` from the repository root to create a source-linked Markdown and JSON lead brief. All results are marked UNVERIFIED; editor fact-checking and approval remain mandatory. This is a manual research utility, not a live feed service or auto-publisher.
+
 ## Current scope
 
-The repository contains the initial responsive dashboard and a story-intake prototype. Live news feeds, user authentication, publishing integrations and deployment are not yet connected.
+The repository contains the initial responsive dashboard, a story-intake prototype and a manual RSS/Atom lead collector. Live dashboard feed integration, user authentication, publishing integrations and deployment are not yet connected.
 
 
 ## AI coding context (ChatGPT + Claude Code)
