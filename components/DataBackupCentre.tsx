@@ -33,20 +33,37 @@ export default function DataBackupCentre(){
   if(file.size>15*1024*1024){setNotice("Backup file exceeds 15 MB. Choose a smaller JSON backup.");e.target.value="";return;}
   const reader=new FileReader();reader.onload=()=>{try{
    const data=JSON.parse(String(reader.result));if(data?.format!==BUNDLE||data?.version!==1||!data.records||typeof data.records!=="object"||Array.isArray(data.records))throw new Error("Unsupported backup format.");
-   const allowed=new Set(ENTRIES.map(x=>x.key));const valid:Backup["records"]={};
-   for(const [key,record] of Object.entries(data.records)){if(allowed.has(key)&&record&&typeof record==="object"&&"present"in record)valid[key]=record as Backup["records"][string];}
+   const allowed=new Set(ENTRIES.map(x=>x.key));const valid:Backup["records"]={};let payloadBytes=0;
+   for(const [key,record] of Object.entries(data.records)){
+    if(!allowed.has(key))continue;
+    if(!record||typeof record!=="object"||typeof (record as {present?:unknown}).present!=="boolean")throw new Error("A recognised record has an invalid structure.");
+    const candidate=record as {label?:unknown;present:boolean;value?:unknown};
+    if(candidate.present&&!Object.prototype.hasOwnProperty.call(candidate,"value"))throw new Error("A present record is missing its value.");
+    const encoded=candidate.present?JSON.stringify(candidate.value):"";
+    if(candidate.present&&typeof encoded!=="string")throw new Error("A record cannot be safely represented as JSON.");
+    payloadBytes+=new Blob([encoded||""]).size;
+    if(payloadBytes>12*1024*1024)throw new Error("Recognised backup data exceeds the safe 12 MB restore limit.");
+    valid[key]={label:typeof candidate.label==="string"?candidate.label:key,present:candidate.present,value:candidate.value};
+   }
    if(!Object.keys(valid).length)throw new Error("No recognised newsroom records found in this backup.");
-   setPreview({...data,records:valid});setNotice("Backup inspected. Review included records, then choose merge or replace and confirm before restoring.");
+   setPreview({...data,records:valid});setNotice("Backup inspected and structure checked. Review included records, then choose merge or replace and confirm before restoring.");
   }catch(err){setNotice(err instanceof Error?err.message:"Could not read this backup file.");} };reader.onerror=()=>setNotice("Could not read the selected file.");reader.readAsText(file);e.target.value="";
  }
  function restore(){
   if(!preview){setNotice("Select a valid backup first.");return;}
   if(confirmText!=="RESTORE GLOBAL FUNN"){setNotice("Type RESTORE GLOBAL FUNN exactly to confirm.");return;}
-  setBusy(true);try{
+  setBusy(true);const previous=new Map<string,string|null>();
+  try{
    const changed:string[]=[];
-   for(const entry of ENTRIES){const record=preview.records[entry.key];if(!record)continue;if(record.present){localStorage.setItem(entry.key,JSON.stringify(record.value));changed.push(entry.label);}else if(replace){localStorage.removeItem(entry.key);changed.push(entry.label+" (cleared)");}}
+   for(const entry of ENTRIES){const record=preview.records[entry.key];if(!record)continue;previous.set(entry.key,localStorage.getItem(entry.key));}
+   try{
+    for(const entry of ENTRIES){const record=preview.records[entry.key];if(!record)continue;if(record.present){localStorage.setItem(entry.key,JSON.stringify(record.value));changed.push(entry.label);}else if(replace){localStorage.removeItem(entry.key);changed.push(entry.label+" (cleared)");}}
+   }catch(writeError){
+    for(const [key,oldValue] of previous){if(oldValue===null)localStorage.removeItem(key);else localStorage.setItem(key,oldValue);}
+    throw writeError;
+   }
    setSummary(changed);setNotice((replace?"Restore completed in replace mode.":"Restore merged the records found in the backup.")+" Reload the relevant workspace to see restored data. Export your current data before replacing it.");setPreview(null);setConfirmText("");
-  }catch{setNotice("Restore stopped because browser storage may be full or unavailable. Some earlier records may already have been restored; inspect and re-export before trying again.");}finally{setBusy(false);}
+  }catch{setNotice("Restore failed. The tool attempted to roll back changed browser keys to their pre-restore values. Check available storage and export a fresh backup before retrying.");}finally{setBusy(false);}
  }
  const field:React.CSSProperties={width:"100%",background:"#08182c",border:"1px solid #355071",borderRadius:8,padding:"9px 10px",color:"#f8fafc",fontSize:12};
  const btn:React.CSSProperties={border:"1px solid #d4af37",borderRadius:8,padding:"9px 12px",background:"#10233d",color:"#f5d98c",fontSize:12,fontWeight:800,cursor:"pointer"};

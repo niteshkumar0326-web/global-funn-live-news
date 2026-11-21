@@ -18,6 +18,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 from typing import Any
 
 
@@ -47,11 +48,24 @@ def parse_date(raw: str) -> str:
         return ""
     try:
         parsed = email.utils.parsedate_to_datetime(raw)
-        if parsed.tzinfo is None:
-            parsed = parsed.replace(tzinfo=timezone.utc)
-        return parsed.astimezone(timezone.utc).isoformat()
     except (TypeError, ValueError, OverflowError):
-        return raw.strip()
+        try:
+            # Atom feeds commonly use ISO 8601 timestamps rather than RFC 822 dates.
+            parsed = datetime.fromisoformat(raw.strip().replace("Z", "+00:00"))
+        except (TypeError, ValueError, OverflowError):
+            return raw.strip()
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc).isoformat()
+
+
+def is_http_url(value: str) -> bool:
+    """Accept only absolute HTTP(S) story links; feed IDs are not automatically URLs."""
+    try:
+        parsed = urlsplit(value.strip())
+        return parsed.scheme.lower() in {"http", "https"} and bool(parsed.hostname)
+    except ValueError:
+        return False
 
 
 def parse_feed(xml_bytes: bytes, source: dict[str, str]) -> list[dict[str, str]]:
@@ -65,7 +79,7 @@ def parse_feed(xml_bytes: bytes, source: dict[str, str]) -> list[dict[str, str]]
             link = child_text(entry, {"guid", "id"})
         description = child_text(entry, {"description", "summary", "content", "encoded"})
         published = child_text(entry, {"pubdate", "published", "updated", "date"})
-        if not title or not link:
+        if not title or not link or not is_http_url(link):
             continue
         results.append({
             "source": source.get("name", "Unknown source"),

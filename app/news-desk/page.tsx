@@ -1,3 +1,5 @@
+import NewsLeadImporter from "@/components/NewsLeadImporter";
+
 export const metadata = {
   title: "News Desk | GLOBAL FUNN",
   description: "Free RSS lead collection and human editorial review workflow for GLOBAL FUNN."
@@ -32,6 +34,7 @@ export default function NewsDeskPage() {
               </article>
             ))}
           </div>
+          <NewsLeadImporter />
           <section style={{marginTop:22,border:"1px solid #6b4e25",background:"#211b12",borderRadius:14,padding:16}}>
             <h2 style={{margin:"0 0 8px",fontSize:18,color:"#f5d28a"}}>Mandatory editorial hold</h2>
             <ul style={{color:"#e2e8f0",fontSize:13,lineHeight:1.9,paddingLeft:20,margin:0}}>

@@ -17,6 +17,7 @@ type Story = {
   corrections?:Correction[];
   workflowState?: "Draft" | "Submitted for Review" | "Approved" | "Rejected";
   workflowHistory?: {id:string;from:string;to:string;editor:string;reason:string;at:string}[];
+  verificationHistory?: {id:string;from:string;to:string;editor:string;at:string}[];
 };
 const KEY="global-funn-newsroom-drafts-v1";
 
@@ -45,10 +46,18 @@ export default function StoryQueue(){
   try{localStorage.setItem(KEY,JSON.stringify(next));setMessage("Saved in this browser only. Export a backup regularly.")}
   catch{setMessage("Browser storage is unavailable or full. Your change may not persist; export a backup if possible.")}
  }
+ function changeVerificationStatus(story:Story,nextStatus:"Not Verified"|"Under Review"|"Verified"|"Disputed"){
+  if(!workflowEditor.trim()){setMessage("Enter the responsible editor name before recording a verification decision.");return;}
+  const current=(story.status||"Not Verified") as "Not Verified"|"Under Review"|"Verified"|"Disputed";
+  if(current===nextStatus)return;
+  const entry={id:crypto.randomUUID(),from:current,to:nextStatus,editor:workflowEditor.trim(),at:new Date().toISOString()};
+  persist(items.map(item=>item.id===story.id?{...item,status:nextStatus,verificationHistory:[...(item.verificationHistory||[]),entry]}:item));
+ }
  function changeWorkflow(story:Story,nextState:"Submitted for Review"|"Approved"|"Rejected"){
   if(!workflowEditor.trim()){setMessage("Enter the responsible editor name before changing workflow state.");return;}
   if(nextState==="Rejected"&&workflowReason.trim().length<10){setMessage("Add a rejection reason of at least 10 characters.");return;}
-  if(nextState==="Approved"&&(!story.source1||!(/^https:\/\//i.test(story.source1)||/^http:\/\//i.test(story.source1))||story.status==="Disputed")){setMessage("Approval blocked: check the primary source and resolve any disputed status first.");return;}
+  const isHttpUrl=(value:string)=>{try{const parsed=new URL(value.trim());return parsed.protocol==="https:"||parsed.protocol==="http"}catch{return false}};
+  if(nextState==="Approved"&&(!isHttpUrl(story.source1)||!isHttpUrl(story.source2)||story.status!=="Verified")){setMessage("Approval blocked: an editor must mark the story Verified and record both a valid primary source and an independent corroborating source.");return;}
   const current=story.workflowState||"Draft";
   if(nextState==="Approved"&&current!=="Submitted for Review"){setMessage("Only stories submitted for review can be approved.");return;}
   if(nextState==="Rejected"&&current!=="Submitted for Review"){setMessage("Only stories submitted for review can be rejected.");return;}
@@ -75,9 +84,19 @@ export default function StoryQueue(){
    sourceUrl:sourceUrl.trim(),
    correctedAt:new Date().toISOString()
   };
+  const previousWorkflow=story.workflowState||"Draft";
+  const workflowReset=previousWorkflow!=="Draft";
+  const resetEntry={id:crypto.randomUUID(),from:previousWorkflow,to:"Draft",editor:editor.trim(),reason:"Correction recorded; prior editorial decision requires fresh review.",at:new Date().toISOString()};
+  const previousVerification=story.status||"Not Verified";
+  const verificationReset=previousVerification!=="Not Verified";
+  const verificationResetEntry={id:crypto.randomUUID(),from:previousVerification,to:"Not Verified",editor:editor.trim(),at:new Date().toISOString()};
   const next=items.map(item=>item.id===story.id?{
    ...item,
    headline:correctedHeadline.trim(),
+   status:"Not Verified",
+   workflowState:"Draft" as const,
+   workflowHistory:workflowReset?[...(item.workflowHistory||[]),resetEntry]:(item.workflowHistory||[]),
+   verificationHistory:verificationReset?[...(item.verificationHistory||[]),verificationResetEntry]:(item.verificationHistory||[]),
    corrections:[...(Array.isArray(item.corrections)?item.corrections:[]),correction]
   }:item);
   persist(next);setEditingId(null);setCorrectedHeadline("");setReason("");setEditor("");setSourceUrl("");
@@ -99,6 +118,13 @@ export default function StoryQueue(){
    <div className="proof" style={{marginTop:12,display:"grid",gap:10}}>
     <strong>Editorial workflow — local prototype</strong>
     <div className="rowline"><span className="muted" style={{fontSize:12}}>Workflow: {s.workflowState||"Draft"}</span><span className="muted" style={{fontSize:12}}>Verification: {s.status||"Not Verified"}</span></div>
+    <label style={label}>Human editor verification decision
+     <select style={field} value={s.status||"Not Verified"} onChange={e=>changeVerificationStatus(s,e.target.value as "Not Verified"|"Under Review"|"Verified"|"Disputed")}>
+      <option>Not Verified</option><option>Under Review</option><option>Verified</option><option>Disputed</option>
+     </select>
+    </label>
+    <p className="muted" style={{fontSize:11,margin:0}}>Only select Verified after checking the primary source and independent corroboration. This is an editor-entered decision, not an automated fact-check.</p>
+    {s.verificationHistory?.length?<div><strong>Verification decision history</strong>{s.verificationHistory.map(h=><p key={h.id} className="muted" style={{fontSize:11}}>{h.from} → {h.to} • {h.editor} • {new Date(h.at).toLocaleString()}</p>)}</div>:null}
     <label style={label}>Responsible editor<input style={field} value={workflowEditor} onChange={e=>setWorkflowEditor(e.target.value)} placeholder="Editor name"/></label>
     {(s.workflowState||"Draft")==="Submitted for Review"&&<label style={label}>Decision note / rejection reason<textarea style={{...field,minHeight:65}} value={workflowReason} onChange={e=>setWorkflowReason(e.target.value)} placeholder="Required for rejection; optional for approval"/></label>}
     <div className="rowline" style={{justifyContent:"flex-start"}}>
