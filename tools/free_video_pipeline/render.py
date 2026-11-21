@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import shutil
 import subprocess
 import sys
@@ -61,6 +62,28 @@ def verify_output_audio(output: Path, expected_duration: float) -> None:
             f"Rendered audio/video duration mismatch: expected about {expected_duration:.1f}s, "
             f"found {actual_duration:.1f}s."
         )
+
+
+def verify_audio_has_signal(output: Path) -> None:
+    """Reject a rendered track whose measured peak is digital silence."""
+    result = subprocess.run(
+        [
+            "ffmpeg", "-hide_banner", "-nostats", "-i", str(output),
+            "-vn", "-af", "volumedetect", "-f", "null", "-"
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "FFmpeg audio signal analysis failed.")
+
+    report = result.stderr
+    match = re.search(r"max_volume:\\s*(-inf|[-+]?\\d+(?:\\.\\d+)?)\\s*dB", report)
+    if not match:
+        raise RuntimeError("FFmpeg did not report a measurable audio peak.")
+    if match.group(1) == "-inf":
+        raise RuntimeError("Rendered audio is completely silent (digital silence).")
+
 
 def escape_concat(path: Path) -> str:
     return str(path.resolve()).replace("\\", "/").replace("'", "'\\''")
@@ -152,7 +175,8 @@ def main() -> int:
         if not output.is_file() or output.stat().st_size < 10000:
             raise RuntimeError("Output MP4 is missing or unexpectedly small.")
         verify_output_audio(output, expected_duration=total)
-        print("Audio QA: PASS (one AAC stereo stream at 44.1 kHz; duration within 1.0s).")
+        verify_audio_has_signal(output)
+        print("Audio QA: PASS (AAC stereo 44.1 kHz, duration aligned, non-silent signal detected).")
         print(f"Created: {output.resolve()}")
         print(f"Duration: {total:.1f}s | Images: {len(images)} | Format: {args.format}")
         print("Review the full video, audio sync, captions, factual accuracy and rights before upload.")
