@@ -19,9 +19,10 @@ def valid_http_urls(values: object) -> list[str]:
     result = []
     for value in values:
         if isinstance(value, str):
-            parsed = urlparse(value.strip())
+            candidate = value.strip()
+            parsed = urlparse(candidate)
             if parsed.scheme in {"http", "https"} and parsed.netloc:
-                result.append(value.strip())
+                result.append(candidate)
     return list(dict.fromkeys(result))
 
 
@@ -29,17 +30,32 @@ def has_text(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def is_utc_timestamp(value: object) -> bool:
+    if not has_text(value):
+        return False
+    try:
+        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None and parsed.utcoffset() == timezone.utc.utcoffset(parsed)
+
+
 def review(item: dict) -> list[str]:
     missing: list[str] = []
     if not has_text(item.get("headline")):
         missing.append("headline")
-    if not valid_http_urls(item.get("primary_source_urls")):
+
+    primary_urls = valid_http_urls(item.get("primary_source_urls"))
+    independent_urls = valid_http_urls(item.get("independent_source_urls"))
+    if not primary_urls:
         missing.append("at least one valid primary_source_url")
-    if not valid_http_urls(item.get("independent_source_urls")):
+    if not independent_urls:
         missing.append("at least one valid independent_source_url")
-    if not isinstance(item.get("verified_facts"), list) or not any(
-        isinstance(x, str) and x.strip() for x in item.get("verified_facts", [])
-    ):
+    if primary_urls and independent_urls and not set(independent_urls).difference(primary_urls):
+        missing.append("independent_source_url must differ from primary source URLs")
+
+    facts = item.get("verified_facts")
+    if not isinstance(facts, list) or not any(isinstance(x, str) and x.strip() for x in facts):
         missing.append("verified_facts")
     if not isinstance(item.get("claims_or_allegations"), list):
         missing.append("claims_or_allegations (use [] when none)")
@@ -49,8 +65,8 @@ def review(item: dict) -> list[str]:
         missing.append("editorial_notes")
     if not has_text(item.get("editor_name")):
         missing.append("editor_name")
-    if not has_text(item.get("approval_timestamp_utc")):
-        missing.append("approval_timestamp_utc")
+    if not is_utc_timestamp(item.get("approval_timestamp_utc")):
+        missing.append("approval_timestamp_utc must be a valid timezone-aware UTC timestamp")
     if item.get("workflow_status") != "approved":
         missing.append("workflow_status must be 'approved'")
     if item.get("approved_for_script") is not True:
