@@ -1,9 +1,9 @@
-// Finds what the /live page should play: the Live News channel's current broadcast
-// when YouTube reports one, otherwise its newest upload, otherwise the newest
-// upload from the main GLOBAL FUNN channel (while Live News has no videos yet).
+// Finds what the /live page should play: the Live News channel's active broadcast,
+// then its newest upload, then the main GLOBAL FUNN channel as a clearly labelled backup.
 export const CHANNEL_ID = "UCmcZKg3Ab7N2yGsshxrqtgQ"; // GLOBAL FUNN Live News
 export const CHANNEL_URL = "https://www.youtube.com/@GLOBALFUNNLiveNews";
-export const MAIN_CHANNEL_ID = "UCLXPISTr2HJnusqycn4Wyog"; // GLOBAL FUNN (hub)
+export const MAIN_CHANNEL_ID = "UCLXPISTr2HJnusqycn4Wyog"; // GLOBAL FUNN main channel
+export const MAIN_CHANNEL_URL = "https://www.youtube.com/@niteshkumar0326";
 export const FALLBACK_VIDEO_ID = "lWrQ_QqjGlc";
 
 export type ChannelVideo = {
@@ -11,7 +11,7 @@ export type ChannelVideo = {
   title: string | null;
   published: string | null;
   isLive: boolean;
-  source: "live" | "feed" | "fallback";
+  source: "live" | "feed" | "main-fallback" | "fallback";
 };
 
 const VIDEO_ID = /^[\w-]{11}$/;
@@ -58,15 +58,17 @@ export function parseLatestFromFeed(xml: string): Omit<ChannelVideo, "isLive" | 
 }
 
 export async function getChannelVideo(): Promise<ChannelVideo> {
-  const liveHtml = await fetchText(`https://www.youtube.com/channel/${CHANNEL_ID}/live`);
+  const liveHtml = await fetchText("https://www.youtube.com/channel/" + CHANNEL_ID + "/live");
   const liveId = liveHtml ? parseLivePage(liveHtml) : null;
   if (liveId) return { videoId: liveId, title: null, published: null, isLive: true, source: "live" };
 
-  for (const id of [CHANNEL_ID, MAIN_CHANNEL_ID]) {
-    const feed = await fetchText(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`);
-    const latest = feed ? parseLatestFromFeed(feed) : null;
-    if (latest) return { ...latest, isLive: false, source: "feed" };
-  }
+  const liveNewsFeed = await fetchText("https://www.youtube.com/feeds/videos.xml?channel_id=" + CHANNEL_ID);
+  const liveNewsLatest = liveNewsFeed ? parseLatestFromFeed(liveNewsFeed) : null;
+  if (liveNewsLatest) return { ...liveNewsLatest, isLive: false, source: "feed" };
+
+  const mainFeed = await fetchText("https://www.youtube.com/feeds/videos.xml?channel_id=" + MAIN_CHANNEL_ID);
+  const mainLatest = mainFeed ? parseLatestFromFeed(mainFeed) : null;
+  if (mainLatest) return { ...mainLatest, isLive: false, source: "main-fallback" };
 
   return { videoId: FALLBACK_VIDEO_ID, title: null, published: null, isLive: false, source: "fallback" };
 }
