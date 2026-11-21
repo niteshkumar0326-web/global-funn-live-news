@@ -30,7 +30,7 @@ class RenderHelperTests(unittest.TestCase):
                 render.duration_of(Path("voice.mp3"))
 
     def test_verify_output_audio_accepts_one_audio_stream_with_matching_duration(self):
-        probe = {"streams": [{"codec_type": "video"}, {"codec_type": "audio"}], "format": {"duration": "12.7"}}
+        probe = {"streams": [{"codec_type": "video"}, {"codec_type": "audio", "codec_name": "aac", "sample_rate": "44100", "channels": 2}], "format": {"duration": "12.7"}}
         with mock.patch.object(render, "run", return_value=json.dumps(probe)) as run:
             render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
         self.assertIn("ffprobe", run.call_args.args[0])
@@ -42,15 +42,26 @@ class RenderHelperTests(unittest.TestCase):
                 render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
 
     def test_verify_output_audio_rejects_multiple_audio_streams(self):
-        probe = {"streams": [{"codec_type": "audio"}, {"codec_type": "audio"}], "format": {"duration": "12.7"}}
+        probe = {"streams": [{"codec_type": "audio", "codec_name": "aac", "sample_rate": "44100", "channels": 2}, {"codec_type": "audio", "codec_name": "aac", "sample_rate": "44100", "channels": 2}], "format": {"duration": "12.7"}}
         with mock.patch.object(render, "run", return_value=json.dumps(probe)):
             with self.assertRaisesRegex(RuntimeError, "exactly one audio stream"):
                 render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
 
     def test_verify_output_audio_rejects_duration_mismatch(self):
-        probe = {"streams": [{"codec_type": "audio"}], "format": {"duration": "8.0"}}
+        probe = {"streams": [{"codec_type": "audio", "codec_name": "aac", "sample_rate": "44100", "channels": 2}], "format": {"duration": "8.0"}}
         with mock.patch.object(render, "run", return_value=json.dumps(probe)):
             with self.assertRaisesRegex(RuntimeError, "duration mismatch"):
+                render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
+    def test_verify_output_audio_rejects_wrong_sample_rate(self):
+        probe = {"streams": [{"codec_type": "audio", "codec_name": "aac", "sample_rate": "48000", "channels": 2}], "format": {"duration": "12.7"}}
+        with mock.patch.object(render, "run", return_value=json.dumps(probe)):
+            with self.assertRaisesRegex(RuntimeError, "44.1 kHz"):
+                render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
+
+    def test_verify_output_audio_rejects_non_aac_codec(self):
+        probe = {"streams": [{"codec_type": "audio", "codec_name": "mp3", "sample_rate": "44100", "channels": 2}], "format": {"duration": "12.7"}}
+        with mock.patch.object(render, "run", return_value=json.dumps(probe)):
+            with self.assertRaisesRegex(RuntimeError, "AAC"):
                 render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
     def test_run_raises_subprocess_stderr_on_failure(self):
         failed = subprocess.CompletedProcess(["ffmpeg"], 1, stdout="", stderr="codec unavailable")
