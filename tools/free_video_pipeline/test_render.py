@@ -70,6 +70,37 @@ class RenderHelperTests(unittest.TestCase):
                 render.run(["ffmpeg", "-version"])
 
 
+    def test_verify_audio_has_signal_accepts_audible_track(self):
+        completed = subprocess.CompletedProcess(
+            ["ffmpeg"], 0, stdout="", stderr="[Parsed_volumedetect] max_volume: -3.2 dB"
+        )
+        with mock.patch.object(render.subprocess, "run", return_value=completed) as run:
+            render.verify_audio_has_signal(Path("render.mp4"))
+        self.assertIn("volumedetect", run.call_args.args[0])
+
+    def test_verify_audio_has_signal_rejects_digital_silence(self):
+        completed = subprocess.CompletedProcess(
+            ["ffmpeg"], 0, stdout="", stderr="[Parsed_volumedetect] max_volume: -inf dB"
+        )
+        with mock.patch.object(render.subprocess, "run", return_value=completed):
+            with self.assertRaisesRegex(RuntimeError, "completely silent"):
+                render.verify_audio_has_signal(Path("render.mp4"))
+
+    def test_verify_audio_has_signal_rejects_missing_measurement(self):
+        completed = subprocess.CompletedProcess(["ffmpeg"], 0, stdout="", stderr="no peak data")
+        with mock.patch.object(render.subprocess, "run", return_value=completed):
+            with self.assertRaisesRegex(RuntimeError, "did not report"):
+                render.verify_audio_has_signal(Path("render.mp4"))
+
+    def test_verify_audio_has_signal_surfaces_ffmpeg_failure(self):
+        completed = subprocess.CompletedProcess(
+            ["ffmpeg"], 1, stdout="", stderr="decoder failed"
+        )
+        with mock.patch.object(render.subprocess, "run", return_value=completed):
+            with self.assertRaisesRegex(RuntimeError, "decoder failed"):
+                render.verify_audio_has_signal(Path("render.mp4"))
+
+
 class RenderCliValidationTests(unittest.TestCase):
     def run_main(self, *args: str) -> tuple[int, str]:
         output = io.StringIO()
