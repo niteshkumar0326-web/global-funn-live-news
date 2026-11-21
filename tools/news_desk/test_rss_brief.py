@@ -50,6 +50,22 @@ class RssBriefParserTests(unittest.TestCase):
         result = parse_feed(payload, {})
         self.assertEqual(result[0]["url"], "https://example.test/id")
 
+    def test_rejects_non_http_story_links(self):
+        payload = b"""<rss><channel>
+          <item><title>Unsafe scheme</title><link>javascript:alert(1)</link></item>
+          <item><title>Relative URL</title><link>/local/story</link></item>
+          <item><title>Malformed URL</title><link>https:///missing-host</link></item>
+          <item><title>Safe URL</title><link>https://example.test/safe</link></item>
+        </channel></rss>"""
+        result = parse_feed(payload, {})
+        self.assertEqual([item["title"] for item in result], ["Safe URL"])
+
+    def test_does_not_treat_non_url_atom_id_as_story_link(self):
+        payload = b"""<feed xmlns="http://www.w3.org/2005/Atom"><entry>
+          <title>Unsafe identifier</title><id>urn:example:story:123</id>
+        </entry></feed>"""
+        self.assertEqual(parse_feed(payload, {}), [])
+
     def test_normalizes_rfc822_dates_to_utc(self):
         self.assertEqual(
             parse_date("Sat, 21 Nov 2026 13:30:00 +0530"),
