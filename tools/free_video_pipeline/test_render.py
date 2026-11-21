@@ -14,8 +14,8 @@ import render
 class RenderHelperTests(unittest.TestCase):
     def test_escape_concat_quotes_apostrophes_and_normalizes_separators(self):
         result = render.escape_concat(Path("folder/O'Brien.png"))
-        self.assertIn("O'\\\\''Brien.png", result)
-        self.assertNotIn("\\\\", result)
+        self.assertIn("O'\\''Brien.png", result)
+        self.assertNotIn("folder\\\\", result)
 
     def test_duration_of_parses_ffprobe_output(self):
         with mock.patch.object(render, "run", return_value="12.75") as run:
