@@ -28,6 +28,17 @@ The tool creates:
 - `output/news-desk/news_brief.md` — editor-friendly lead sheet
 - `output/news-desk/news_brief.json` — structured lead archive
 
+## Import leads into the website dashboard
+
+After the collector finishes, open the GLOBAL FUNN website's **Free News Desk** page (`/news-desk`) and select `output/news-desk/news_brief.json` in the **Import collected news leads** panel. Review each headline and use **Add to story queue** (or **Import remaining leads**) to create local draft records.
+
+- Imported records are always marked **Not Verified** and **Draft**.
+- Invalid or non-HTTP(S) source URLs are skipped; duplicate headlines or source URLs already in the local queue are not added again.
+- The importer runs in the browser and stores drafts in that browser's local storage. It does not upload the file to the server or sync it to another device.
+- Open **Story Queue** to add independent corroboration and complete human editorial review.
+
+This is a manual transfer step. The website does not fetch RSS feeds or run the Python collector automatically.
+
 Edit `feeds.json` to add, remove, or replace RSS/Atom feeds. Keep the source name, URL and category together. A failed feed is reported without stopping the other feeds.
 
 ## Editorial gate — mandatory
@@ -68,3 +79,7 @@ py -3 tools/news_desk/editorial_gate.py
 ```
 
 See [EDITORIAL_WORKFLOW.md](EDITORIAL_WORKFLOW.md) for the required source checks and approval process. A pass means only that the checklist fields are complete; it is not a fact-check or permission to publish.
+
+### Import validation safeguards
+
+The dashboard importer accepts the collector's `items` JSON envelope, limits each brief to 300 leads and 5 MB, skips malformed items, and rejects non-HTTP(S) URLs or URLs containing embedded credentials. It shows the brief generation timestamp and feed failures so an editor can see when sources did not respond. These checks validate input shape only; they do not verify reporting.
