@@ -2,16 +2,8 @@
 
 import { useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
-
-type Lead = {
-  id: string;
-  title: string;
-  url: string;
-  description: string;
-  category: string;
-  source: string;
-  published: string;
-};
+import { parseNewsBrief } from "@/lib/newsLeadValidation.mjs";
+import type { FeedFailure, Lead } from "@/lib/newsLeadValidation.mjs";
 type LocalStory = {
   id: string;
   headline: string;
@@ -27,33 +19,6 @@ type LocalStory = {
 };
 
 const STORY_QUEUE_KEY = "global-funn-newsroom-drafts-v1";
-const safeText = (value: unknown, max = 1200) =>
-  typeof value === "string" ? value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, max) : "";
-function safeHttpUrl(value: unknown): string {
-  if (typeof value !== "string") return "";
-  try {
-    const parsed = new URL(value.trim());
-    return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.toString() : "";
-  } catch {
-    return "";
-  }
-}
-function normalizeLead(value: unknown, index: number): Lead | null {
-  if (!value || typeof value !== "object") return null;
-  const item = value as Record<string, unknown>;
-  const title = safeText(item.title, 240);
-  const url = safeHttpUrl(item.url);
-  if (!title || !url) return null;
-  return {
-    id: `rss-${index}-${url}`,
-    title,
-    url,
-    description: safeText(item.description, 1000),
-    category: safeText(item.category, 80) || "Uncategorised",
-    source: safeText(item.source, 120) || "RSS feed",
-    published: safeText(item.published, 80),
-  };
-}
 
 export default function NewsLeadImporter() {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -61,6 +26,8 @@ export default function NewsLeadImporter() {
   const [message, setMessage] = useState("Choose the news_brief.json file created by the free RSS collector.");
   const [addedUrls, setAddedUrls] = useState<string[]>([]);
   const [queueCount, setQueueCount] = useState<number | null>(null);
+  const [feedFailures, setFeedFailures] = useState<FeedFailure[]>([]);
+  const [generatedAtUtc, setGeneratedAtUtc] = useState("");
 
   const remaining = useMemo(() => leads.filter((lead) => !addedUrls.includes(lead.url)), [leads, addedUrls]);
 
@@ -70,19 +37,18 @@ export default function NewsLeadImporter() {
     setLeads([]);
     setAddedUrls([]);
     setQueueCount(null);
+    setFeedFailures([]);
+    setGeneratedAtUtc("");
     setFileName(file.name);
     try {
       if (file.size > 5_000_000) throw new Error("File is larger than 5 MB. Export a smaller RSS brief.");
       const parsed: unknown = JSON.parse(await file.text());
-      const rawItems = Array.isArray(parsed)
-        ? parsed
-        : parsed && typeof parsed === "object" && Array.isArray((parsed as Record<string, unknown>).items)
-          ? (parsed as { items: unknown[] }).items
-          : [];
-      if (!rawItems.length) throw new Error("No RSS items found. Select news_brief.json, not the Markdown brief.");
-      const valid = rawItems.map(normalizeLead).filter((item): item is Lead => item !== null);
-      setLeads(valid);
-      setMessage(`Loaded ${valid.length} valid leads; ${rawItems.length - valid.length} invalid or incomplete items skipped. Every lead remains UNVERIFIED.`);
+      const brief = parseNewsBrief(parsed);
+      if (!brief.sourceItemCount) throw new Error("This news brief contains no RSS items.");
+      setLeads(brief.items);
+      setFeedFailures(brief.feedFailures);
+      setGeneratedAtUtc(brief.generatedAtUtc);
+      setMessage(`Loaded ${brief.items.length} valid leads; ${brief.sourceItemCount - brief.items.length} invalid or incomplete items skipped; ${brief.feedFailures.length} feed failure(s). Every lead remains UNVERIFIED.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Could not read this JSON file.");
     } finally {
@@ -152,7 +118,9 @@ export default function NewsLeadImporter() {
         <input type="file" accept=".json,application/json" onChange={loadFile} style={inputStyle} />
       </label>
       {fileName && <p className="muted" style={{ fontSize: 11 }}>Selected file: {fileName}</p>}
+      {generatedAtUtc && <p className="muted" style={{ fontSize: 11 }}>Brief generated (UTC): {generatedAtUtc}</p>}
       <div className="proof" role="status" style={{ marginTop: 12 }}>{message}</div>
+      {feedFailures.length > 0 && <div className="proof" style={{ marginTop: 10, borderColor: "#8b4248" }}><strong>Feed failures — check manually</strong>{feedFailures.map((failure, index) => <p key={index} className="muted" style={{ fontSize: 11, margin: "6px 0 0" }}>{failure.source}: {failure.error}</p>)}</div>}
       {leads.length > 0 && (
         <>
           <div className="rowline" style={{ marginTop: 16, flexWrap: "wrap" }}>
@@ -174,6 +142,7 @@ export default function NewsLeadImporter() {
                     </div>
                     <span className={imported ? "status" : "status warn"}>{imported ? "IMPORTED / DUPLICATE" : "UNVERIFIED"}</span>
                   </div>
+                  {lead.published && <p className="muted" style={{ fontSize: 10 }}>Feed publication timestamp: {lead.published} (not independently verified)</p>}
                   {lead.description && <p className="muted" style={{ fontSize: 12, lineHeight: 1.6 }}>{lead.description}</p>}
                   <div className="rowline" style={{ flexWrap: "wrap" }}>
                     <a href={lead.url} target="_blank" rel="noopener noreferrer" style={{ color: "#d4af37", fontSize: 11 }}>Open original source ↗</a>
