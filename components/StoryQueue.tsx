@@ -87,12 +87,16 @@ export default function StoryQueue(){
   const previousWorkflow=story.workflowState||"Draft";
   const workflowReset=previousWorkflow!=="Draft";
   const resetEntry={id:crypto.randomUUID(),from:previousWorkflow,to:"Draft",editor:editor.trim(),reason:"Correction recorded; prior editorial decision requires fresh review.",at:new Date().toISOString()};
+  const previousVerification=story.status||"Not Verified";
+  const verificationReset=previousVerification!=="Not Verified";
+  const verificationResetEntry={id:crypto.randomUUID(),from:previousVerification,to:"Not Verified",editor:editor.trim(),at:new Date().toISOString()};
   const next=items.map(item=>item.id===story.id?{
    ...item,
    headline:correctedHeadline.trim(),
    status:"Not Verified",
    workflowState:"Draft" as const,
    workflowHistory:workflowReset?[...(item.workflowHistory||[]),resetEntry]:(item.workflowHistory||[]),
+   verificationHistory:verificationReset?[...(item.verificationHistory||[]),verificationResetEntry]:(item.verificationHistory||[]),
    corrections:[...(Array.isArray(item.corrections)?item.corrections:[]),correction]
   }:item);
   persist(next);setEditingId(null);setCorrectedHeadline("");setReason("");setEditor("");setSourceUrl("");
