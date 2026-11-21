@@ -79,3 +79,7 @@ py -3 tools/news_desk/editorial_gate.py
 ```
 
 See [EDITORIAL_WORKFLOW.md](EDITORIAL_WORKFLOW.md) for the required source checks and approval process. A pass means only that the checklist fields are complete; it is not a fact-check or permission to publish.
+
+### Import validation safeguards
+
+The dashboard importer accepts the collector's `items` JSON envelope, limits each brief to 300 leads and 5 MB, skips malformed items, and rejects non-HTTP(S) URLs or URLs containing embedded credentials. It shows the brief generation timestamp and feed failures so an editor can see when sources did not respond. These checks validate input shape only; they do not verify reporting.
