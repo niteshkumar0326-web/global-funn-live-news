@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
+import re
 import shutil
 import subprocess
 import sys
@@ -27,6 +29,62 @@ def duration_of(audio: Path) -> float:
     return float(value)
 
 
+
+def verify_output_audio(output: Path, expected_duration: float) -> None:
+    """Fail closed unless the rendered MP4 contains one valid audio stream."""
+    raw = run([
+        "ffprobe", "-v", "error", "-show_streams", "-show_format",
+        "-of", "json", str(output),
+    ])
+    try:
+        metadata = json.loads(raw)
+        audio_streams = [
+            stream for stream in metadata.get("streams", [])
+            if stream.get("codec_type") == "audio"
+        ]
+        actual_duration = float(metadata["format"]["duration"])
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError("FFprobe returned invalid output audio metadata.") from exc
+
+    if len(audio_streams) != 1:
+        raise RuntimeError(
+            f"Rendered video must contain exactly one audio stream; found {len(audio_streams)}."
+        )
+    audio = audio_streams[0]
+    if audio.get("codec_name") != "aac":
+        raise RuntimeError("Rendered audio must use the AAC codec.")
+    if audio.get("sample_rate") != "44100":
+        raise RuntimeError("Rendered audio must use a 44.1 kHz sample rate.")
+    if audio.get("channels") != 2:
+        raise RuntimeError("Rendered audio must be stereo (2 channels).")
+    if not math.isfinite(actual_duration) or abs(actual_duration - expected_duration) > 1.0:
+        raise RuntimeError(
+            f"Rendered audio/video duration mismatch: expected about {expected_duration:.1f}s, "
+            f"found {actual_duration:.1f}s."
+        )
+
+
+def verify_audio_has_signal(output: Path) -> None:
+    """Reject a rendered track whose measured peak is digital silence."""
+    result = subprocess.run(
+        [
+            "ffmpeg", "-hide_banner", "-nostats", "-i", str(output),
+            "-vn", "-af", "volumedetect", "-f", "null", "-"
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "FFmpeg audio signal analysis failed.")
+
+    report = result.stderr
+    match = re.search(r"max_volume:\s*(-inf|[-+]?\d+(?:\.\d+)?)\s*dB", report)
+    if not match:
+        raise RuntimeError("FFmpeg did not report a measurable audio peak.")
+    if match.group(1) == "-inf":
+        raise RuntimeError("Rendered audio is completely silent (digital silence).")
+
+
 def escape_concat(path: Path) -> str:
     return str(path.resolve()).replace("\\", "/").replace("'", "'\\''")
 
@@ -40,6 +98,10 @@ def main() -> int:
     parser.add_argument("--srt", default=None)
     parser.add_argument("--fps", type=int, default=30)
     args = parser.parse_args()
+
+    if args.fps < 1:
+        print("FPS must be at least 1.", file=sys.stderr)
+        return 2
 
     audio = Path(args.audio)
     image_dir = Path(args.images)
@@ -104,7 +166,7 @@ def main() -> int:
                 "-r", str(args.fps),
                 "-t", f"{total:.3f}",
                 "-c:v", "libx264", "-preset", "medium", "-crf", "21",
-                "-c:a", "aac", "-b:a", "192k",
+                "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
                 str(output)
             ]
@@ -112,6 +174,9 @@ def main() -> int:
 
         if not output.is_file() or output.stat().st_size < 10000:
             raise RuntimeError("Output MP4 is missing or unexpectedly small.")
+        verify_output_audio(output, expected_duration=total)
+        verify_audio_has_signal(output)
+        print("Audio QA: PASS (AAC stereo 44.1 kHz, duration aligned, non-silent signal detected).")
         print(f"Created: {output.resolve()}")
         print(f"Duration: {total:.1f}s | Images: {len(images)} | Format: {args.format}")
         print("Review the full video, audio sync, captions, factual accuracy and rights before upload.")
