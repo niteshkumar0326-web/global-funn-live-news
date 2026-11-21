@@ -17,18 +17,20 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Install pinned graph community support
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Pin Code Review Graph and Leiden support
+        run: python -m pip install --quiet "code-review-graph[communities]==2.4.0"
       - name: Run local Code Review Graph analysis
         id: crg
-        # Pinned to the v2.4.0 release commit. The action's own comment step
-        # calls `gh api user`, which the default GITHUB_TOKEN cannot do, so the
-        # job failed on every PR; we post the comment ourselves below.
         uses: tirth8205/code-review-graph@b3f1285965a1337b3821e4423da03b65d70ee423 # v2.4.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment: "false"
           fail-on-risk: "none"
-          details: "risk,impact,gaps"
-
+          details: "risk,communities,hubs,coupling,impact,gaps,graph"
       - name: Upsert review comment with the workflow token
         shell: bash
         env:
