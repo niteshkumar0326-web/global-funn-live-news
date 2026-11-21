@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: 20
           # No package lockfile is committed yet; install dependencies without cache.
+      - name: Test RSS importer validation
+        run: node --test tests/*.test.mjs
       - name: Install dependencies
         run: npm install
       - name: Build Next.js app
