@@ -5,7 +5,7 @@ const REQUEST_TIMEOUT_MS = 30_000;
 function getBaseUrl(): string {
   const raw = process.env.OLLAMA_BASE_URL?.trim() || DEFAULT_BASE_URL;
   const url = new URL(raw);
-  if (url.protocol !== "http:" || !["127.0.0.1", "localhost", "::1"].includes(url.hostname)) {
+  if (url.protocol !== "http:" || !["127.0.0.1", "localhost", "::1", "[::1]"].includes(url.hostname) || url.username || url.password) {
     throw new Error("Ollama must use a local HTTP address (127.0.0.1, localhost or ::1).");
   }
   return url.toString().replace(/\/$/, "");
