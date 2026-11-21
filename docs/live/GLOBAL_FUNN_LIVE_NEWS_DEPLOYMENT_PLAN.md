@@ -8,7 +8,7 @@ Timezone: Asia/Kolkata
 
 Launch a scheduled, human-reviewed live news bulletin first. Do not start with an unattended 24/7 loop. A credible live news service needs current verified reporting, licensed visuals/audio, active moderation, and a person who can stop or correct a stream. A looping slideshow labelled LIVE is not an acceptable substitute.
 
-Phase 1: one 25–35 minute live bulletin on weekdays, with an optional second 10–15 minute breaking-news update only when a story is verified.
+Phase 1: one 30-minute Hindi live bulletin on Wednesday at 16:00 IST as the first pilot slot, with an optional second 10–15 minute breaking-news update only when a story is verified. Metricool's connected YouTube audience-time report for 2026-11-23 to 2026-11-29 showed Wednesday 16:00 as the strongest hour (score 12033), with Thursday 16:00 close (11979). Treat this as a test slot and reassess after four pilots.
 Phase 2: extend to 45–60 minutes and add a weekend review after four successful pilots.
 Phase 3: consider longer/continuous programming only after reliable editorial staffing, rights-cleared feeds, and hosting costs are approved.
 
@@ -81,7 +81,7 @@ Target from the channel plan: 3 long videos + 6 Shorts each week. Add the live b
 Suggested rhythm (IST):
 - Mon/Wed/Fri: one researched long video.
 - Tue/Thu/Sat: two Shorts each day, sourced from the week's long/live content.
-- Weekdays: one 25–35 minute live bulletin at a consistent time chosen after audience analytics.
+- Wednesday 16:00 IST: 30-minute live bulletin pilot (best available Metricool YouTube audience-time slot); reassess after four shows.
 - Sunday: analytics review, corrections, and next-week rundown.
 
 Metricool Free currently supports one brand and up to 20 published posts per calendar month. The 9-video weekly target is about 36 posts/month before counting live announcements or cross-posting, so use Metricool Free selectively (priority posts) or upgrade only if its paid publishing capacity is needed. Check the connected account's live limits before purchase.
@@ -111,7 +111,7 @@ Recommendation: stay on Free during the pilot. The current 9 posts/week plan exc
 
 Gate A — Local setup: install OBS from obsproject.com; install FFmpeg; run the existing tools/free_video_pipeline/setup.ps1; keep OAuth and stream keys local.
 Gate B — Pre-recorded pilot: create Hindi narration, render the 16:9 video and vertical Shorts, review factual accuracy and subtitles.
-Gate C — Live rehearsal: 10-minute private/unlisted OBS stream; verify audio, network, scenes, stream key and moderation.
+Gate C — Live rehearsal: 10-minute private/unlisted OBS stream; verify audio, network, scenes, stream key and moderation. YouTube Live is already enabled on the channel per user confirmation.
 Gate D — Public pilot: editor-approved rundown, source log, thumbnail/title/description, scheduled event and moderator.
 Gate E — Scale: only after 4 successful live pilots with no major factual/rights incidents; assess whether to add cloud encoding or more frequent shows.
 
