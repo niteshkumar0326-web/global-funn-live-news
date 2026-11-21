@@ -35,7 +35,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     datePublished: a.published,
     dateModified: a.updated ?? a.published,
     mainEntityOfPage: `${SITE}/khabar/${a.slug}`,
-    author: { "@type": "Organization", name: "GLOBAL FUNN" },
+    author: { "@type": "Person", name: "नितेश कुमार", alternateName: "Nitesh Kumar", url: `${SITE}/author/nitesh-kumar` },
     publisher: { "@type": "Organization", name: "GLOBAL FUNN" },
     citation: a.sources.map((s) => s.url),
   };
@@ -45,7 +45,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <span className="tag">{a.category}</span>
         <h1>{a.title}</h1>
         <p className="muted">
-          प्रकाशित: {formatDate(a.published)}
+          लेखक: <a href="/author/nitesh-kumar">नितेश कुमार</a> • प्रकाशित: {formatDate(a.published)}
           {a.updated && a.updated !== a.published ? ` • अपडेट: ${formatDate(a.updated)}` : ""}
         </p>
         {hasProducts ? <AffiliateDisclosure /> : null}

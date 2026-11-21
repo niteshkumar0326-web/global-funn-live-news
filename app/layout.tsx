@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://news.globalfunn.in"),
   title: "GLOBAL FUNN LIVE NEWS",
   description: "India • World • Beyond — Khabar Har Pal, Nazar Global.",
+  // Lets Google show large image previews (used by Discover).
+  robots: { index: true, follow: true, googleBot: { "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
 };
 
 const adsenseOn = /^ca-pub-\d{10,20}$/.test(ADSENSE_CLIENT);
