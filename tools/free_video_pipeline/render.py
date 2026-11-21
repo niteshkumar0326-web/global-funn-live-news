@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import shutil
 import subprocess
@@ -26,6 +27,33 @@ def duration_of(audio: Path) -> float:
     ])
     return float(value)
 
+
+
+def verify_output_audio(output: Path, expected_duration: float) -> None:
+    """Fail closed unless the rendered MP4 contains one valid audio stream."""
+    raw = run([
+        "ffprobe", "-v", "error", "-show_streams", "-show_format",
+        "-of", "json", str(output),
+    ])
+    try:
+        metadata = json.loads(raw)
+        audio_streams = [
+            stream for stream in metadata.get("streams", [])
+            if stream.get("codec_type") == "audio"
+        ]
+        actual_duration = float(metadata["format"]["duration"])
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError("FFprobe returned invalid output audio metadata.") from exc
+
+    if len(audio_streams) != 1:
+        raise RuntimeError(
+            f"Rendered video must contain exactly one audio stream; found {len(audio_streams)}."
+        )
+    if not math.isfinite(actual_duration) or abs(actual_duration - expected_duration) > 1.0:
+        raise RuntimeError(
+            f"Rendered audio/video duration mismatch: expected about {expected_duration:.1f}s, "
+            f"found {actual_duration:.1f}s."
+        )
 
 def escape_concat(path: Path) -> str:
     return str(path.resolve()).replace("\\", "/").replace("'", "'\\''")
@@ -116,6 +144,8 @@ def main() -> int:
 
         if not output.is_file() or output.stat().st_size < 10000:
             raise RuntimeError("Output MP4 is missing or unexpectedly small.")
+        verify_output_audio(output, expected_duration=total)
+        print("Audio QA: PASS (exactly one audio stream; duration within 1.0s).")
         print(f"Created: {output.resolve()}")
         print(f"Duration: {total:.1f}s | Images: {len(images)} | Format: {args.format}")
         print("Review the full video, audio sync, captions, factual accuracy and rights before upload.")
