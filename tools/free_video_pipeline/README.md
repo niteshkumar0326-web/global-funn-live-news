@@ -54,13 +54,20 @@ py render.py --audio output/narration.mp3 --images assets/images --srt captions.
 
 The renderer makes a simple image-led video, adds the narration, scales/crops to the requested frame, and optionally burns in an SRT file. It does not invent footage, facts, or subtitles. Review every export before upload.
 
-## 4. Publishing
-- Upload long videos and Shorts through YouTube Studio first: https://studio.youtube.com/
-- YouTube privacy (private/unlisted/public), title, audience declaration, and schedule must be checked before publishing.
+## 4. Upload through YouTube API (optional)
+For an authorized upload workflow, create a Google Cloud project, enable YouTube Data API v3, create OAuth credentials for a Desktop app, and save the downloaded JSON as `client_secrets.json` in this folder. Keep this file and the generated `token.json` private; both are excluded by `.gitignore`.
+
+Then run:
+```powershell
+py youtube_upload.py --video output/global-funn-long.mp4 --title "Video title" --description "Video description" --tags "India,markets,GLOBAL FUNN"
+```
+
+Uploads default to **private**. To schedule, pass `--publish-at 2026-12-01T10:00:00Z` (UTC); YouTube requires a private video for scheduled publication. Do not use `--privacy public` unless the final video has been reviewed and the creator explicitly approves public release. Check processing and final status in YouTube Studio: https://studio.youtube.com/
+
 - Publer Free currently advertises 3 social accounts (excluding X) and 10 scheduled posts per account. Bulk CSV scheduling is a paid feature. Confirm current limits before relying on it.
 
 ## Important limitations
 - Edge TTS needs internet and is a free-access fallback, not a guaranteed permanent API or offline voice engine. It does not reproduce vidIQ's Bunty voice.
 - FFmpeg and Python do the editing locally; this computer must stay on while rendering.
-- This toolkit does not upload or publish by itself. YouTube Studio remains the reliable free publishing route until a tested, authorized API workflow is configured.
+- The YouTube uploader is optional and requires the channel owner's own Google Cloud OAuth setup. YouTube Studio remains the simplest manual fallback. No credentials are stored in this repository.
 - Never publish unverified market figures. Refresh data and sources immediately before narration; label AI-generated illustrations clearly.
