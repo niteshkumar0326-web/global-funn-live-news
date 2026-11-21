@@ -1,0 +1,10 @@
+{
+  "name": "RetailPulse Distributor Suite",
+  "short_name": "RetailPulse",
+  "description": "Orders, inventory, collections and field team management.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6fb",
+  "theme_color": "#101b35",
+  "icons": []
+}
