@@ -49,6 +49,13 @@ def verify_output_audio(output: Path, expected_duration: float) -> None:
         raise RuntimeError(
             f"Rendered video must contain exactly one audio stream; found {len(audio_streams)}."
         )
+    audio = audio_streams[0]
+    if audio.get("codec_name") != "aac":
+        raise RuntimeError("Rendered audio must use the AAC codec.")
+    if audio.get("sample_rate") != "44100":
+        raise RuntimeError("Rendered audio must use a 44.1 kHz sample rate.")
+    if audio.get("channels") != 2:
+        raise RuntimeError("Rendered audio must be stereo (2 channels).")
     if not math.isfinite(actual_duration) or abs(actual_duration - expected_duration) > 1.0:
         raise RuntimeError(
             f"Rendered audio/video duration mismatch: expected about {expected_duration:.1f}s, "
@@ -136,7 +143,7 @@ def main() -> int:
                 "-r", str(args.fps),
                 "-t", f"{total:.3f}",
                 "-c:v", "libx264", "-preset", "medium", "-crf", "21",
-                "-c:a", "aac", "-b:a", "192k",
+                "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
                 str(output)
             ]
@@ -145,7 +152,7 @@ def main() -> int:
         if not output.is_file() or output.stat().st_size < 10000:
             raise RuntimeError("Output MP4 is missing or unexpectedly small.")
         verify_output_audio(output, expected_duration=total)
-        print("Audio QA: PASS (exactly one audio stream; duration within 1.0s).")
+        print("Audio QA: PASS (one AAC stereo stream at 44.1 kHz; duration within 1.0s).")
         print(f"Created: {output.resolve()}")
         print(f"Duration: {total:.1f}s | Images: {len(images)} | Format: {args.format}")
         print("Review the full video, audio sync, captions, factual accuracy and rights before upload.")
