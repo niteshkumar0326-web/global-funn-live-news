@@ -41,6 +41,10 @@ def main() -> int:
     parser.add_argument("--fps", type=int, default=30)
     args = parser.parse_args()
 
+    if args.fps < 1:
+        print("FPS must be at least 1.", file=sys.stderr)
+        return 2
+
     audio = Path(args.audio)
     image_dir = Path(args.images)
     output = Path(args.output)
