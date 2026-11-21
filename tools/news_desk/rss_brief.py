@@ -47,11 +47,15 @@ def parse_date(raw: str) -> str:
         return ""
     try:
         parsed = email.utils.parsedate_to_datetime(raw)
-        if parsed.tzinfo is None:
-            parsed = parsed.replace(tzinfo=timezone.utc)
-        return parsed.astimezone(timezone.utc).isoformat()
     except (TypeError, ValueError, OverflowError):
-        return raw.strip()
+        try:
+            # Atom feeds commonly use ISO 8601 timestamps rather than RFC 822 dates.
+            parsed = datetime.fromisoformat(raw.strip().replace("Z", "+00:00"))
+        except (TypeError, ValueError, OverflowError):
+            return raw.strip()
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc).isoformat()
 
 
 def parse_feed(xml_bytes: bytes, source: dict[str, str]) -> list[dict[str, str]]:
