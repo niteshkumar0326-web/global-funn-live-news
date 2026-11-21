@@ -25,9 +25,13 @@ def valid_http_urls(values: object) -> list[str]:
     return list(dict.fromkeys(result))
 
 
+def has_text(value: object) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
 def review(item: dict) -> list[str]:
     missing: list[str] = []
-    if not item.get("headline", "").strip():
+    if not has_text(item.get("headline")):
         missing.append("headline")
     if not valid_http_urls(item.get("primary_source_urls")):
         missing.append("at least one valid primary_source_url")
@@ -39,13 +43,13 @@ def review(item: dict) -> list[str]:
         missing.append("verified_facts")
     if not isinstance(item.get("claims_or_allegations"), list):
         missing.append("claims_or_allegations (use [] when none)")
-    if not item.get("uncertainties_and_context", "").strip():
+    if not has_text(item.get("uncertainties_and_context")):
         missing.append("uncertainties_and_context (write 'None identified' if applicable)")
-    if not item.get("editorial_notes", "").strip():
+    if not has_text(item.get("editorial_notes")):
         missing.append("editorial_notes")
-    if not item.get("editor_name", "").strip():
+    if not has_text(item.get("editor_name")):
         missing.append("editor_name")
-    if not item.get("approval_timestamp_utc", "").strip():
+    if not has_text(item.get("approval_timestamp_utc")):
         missing.append("approval_timestamp_utc")
     if item.get("workflow_status") != "approved":
         missing.append("workflow_status must be 'approved'")
