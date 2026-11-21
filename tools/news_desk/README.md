@@ -51,3 +51,20 @@ Do not scrape paywalled material, copy full articles, or reuse third-party video
 - The tool does not fact-check, rank truth, generate scripts, download media, or publish videos.
 - It does not run continuously; run it when preparing an edition.
 - Network or feed errors are shown in the output. A zero-result run is not proof that no news exists.
+
+
+## Next step: editor review queue
+
+After collecting RSS leads, prepare a review file:
+
+```powershell
+py -3 tools/news_desk/prepare_review_queue.py
+```
+
+Complete the human review fields, then run the documentation gate:
+
+```powershell
+py -3 tools/news_desk/editorial_gate.py
+```
+
+See [EDITORIAL_WORKFLOW.md](EDITORIAL_WORKFLOW.md) for the required source checks and approval process. A pass means only that the checklist fields are complete; it is not a fact-check or permission to publish.
