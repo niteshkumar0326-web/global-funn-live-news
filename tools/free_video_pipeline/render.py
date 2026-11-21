@@ -78,7 +78,7 @@ def verify_audio_has_signal(output: Path) -> None:
         raise RuntimeError(result.stderr.strip() or "FFmpeg audio signal analysis failed.")
 
     report = result.stderr
-    match = re.search(r"max_volume:\\s*(-inf|[-+]?\\d+(?:\\.\\d+)?)\\s*dB", report)
+    match = re.search(r"max_volume:\s*(-inf|[-+]?\d+(?:\.\d+)?)\s*dB", report)
     if not match:
         raise RuntimeError("FFmpeg did not report a measurable audio peak.")
     if match.group(1) == "-inf":
