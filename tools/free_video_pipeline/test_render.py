@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import json
 import subprocess
 import sys
 import unittest
@@ -28,6 +29,29 @@ class RenderHelperTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 render.duration_of(Path("voice.mp3"))
 
+    def test_verify_output_audio_accepts_one_audio_stream_with_matching_duration(self):
+        probe = {"streams": [{"codec_type": "video"}, {"codec_type": "audio"}], "format": {"duration": "12.7"}}
+        with mock.patch.object(render, "run", return_value=json.dumps(probe)) as run:
+            render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
+        self.assertIn("ffprobe", run.call_args.args[0])
+
+    def test_verify_output_audio_rejects_missing_audio_stream(self):
+        probe = {"streams": [{"codec_type": "video"}], "format": {"duration": "12.7"}}
+        with mock.patch.object(render, "run", return_value=json.dumps(probe)):
+            with self.assertRaisesRegex(RuntimeError, "exactly one audio stream"):
+                render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
+
+    def test_verify_output_audio_rejects_multiple_audio_streams(self):
+        probe = {"streams": [{"codec_type": "audio"}, {"codec_type": "audio"}], "format": {"duration": "12.7"}}
+        with mock.patch.object(render, "run", return_value=json.dumps(probe)):
+            with self.assertRaisesRegex(RuntimeError, "exactly one audio stream"):
+                render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
+
+    def test_verify_output_audio_rejects_duration_mismatch(self):
+        probe = {"streams": [{"codec_type": "audio"}], "format": {"duration": "8.0"}}
+        with mock.patch.object(render, "run", return_value=json.dumps(probe)):
+            with self.assertRaisesRegex(RuntimeError, "duration mismatch"):
+                render.verify_output_audio(Path("render.mp4"), expected_duration=12.75)
     def test_run_raises_subprocess_stderr_on_failure(self):
         failed = subprocess.CompletedProcess(["ffmpeg"], 1, stdout="", stderr="codec unavailable")
         with mock.patch.object(render.subprocess, "run", return_value=failed):
