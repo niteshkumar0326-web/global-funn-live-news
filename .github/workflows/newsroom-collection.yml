@@ -25,6 +25,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Run offline RSS and Atom regression tests
+        run: python -m unittest discover -s tools/news_desk -p "test_*.py"
+
       - name: Collect RSS and Atom leads
         id: collect
         shell: bash
