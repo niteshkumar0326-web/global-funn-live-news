@@ -1,3 +1,5 @@
+import NewsLeadImporter from "@/components/NewsLeadImporter";
+
 export const metadata = {
   title: "News Desk | GLOBAL FUNN",
   description: "Free RSS lead collection and human editorial review workflow for GLOBAL FUNN."
@@ -32,6 +34,7 @@ export default function NewsDeskPage() {
               </article>
             ))}
           </div>
+          <NewsLeadImporter />
           <section style={{marginTop:22,border:"1px solid #6b4e25",background:"#211b12",borderRadius:14,padding:16}}>
             <h2 style={{margin:"0 0 8px",fontSize:18,color:"#f5d28a"}}>Mandatory editorial hold</h2>
             <ul style={{color:"#e2e8f0",fontSize:13,lineHeight:1.9,paddingLeft:20,margin:0}}>
@@ -47,7 +50,7 @@ export default function NewsDeskPage() {
             <a href="https://github.com/niteshkumar0326-web/global-funn-live-news/blob/main/tools/news_desk/EDITORIAL_WORKFLOW.md" target="_blank" rel="noreferrer" style={{border:"1px solid #64748b",color:"#f8fafc",textDecoration:"none",borderRadius:10,padding:"12px 16px"}}>Read editorial workflow ↗</a>
             <a href="/broadcast" style={{border:"1px solid #64748b",color:"#f8fafc",textDecoration:"none",borderRadius:10,padding:"12px 16px"}}>Broadcast desk →</a>
           </div>
-          <p style={{fontSize:12,color:"#94a3b8",lineHeight:1.6,marginTop:18}}>Important: this page documents the local Python workflow. It does not run the collector on the website, connect live RSS feeds to the dashboard, publish videos, schedule posts or start a live stream. Run the commands on the Windows PC from the cloned repository folder.</p>
+          <p style={{fontSize:12,color:"#94a3b8",lineHeight:1.6,marginTop:18}}>Important: the collector still runs locally on your Windows PC. The importer transfers its JSON output into this browser's local story queue only; it does not fetch live feeds from the website, sync between devices, publish videos, schedule posts or start a live stream. Run the commands on the Windows PC from the cloned repository folder, then import news_brief.json above.</p>
         </section>
       </div>
     </main>
