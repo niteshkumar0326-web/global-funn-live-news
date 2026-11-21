@@ -1,0 +1,31 @@
+name: Trading paper engine tests
+
+on:
+  pull_request:
+    paths:
+      - "trading_lab/**"
+      - ".github/workflows/paper-engine-tests.yml"
+  push:
+    branches:
+      - main
+      - digital-business-expansion-v1
+    paths:
+      - "trading_lab/**"
+      - ".github/workflows/paper-engine-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  paper-engine-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run offline simulator tests
+        working-directory: trading_lab
+        run: python -m unittest -v
