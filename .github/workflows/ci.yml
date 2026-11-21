@@ -8,6 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile newsroom scripts
+        run: python -m compileall -q tools/news_desk
+      - name: Test newsroom feed parser and editorial gate
+        run: python -m unittest discover -s tools/news_desk -p 'test_*.py' -v
       - name: Check out source
         uses: actions/checkout@v4
       - name: Set up Node.js
