@@ -1,0 +1,12 @@
+# One production cycle: render everything in queue/, feed approved wide videos to the live inbox,
+# then upload (private/scheduled) within the daily quota.
+[Unit]
+Description=GLOBAL FUNN batch render + upload
+
+[Service]
+Type=oneshot
+User=globalfunn
+WorkingDirectory=/opt/global-funn-live-news/tools/video_factory
+ExecStart=/opt/global-funn-live-news/tools/video_factory/deploy/run_cycle.sh
+Nice=19
+IOSchedulingClass=idle

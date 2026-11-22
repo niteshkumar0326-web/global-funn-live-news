@@ -1,0 +1,11 @@
+# Hourly cycle, but run_cycle.sh itself refuses to render during NSE market hours
+# (09:15-15:30 IST, Mon-Fri) so the trading bot on the same VPS is never starved.
+[Unit]
+Description=Hourly GLOBAL FUNN production cycle
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

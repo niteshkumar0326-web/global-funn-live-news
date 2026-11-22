@@ -1,0 +1,92 @@
+{
+  "_comment": "Ek jagah se saare channels ka setting. Naya channel = naya block. Koi secret yahan nahi (token/stream key env ya secrets/ me).",
+  "defaults": {
+    "language": "hi",
+    "category_id": "25",
+    "publish_mode": "private",
+    "daily_upload_budget": 6,
+    "slots_ist": ["07:30", "12:30", "18:30", "21:30"],
+    "ai_label": "आवाज़: AI-जनित  •  तथ्य: प्रकाशित समाचार स्रोतों से",
+    "voice": "hm_omega",
+    "voice_b": "hf_alpha",
+    "speed": 1.12
+  },
+  "channels": {
+    "live_news": {
+      "name": "GLOBAL FUNN",
+      "sub_name": "LIVE NEWS",
+      "handle": "@GLOBALFUNNLiveNews",
+      "tagline": "खबर हर पल, नज़र ग्लोबल",
+      "strap": "LIVE NEWS  •  भारत  •  विश्व  •  आगे",
+      "kind": "news",
+      "accent": [214, 40, 57],
+      "gold": [255, 196, 61],
+      "bg": [[7, 14, 40], [18, 36, 88]],
+      "voice": "hm_omega",
+      "formats": ["short", "wide"],
+      "hashtags": ["#LiveNews", "#HindiNews", "#GlobalFunn"],
+      "live": {"enabled": true, "stream_key_env": "YT_STREAM_KEY_LIVE_NEWS", "rtmp": "rtmp://a.rtmp.youtube.com/live2"}
+    },
+    "business": {
+      "name": "GLOBAL FUNN",
+      "sub_name": "BUSINESS",
+      "handle": "",
+      "tagline": "बाज़ार, कारोबार, अर्थव्यवस्था",
+      "strap": "BUSINESS  •  बाज़ार  •  कंपनियाँ  •  अर्थव्यवस्था",
+      "kind": "news",
+      "accent": [16, 150, 96],
+      "gold": [255, 205, 80],
+      "bg": [[4, 28, 24], [10, 70, 58]],
+      "voice": "hm_omega",
+      "formats": ["short", "wide"],
+      "hashtags": ["#Business", "#ShareMarket", "#GlobalFunn"],
+      "live": {"enabled": false}
+    },
+    "sports": {
+      "name": "GLOBAL FUNN",
+      "sub_name": "SPORTS",
+      "handle": "",
+      "tagline": "क्रिकेट, फुटबॉल, हर खेल",
+      "strap": "SPORTS  •  क्रिकेट  •  फुटबॉल  •  ओलंपिक",
+      "kind": "news",
+      "accent": [236, 112, 20],
+      "gold": [255, 220, 90],
+      "bg": [[34, 12, 4], [92, 40, 10]],
+      "voice": "hm_omega",
+      "formats": ["short", "wide"],
+      "hashtags": ["#Cricket", "#Sports", "#GlobalFunn"],
+      "live": {"enabled": false}
+    },
+    "tech": {
+      "name": "GLOBAL FUNN",
+      "sub_name": "TECH",
+      "handle": "",
+      "tagline": "AI, गैजेट, टेक की खबरें",
+      "strap": "TECH  •  AI  •  गैजेट  •  स्टार्टअप",
+      "kind": "news",
+      "accent": [88, 86, 214],
+      "gold": [120, 230, 255],
+      "bg": [[10, 8, 36], [38, 30, 100]],
+      "voice": "hf_alpha",
+      "formats": ["short", "wide"],
+      "hashtags": ["#Tech", "#AI", "#GlobalFunn"],
+      "live": {"enabled": false}
+    },
+    "podcast": {
+      "name": "GLOBAL FUNN",
+      "sub_name": "PODCAST",
+      "handle": "",
+      "tagline": "दो आवाज़ें, एक विषय",
+      "strap": "AI PODCAST  •  बातचीत  •  समझ  •  संदर्भ",
+      "kind": "podcast",
+      "accent": [168, 60, 200],
+      "gold": [255, 196, 61],
+      "bg": [[22, 8, 38], [64, 24, 96]],
+      "voice": "hf_alpha",
+      "voice_b": "hm_omega",
+      "formats": ["wide"],
+      "hashtags": ["#Podcast", "#HindiPodcast", "#GlobalFunn"],
+      "live": {"enabled": false}
+    }
+  }
+}

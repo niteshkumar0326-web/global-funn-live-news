@@ -47,3 +47,6 @@ If Code Review Graph MCP is connected, begin with `get_minimal_context_tool`, th
 
 ## Current project milestone
 Build 32 adds RTK + Context Saver configuration and the mobile-friendly AI Context Pocket. See Build 31–32 in `docs/PROJECT_STATUS.md`.
+
+## Video factory (bulk production, uploads, 24x7 live)
+`tools/video_factory/` — config-driven, free-tools pipeline (Kokoro Hindi TTS + ffmpeg): bulletins (Short + 16:9), two-host AI podcast, quota-aware YouTube uploader, 24x7 live runner. Start with `tools/video_factory/README_HINGLISH.md`. Editorial gate: unapproved content is always private; secrets/tokens/stream keys never committed.
