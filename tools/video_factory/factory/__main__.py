@@ -73,6 +73,29 @@ def cmd_gate(a) -> int:
     return 0 if g.ok else 2
 
 
+def cmd_fetch_visuals(a) -> int:
+    """Download/generate every story's photos+clips into work/visuals (run where internet is open)."""
+    from . import assets as vis
+    from .bulletin import build_scenes
+
+    spec = _load(a.spec)
+    ch = config.channel(spec["channel"])
+    n_net = 0
+    for fmt in a.format or ch.get("formats", ["short", "wide"]):
+        for sc in build_scenes(spec, ch):
+            if sc.kind != "story" or sc.story.get("visuals") is False:
+                continue
+            seed = f"{spec.get('date','')}-{sc.name}-{sc.story.get('headline','')}"
+            items = vis.resolve_story(sc.story, fmt, ch, seed_text=seed, no_net=False if not a.offline else True)
+            n_net += sum(1 for x in items if x.origin != "generated")
+            print(f"[{fmt}] {sc.name}: " + ", ".join(f"{x.origin}/{x.kind}" for x in items))
+            for line in vis.credits(items):
+                print("     credit:", line)
+    if not n_net:
+        print("No real photos/clips found: set PEXELS_API_KEY / PIXABAY_API_KEY (free) or use type=wikimedia/ai/file.")
+    return 0
+
+
 def render_spec(spec: dict, formats: list[str], out: Path | None) -> list[dict]:
     kind = spec.get("kind", "bulletin")
     results = []
@@ -179,6 +202,7 @@ def main(argv=None) -> int:
     sub.add_parser("fetch-models").set_defaults(fn=cmd_fetch_models)
     sub.add_parser("fetch-font").set_defaults(fn=cmd_fetch_font)
     p = sub.add_parser("gate"); p.add_argument("spec"); p.set_defaults(fn=cmd_gate)
+    p = sub.add_parser("fetch-visuals"); p.add_argument("spec"); p.add_argument("--format", action="append", choices=["short", "wide"]); p.add_argument("--offline", action="store_true"); p.set_defaults(fn=cmd_fetch_visuals)
     p = sub.add_parser("render"); p.add_argument("spec"); p.add_argument("--formats", help="short,wide")
     p.add_argument("--out"); p.set_defaults(fn=cmd_render)
     p = sub.add_parser("batch"); p.add_argument("queue"); p.add_argument("--formats"); p.add_argument("--out")

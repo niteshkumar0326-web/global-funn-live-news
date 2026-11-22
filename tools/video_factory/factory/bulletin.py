@@ -6,6 +6,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from . import assets as visuals_mod
 from . import config, editorial, media, meta, tts
 from .cards import Cards
 from .hindi import srt_time
@@ -21,6 +22,7 @@ class Scene:
     narration: str
     card_args: dict
     kind: str  # intro | story | outro
+    story: dict | None = None
 
 
 def slugify(s: str) -> str:
@@ -47,7 +49,7 @@ def build_scenes(spec: dict, ch: dict) -> list[Scene]:
             tag=f"खबर {i}", chip=s.get("chip", ""), headline=s["headline"], sub=s.get("sub", ""),
             tiles=[tuple(t) for t in s.get("tiles", [])],
             source=("स्रोत: " + "  •  ".join(s.get("sources", []))) if s.get("sources") else "",
-            note=s.get("note"), ai=ai, date=date_label), "story"))
+            note=s.get("note"), ai=ai, date=date_label), "story", s))
     outro = spec.get("outro", {})
     srcs = sorted({x for s in spec["stories"] for x in s.get("sources", [])})
     scenes.append(Scene("outro", outro.get("narration") or DEFAULT_OUTRO,
@@ -68,6 +70,44 @@ def card_for(cards: Cards, sc: Scene):
 def ticker_text(spec: dict, ch: dict) -> str:
     items = spec.get("ticker") or [s["headline"] for s in spec["stories"]]
     return f"{ch['name']} {ch.get('sub_name','')}   •   " + "   •   ".join(items)
+
+
+
+XFADE = 0.6
+MIN_SLIDE = 3.2
+
+
+def story_assets(sc: Scene, spec: dict, ch: dict, fmt: str):
+    """Assets for a story scene (None for intro/outro or when the story opts out with visuals=false)."""
+    if sc.kind != "story" or sc.story is None or sc.story.get("visuals") is False:
+        return None
+    return visuals_mod.resolve_story(sc.story, fmt, ch, seed_text=f"{spec.get('date','')}-{sc.name}-{sc.story.get('headline','')}")
+
+
+def slideshow_filter(items: list, D: float, W: int, H: int, work: Path, scrim_idx: int):
+    """Build ffmpeg inputs + filter graph (label [bg]) for N photos/clips with Ken-Burns and cross-fades."""
+    n = len(items)
+    d = (D + (n - 1) * XFADE) / n
+    inputs, chains = [], []
+    for i, a in enumerate(items):
+        if a.kind == "video":
+            inputs += ["-stream_loop", "-1", "-t", f"{d:.3f}", "-i", str(a.file)]
+            chains.append(f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,"
+                          f"format=yuv420p[v{i}]")
+        else:
+            png = visuals_mod.prepare_photo(a, W, H, work / "frames")
+            inputs += ["-loop", "1", "-framerate", "30", "-t", f"{d:.3f}", "-i", str(png)]
+            z = (f"1+0.0035*on/30" if i % 2 == 0 else f"1.12-0.0035*on/30")
+            xs = ("iw/2-(iw/zoom/2)+" + str((i % 3 - 1) * 14)) if n > 1 else "iw/2-(iw/zoom/2)"
+            chains.append(f"[{i}:v]zoompan=z='{z}':x='{xs}':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30,"
+                          f"setsar=1,format=yuv420p[v{i}]")
+    last = "v0"
+    for i in range(1, n):
+        off = i * (d - XFADE)
+        chains.append(f"[{last}][v{i}]xfade=transition=fade:duration={XFADE}:offset={off:.3f}[x{i}]")
+        last = f"x{i}"
+    chains.append(f"[{last}]null[bg]")
+    return inputs, chains
 
 
 def render_bulletin(spec: dict, fmt: str, out_root: Path | None = None, chapters_out: list | None = None,
@@ -92,29 +132,62 @@ def render_bulletin(spec: dict, fmt: str, out_root: Path | None = None, chapters
     strip, P = cards.ticker_strip(ticker_text(spec, ch))
     strip.save(work / "ticker.png")
 
-    clips, t0, srt_lines, chapters, timeline = [], 0.0, [], [], []
+    clips, t0, srt_lines, chapters, timeline, all_credits = [], 0.0, [], [], [], []
     for i, sc in enumerate(scenes):
         seg = tts.synth_segment(sc.narration, voice, speed)
         wav = work / f"{sc.name}.wav"
         tts.write_wav(wav, seg.samples, seg.sr)
         png = work / f"{sc.name}.png"
-        card_for(cards, sc).save(png)
         D = round(seg.duration + 0.15, 3)
         first, last = i == 0, i == len(scenes) - 1
         vfade = ",".join(x for x in ("fade=t=in:st=0:d=0.3" if first else "",
                                       f"fade=t=out:st={D-0.6:.2f}:d=0.6" if last else "") if x)
         afade = ",".join(x for x in ("afade=t=in:st=0:d=0.2" if first else "",
                                       f"afade=t=out:st={D-0.6:.2f}:d=0.6" if last else "") if x)
-        vf = (f"[0:v]scale={W*2}:{H*2}:flags=lanczos,zoompan=z='1+0.003*on/30':x='iw/2-(iw/zoom/2)':"
-              f"y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30[bg];"
-              f"[bg][1:v]overlay=x='-mod({TICKER_SPEED[fmt]}*(t+{t0:.3f}),{P})':y={TICKER_Y[fmt]},"
-              f"format=yuv420p{','+vfade if vfade else ''}[v];"
-              f"[2:a]{media.AUDIO_FILTER}{','+afade if afade else ''}[a]")
         clip = work / f"{sc.name}.mp4"
-        media.ffmpeg("-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(png),
-                     "-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(work / "ticker.png"),
-                     "-i", str(wav), "-filter_complex", vf, "-map", "[v]", "-map", "[a]",
-                     *media.VIDEO_ARGS, *media.AUDIO_ARGS, "-shortest", str(clip))
+        tick = (f"overlay=x='-mod({TICKER_SPEED[fmt]}*(t+{t0:.3f}),{P})':y={TICKER_Y[fmt]},"
+                f"format=yuv420p{','+vfade if vfade else ''}")
+        items = story_assets(sc, spec, ch, fmt)
+        if items:
+            items = items[: max(1, int((D + XFADE) // MIN_SLIDE))]
+            a = sc.card_args
+            card_png = work / f"{sc.name}.photo.png"
+            cards.story_photo_card(a["tag"], a["chip"], a["headline"], a["sub"], a["tiles"], a["source"], a["note"],
+                                   a["ai"], date_label=a["date"]).save(card_png)
+            ins, chains = slideshow_filter(items, D, W, H, work, 0)
+            n = len(items)
+            per = (D + (n - 1) * XFADE) / n
+            ins += ["-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(card_png)]
+            label_ins, cur = [], "bg"
+            for k, it in enumerate(items):
+                lp = work / f"{sc.name}.label{k}.png"
+                cards.photo_label_overlay(it.label()).save(lp)
+                label_ins += ["-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(lp)]
+            ins += label_ins
+            ci = n  # index of card input
+            chains.append(f"[bg][{ci}:v]overlay=0:0[c0]")
+            cur = "c0"
+            for k in range(n):
+                s0 = max(0.0, k * (per - XFADE))
+                s1 = D + 1 if k == n - 1 else s0 + per - XFADE / 2
+                chains.append(f"[{cur}][{ci + 1 + k}:v]overlay=0:0:enable='between(t,{s0:.3f},{s1:.3f})'[c{k+1}]")
+                cur = f"c{k+1}"
+            ti, ai_ = ci + 1 + n, ci + 2 + n
+            chains.append(f"[{cur}][{ti}:v]{tick}[v]")
+            chains.append(f"[{ai_}:a]{media.AUDIO_FILTER}{','+afade if afade else ''}[a]")
+            media.ffmpeg(*ins, "-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(work / "ticker.png"),
+                         "-i", str(wav), "-filter_complex", ";".join(chains), "-map", "[v]", "-map", "[a]",
+                         *media.VIDEO_ARGS, *media.AUDIO_ARGS, "-shortest", str(clip))
+            all_credits.extend(visuals_mod.credits(items))
+        else:
+            card_for(cards, sc).save(png)
+            vf = (f"[0:v]scale={W*2}:{H*2}:flags=lanczos,zoompan=z='1+0.003*on/30':x='iw/2-(iw/zoom/2)':"
+                  f"y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30[bg];[bg][1:v]{tick}[v];"
+                  f"[2:a]{media.AUDIO_FILTER}{','+afade if afade else ''}[a]")
+            media.ffmpeg("-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(png),
+                         "-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(work / "ticker.png"),
+                         "-i", str(wav), "-filter_complex", vf, "-map", "[v]", "-map", "[a]",
+                         *media.VIDEO_ARGS, *media.AUDIO_ARGS, "-shortest", str(clip))
         clips.append(clip)
         title = {"intro": "शुरुआत", "outro": "समापन"}.get(sc.kind) or sc.card_args["headline"][:60]
         chapters.append((t0, title))
@@ -131,7 +204,7 @@ def render_bulletin(spec: dict, fmt: str, out_root: Path | None = None, chapters
     srt = out_dir / f"{slug}_{fmt}.hi.srt"
     srt.write_text("".join(f"{i}\n{srt_time(a)} --> {srt_time(b)}\n{t}\n\n"
                            for i, (a, b, t) in enumerate(srt_lines, 1)), encoding="utf-8")
-    pkg = meta.build_package(spec, ch, fmt, video, gate, chapters, srt)
+    pkg = meta.build_package(spec, ch, fmt, video, gate, chapters, srt, credits=sorted(set(all_credits)))
     pkg_path = out_dir / f"{slug}_{fmt}.upload.json"
     pkg_path.write_text(json.dumps(pkg, ensure_ascii=False, indent=2), encoding="utf-8")
     dur = media.duration(video)

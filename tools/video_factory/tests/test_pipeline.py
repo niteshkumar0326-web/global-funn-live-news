@@ -59,3 +59,24 @@ def test_podcast(tmp_path):
     r = render_podcast(spec, tmp_path / "out")
     assert media.stream_signature(r["video"]) == live.TARGET_SIG
     assert r["chapters"][0][0] == 0
+
+
+def test_story_with_photos_renders_slideshow(tmp_path, monkeypatch):
+    import io
+    from PIL import Image
+    from factory.bulletin import render_bulletin
+
+    monkeypatch.setenv("GF_OFFLINE", "1")
+    paths = []
+    for i, c in enumerate([(200, 60, 60), (60, 120, 200), (60, 160, 90)]):
+        p = tmp_path / f"p{i}.jpg"
+        Image.new("RGB", (1600, 1200), c).save(p)
+        paths.append(p)
+    spec = json.loads((EX / "bulletin_live_news.json").read_text(encoding="utf-8"))
+    spec["stories"] = spec["stories"][:1]
+    spec["stories"][0]["visuals"] = [{"type": "file", "file": str(p), "credit": f"c{i}", "license": "own"}
+                                     for i, p in enumerate(paths)]
+    r = render_bulletin(spec, "short", tmp_path / "out")
+    assert media.stream_signature(r["video"])[1:3] == (1080, 1920)
+    pkg = json.loads(r["package"].read_text(encoding="utf-8"))
+    assert "चित्र / क्लिप क्रेडिट" in pkg["description"]

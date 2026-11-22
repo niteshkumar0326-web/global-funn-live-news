@@ -92,3 +92,29 @@ Server par systemd se (`deploy/globalfunn-live.service`): crash ho ya internet j
 ```bash
 python -m pytest -q tests      # 18 tests, ffmpeg chahiye, Kokoro nahi
 ```
+
+## Videos me topic wali photos / clips / AI image (naya)
+
+Har story me `visuals` list daalo (examples/bulletin_live_news.json dekho). Slideshow apne aap banta hai:
+ek story ki 2-4 photos Ken-Burns zoom + cross-fade ke saath, upar headline card, neeche ticker.
+Har photo par chhota label aata hai ("प्रतीकात्मक चित्र", "AI-जनित प्रतीकात्मक चित्र", ya "चित्र: <naam> (<licence>)")
+aur credit upload description me khud judta hai.
+
+| type | kya karta hai | key chahiye? |
+|------|---------------|--------------|
+| `stock` | Pexels, na mile to Pixabay se photo | free API key: `PEXELS_API_KEY`, `PIXABAY_API_KEY` |
+| `video` | Pexels/Pixabay se 3-40 sec ka clip | wahi keys |
+| `wikimedia` | Wikimedia Commons (sirf CC/public domain, author+licence credit) | nahi |
+| `ai` | Pollinations (FLUX) se AI image, hamesha AI label ke saath | nahi |
+| `file` | aapki apni / licensed photo ya clip (`credit` zaroor likho) | nahi |
+
+Niyam (AGENTS.md): asli log/asli ghatna wali story me `"real_event": true` likho. Tab AI image **band** ho jaati hai
+(gate error deta hai) aur sirf asli credited photo (`wikimedia` / `file`) chalti hai. AI prompt me hamesha "no identifiable
+people, no text, no logos" jud jaata hai. Kuch na mile to abstract graphic backdrop lagta hai, render kabhi nahi rukta.
+
+Kahan chalaye: cloud sandbox me photo sites band hain, isliye PC ya VPS par:
+
+```
+python -m factory fetch-visuals examples/bulletin_live_news.json      # photos/clips work/visuals me cache
+python -m factory render examples/bulletin_live_news.json              # cache se render (GF_OFFLINE=1 ho to net nahi)
+```

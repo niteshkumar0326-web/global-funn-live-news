@@ -58,6 +58,20 @@ def check(spec: dict, channel: dict) -> GateResult:
         if kind == "bulletin" and not it.get("narration"):
             r.problems.append(f"{label}: narration is empty")
 
+    for label, it in _items(spec):
+        vis = it.get("visuals")
+        if not isinstance(vis, list):
+            continue
+        for v in vis:
+            if v.get("type") == "ai" and it.get("real_event"):
+                r.problems.append(f"{label}: AI image used for a real event/person (real_event=true); "
+                                  "use a real credited photo (type wikimedia/file) instead")
+            if v.get("type") == "ai" and re.search(r"\b(prime minister|president|actor|player|minister)\b|[A-Z][a-z]+ [A-Z][a-z]+",
+                                                    v.get("prompt", "")):
+                r.warnings.append(f"{label}: AI prompt may name a real person - AI visuals must stay generic")
+            if v.get("type") == "file" and not v.get("credit") and not v.get("own"):
+                r.warnings.append(f"{label}: local visual '{v.get('file')}' has no credit/licence (add credit, or own=true)")
+
     texts: list[str] = []
     if kind == "bulletin":
         texts = [spec.get("intro", {}).get("narration", ""), spec.get("outro", {}).get("narration", "")]

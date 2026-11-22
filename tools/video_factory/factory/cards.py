@@ -266,6 +266,124 @@ class Cards:
         self._footer(img, source, ai_label)
         return img
 
+    # ---- photo-led story card (transparent overlay for slideshow backgrounds) ----
+    def _scrim(self, img, y0, y1, a0, a1):
+        """Black vertical gradient of alpha a0->a1 (0-255) composited onto img."""
+        h = y1 - y0
+        alpha = np.linspace(a0, a1, h)[:, None].repeat(self.W, axis=1).astype(np.uint8)
+        ov = Image.new("RGBA", (self.W, h), (0, 0, 0, 0))
+        ov.putalpha(Image.fromarray(alpha, "L"))
+        base = img.crop((0, y0, self.W, y1)).convert("RGBA")
+        img.paste(Image.alpha_composite(base, ov).convert("RGB"), (0, y0))
+
+    def overlay(self, draw_fn) -> Image.Image:
+        """Render draw_fn(img) twice (black / white canvas) and recover the true RGBA by difference matting."""
+        saved = self.bg
+        try:
+            res = []
+            for v in (0, 255):
+                self.bg = Image.new("RGB", (self.W, self.H), (v, v, v))
+                res.append(np.asarray(draw_fn(), dtype=np.float32))
+        finally:
+            self.bg = saved
+        a, b = res
+        alpha = np.clip(1.0 - (b - a).mean(axis=2) / 255.0, 0.0, 1.0)
+        safe = np.maximum(alpha, 1e-3)[..., None]
+        rgb = np.clip(a / safe, 0, 255)
+        rgb[alpha < 0.004] = 0
+        out = np.dstack([rgb, alpha * 255]).astype(np.uint8)
+        return Image.fromarray(out, "RGBA")
+
+    def _photo_label(self, img, label, m, top):
+        d = ImageDraw.Draw(img)
+        f = one_line(d, label, self.W - 2 * m - 40, 28, 18, 600)
+        tw = _tlen(d, label, f)
+        lx, ly = m + 14, top - 52
+        ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        ImageDraw.Draw(ov).rounded_rectangle((lx, ly, lx + tw + 32, ly + f.size + 18), radius=18, fill=(0, 0, 0, 150))
+        img.paste(Image.alpha_composite(img.convert("RGBA"), ov).convert("RGB"))
+        ImageDraw.Draw(img).text((lx + 16, ly + 6), label, font=f, fill=WHITE)
+
+    def photo_label_overlay(self, label: str) -> Image.Image:
+        m, top = (40, 600) if self.vertical else (60, 500)
+        return self.overlay(lambda: (lambda im: (self._photo_label(im, label, m, top), im)[1])(self.bg.copy()))
+
+    def story_photo_card(self, tag, chip, headline, sub, tiles, source, note, ai_label, photo_label="",
+                         date_label="") -> Image.Image:
+        """Transparent card for stories that have photos/clips behind them: header + lower-third panel."""
+        def draw():
+            img = self.bg.copy()
+            W, H = self.W, self.H
+            self._scrim(img, 0, 250, 190, 0)
+            self._header(img, tag, date_label)
+            ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            od = ImageDraw.Draw(ov)
+            if self.vertical:
+                top, bot, m = 600, 1432, 40
+            else:
+                top, bot, m = 500, 972, 60
+            od.rounded_rectangle((m, top, W - m, bot), radius=36, fill=(5, 11, 32, 182))
+            img.paste(Image.alpha_composite(img.convert("RGBA"), ov).convert("RGB"))
+            d = ImageDraw.Draw(img)
+            if photo_label:
+                self._photo_label(img, photo_label, m, top)
+                d = ImageDraw.Draw(img)
+            tl = tiles[:3] if self.vertical else tiles[:2]
+            if self.vertical:
+                self._pill(img, (m + 22, top + 30), chip, font(40, 700), (36, 70, 160))
+                d = ImageDraw.Draw(img)
+                f, lines = fit_text(d, headline, W - 2 * m - 60, 250, 80, 46, 800)
+                y = self._centered(d, top + 112, lines, f, WHITE, gap=int(f.size * 0.22), x0=m, x1=W - m)
+                if sub:
+                    fs, sl = fit_text(d, sub, W - 2 * m - 60, 90, 44, 28, 500)
+                    y = self._centered(d, y + 2, sl, fs, SOFT, gap=8, x0=m, x1=W - m)
+                y = max(y + 14, top + 380)
+                n = len(tl)
+                if n:
+                    tw = (W - 2 * m - 44 - (n - 1) * 24) // n
+                    for i, t in enumerate(tl):
+                        x0 = m + 22 + i * (tw + 24)
+                        self._tile(img, (x0, y, x0 + tw, y + 196), *t)
+                    y += 212
+                d = ImageDraw.Draw(img)
+                if note:
+                    fn = one_line(d, note, W - 2 * m - 60, 34, 22, 500)
+                    self._centered(d, y, [note], fn, self.gold, x0=m, x1=W - m)
+                    y += fn.size + 14
+                if source:
+                    fsrc = one_line(d, source, W - 2 * m - 60, 34, 22, 600)
+                    self._centered(d, bot - 88, [source], fsrc, self.gold, x0=m, x1=W - m)
+                fa = one_line(d, ai_label, W - 2 * m - 60, 26, 16, 500)
+                self._centered(d, bot - 44, [ai_label], fa, SOFT, x0=m, x1=W - m)
+            else:
+                self._pill(img, (m + 36, top + 26), chip, font(36, 700), (36, 70, 160))
+                d = ImageDraw.Draw(img)
+                colw = 1000 if tl else W - 2 * m - 72
+                f, lines = fit_text(d, headline, colw, 200, 72, 42, 800)
+                y = top + 100
+                for ln in lines:
+                    d.text((m + 36, y), ln, font=f, fill=WHITE)
+                    y += int(f.size * 1.22)
+                if sub:
+                    fs, sl = fit_text(d, sub, colw, 60, 38, 24, 500)
+                    for ln in sl:
+                        d.text((m + 36, y + 4), ln, font=fs, fill=SOFT)
+                        y += int(fs.size * 1.22)
+                if note:
+                    fn = one_line(d, note, colw, 32, 22, 500)
+                    d.text((m + 36, y + 10), note, font=fn, fill=self.gold)
+                for i, t in enumerate(tl):
+                    self._tile(img, (1180, top + 26 + i * 208, W - m - 36, top + 26 + i * 208 + 196), *t)
+                d = ImageDraw.Draw(img)
+                if source:
+                    fsrc = one_line(d, source, colw, 30, 20, 600)
+                    d.text((m + 36, bot - 82), source, font=fsrc, fill=self.gold)
+                fa = one_line(d, ai_label, W - 2 * m - 72, 24, 16, 500)
+                d.text((m + 36, bot - 42), ai_label, font=fa, fill=SOFT)
+            return img
+
+        return self.overlay(draw)
+
     def caption_png(self, text: str, maxlines: int = 2) -> Image.Image:
         """Transparent caption bar for burning sentence captions."""
         W = self.W

@@ -24,7 +24,7 @@ def mmss(t: float) -> str:
 
 
 def build_package(spec: dict, ch: dict, fmt: str, video: Path, gate, chapters: list[tuple[float, str]],
-                  srt: Path | None) -> dict:
+                  srt: Path | None, credits: list[str] | None = None) -> dict:
     kind = spec.get("kind", "bulletin")
     date_short = spec.get("date_label_short") or spec.get("date", "")
     if kind == "bulletin":
@@ -48,6 +48,8 @@ def build_package(spec: dict, ch: dict, fmt: str, video: Path, gate, chapters: l
         for t, name in chapters:
             lines.append(f"{mmss(t)} {name}")
         lines.append("")
+    if credits:
+        lines += ["चित्र / क्लिप क्रेडिट:"] + [f"• {c}" for c in credits] + [""]
     lines += [DISCLOSURE, "", " ".join(ch.get("hashtags", []) + (["#Shorts"] if fmt == "short" else []))]
     description = "\n".join(lines).strip()
     tags = [h.lstrip("#") for h in ch.get("hashtags", [])] + ["Hindi", ch.get("sub_name", "News")]
