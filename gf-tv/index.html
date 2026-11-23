@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOBAL FUNN TV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ design tokens ============ */
+:root{
+  --bg:#0b0f14;
+  --bg-raised:#121820;
+  --surface:#171f29;
+  --surface-2:#1e2733;
+  --border:#2a3542;
+  --text:#eef2f6;
+  --text-dim:#9aa7b4;
+  --text-faint:#6b7684;
+  --accent:#e0a955;       /* warm gold — not Netflix red */
+  --accent-strong:#f0bf72;
+  --free-tag:#4fb6a8;     /* teal — free / CC content */
+  --live-tag:#e2574c;
+  --font-display:'Poppins', 'Hind', sans-serif;
+  --font-body:'Hind', 'Poppins', sans-serif;
+  --radius:10px;
+  --shadow-card: 0 14px 34px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+button{font-family:inherit;}
+::selection{background:var(--accent);color:#1a1205;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
+
+/* ============ top nav ============ */
+.topnav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; gap:28px;
+  padding:14px 4vw;
+  background:linear-gradient(to bottom, rgba(8,11,15,.92) 10%, rgba(8,11,15,0));
+  transition:background .3s ease;
+}
+.topnav.scrolled{ background:rgba(8,11,15,.97); border-bottom:1px solid var(--border); }
+.brand{
+  font-family:var(--font-display); font-weight:800; font-size:1.3rem; letter-spacing:.3px;
+  color:var(--accent-strong); white-space:nowrap; display:flex; align-items:center; gap:8px;
+  cursor:pointer; border:none; background:none;
+}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;}
+.navlinks{display:flex; gap:20px; list-style:none; margin:0; padding:0; flex:1; min-width:0;}
+.navlinks button{
+  background:none;border:none;color:var(--text-dim);font-size:.92rem;font-weight:600;
+  cursor:pointer;padding:6px 2px;white-space:nowrap;border-bottom:2px solid transparent;
+}
+.navlinks button:hover, .navlinks button:focus-visible{color:var(--text); outline:none;}
+.navlinks button.active{color:var(--text); border-bottom-color:var(--accent);}
+.navright{display:flex; align-items:center; gap:14px;}
+.search-wrap{display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:999px; padding:7px 14px; transition:background .2s;}
+.search-wrap:focus-within{background:rgba(255,255,255,.1); border-color:var(--accent);}
+.search-wrap input{
+  background:none;border:none;color:var(--text);font-size:.9rem;width:160px;outline:none;font-family:var(--font-body);
+}
+.search-wrap input::placeholder{color:var(--text-faint);}
+.icon-btn{
+  background:none;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+}
+.icon-btn:hover,.icon-btn:focus-visible{border-color:var(--accent);outline:none;}
+
+/* ============ hero ============ */
+.hero{
+  position:relative; min-height:62vh; display:flex; align-items:flex-end;
+  padding:0 4vw 48px; margin-top:0;
+  background:
+    linear-gradient(to top, var(--bg) 2%, rgba(11,15,20,.35) 45%, rgba(11,15,20,.05) 70%),
+    linear-gradient(to right, rgba(11,15,20,.9) 10%, rgba(11,15,20,.1) 65%),
+    radial-gradient(ellipse at 70% 20%, #2a3550 0%, #121823 55%, #0b0f14 100%);
+}
+.hero-inner{max-width:620px;}
+.hero-tag{
+  display:inline-flex; align-items:center; gap:6px; font-size:.75rem; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--accent-strong);
+  background:rgba(224,169,85,.12); border:1px solid rgba(224,169,85,.35);
+  padding:4px 10px; border-radius:999px; margin-bottom:14px;
+}
+.hero h1{
+  font-family:var(--font-display); font-weight:800; font-size:clamp(1.8rem,4.6vw,3.2rem);
+  margin:0 0 14px; text-wrap:balance; line-height:1.08;
+}
+.hero p{color:var(--text-dim); font-size:1.02rem; max-width:52ch; margin:0 0 22px;}
+.hero-actions{display:flex; gap:12px; flex-wrap:wrap;}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:.95rem;
+  padding:12px 24px; border-radius:7px; border:none; cursor:pointer; font-family:var(--font-display);
+}
+.btn-play{background:var(--text); color:#111;}
+.btn-play:hover{background:#fff;}
+.btn-ghost{background:rgba(255,255,255,.14); color:var(--text); backdrop-filter:blur(4px);}
+.btn-ghost:hover{background:rgba(255,255,255,.22);}
+.btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+/* ============ rows ============ */
+.rows{padding:8px 0 60px;}
+.row{margin:30px 0;}
+.row-head{display:flex; align-items:baseline; justify-content:space-between; padding:0 4vw; margin-bottom:10px;}
+.row-head h2{font-family:var(--font-display); font-size:1.15rem; font-weight:700; margin:0;}
+.row-head .count{color:var(--text-faint); font-size:.8rem;}
+.row-scroll-wrap{position:relative;}
+.row-track{
+  display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:4px 4vw 14px;
+  scrollbar-width:none;
+}
+.row-track::-webkit-scrollbar{display:none;}
+.row-nav{
+  position:absolute; top:0; bottom:14px; width:48px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(to right, rgba(11,15,20,.85), transparent); border:none; color:var(--text);
+  cursor:pointer; z-index:5; opacity:0; transition:opacity .15s;
+}
+.row-scroll-wrap:hover .row-nav{opacity:1;}
+.row-nav.right{right:0; left:auto; background:linear-gradient(to left, rgba(11,15,20,.85), transparent);}
+.row-nav:focus-visible{opacity:1; outline:none;}
+
+.card{
+  position:relative; flex:0 0 auto; width:240px; border-radius:var(--radius); overflow:hidden;
+  background:var(--surface); cursor:pointer; border:1px solid var(--border);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s;
+}
+.card:hover, .card:focus-visible{
+  transform:translateY(-6px) scale(1.035); box-shadow:var(--shadow-card); border-color:var(--accent); z-index:2; outline:none;
+}
+.card-thumb{position:relative; aspect-ratio:16/9; background:var(--surface-2); overflow:hidden;}
+.card-thumb img{width:100%;height:100%;object-fit:cover;}
+.card-badge{
+  position:absolute; top:8px; left:8px; font-size:.62rem; font-weight:800; letter-spacing:.04em;
+  text-transform:uppercase; padding:3px 7px; border-radius:4px; color:#0b0f14;
+}
+.badge-original{background:var(--accent-strong);}
+.badge-free{background:var(--free-tag); color:#06201c;}
+.card-play{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0); opacity:0; transition:opacity .15s, background .15s;
+}
+.card:hover .card-play, .card:focus-visible .card-play{opacity:1; background:rgba(5,8,12,.28);}
+.card-play svg{width:38px;height:38px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));}
+.card-body{padding:10px 11px 12px;}
+.card-title{
+  font-size:.84rem; font-weight:600; line-height:1.3; margin:0 0 4px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.card-meta{font-size:.72rem; color:var(--text-faint); display:flex; gap:6px; align-items:center;}
+
+.empty-state{padding:60px 4vw; text-align:center; color:var(--text-dim);}
+.empty-state h3{font-family:var(--font-display); color:var(--text); margin-bottom:6px;}
+
+/* ============ modal ============ */
+.modal-backdrop{
+  position:fixed; inset:0; background:rgba(5,7,10,.86); z-index:200;
+  display:flex; align-items:center; justify-content:center; padding:4vw;
+  opacity:0; pointer-events:none; transition:opacity .18s;
+}
+.modal-backdrop.open{opacity:1; pointer-events:auto;}
+.modal{
+  background:var(--bg-raised); border:1px solid var(--border); border-radius:14px; max-width:860px; width:100%;
+  max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 30px 80px -20px rgba(0,0,0,.7);
+}
+.modal-close{
+  position:absolute; top:12px; right:12px; z-index:3; width:36px;height:36px;border-radius:50%;
+  background:rgba(10,13,17,.7); border:1px solid var(--border); color:#fff; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+}
+.modal-player{position:relative; width:100%; aspect-ratio:16/9; background:#000;}
+.modal-player iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+.modal-body{padding:22px 26px 28px;}
+.modal-body h2{font-family:var(--font-display); font-size:1.4rem; margin:0 0 8px;}
+.modal-tags{display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+.tag{font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:5px; letter-spacing:.03em;}
+.tag-original{background:rgba(224,169,85,.15); color:var(--accent-strong); border:1px solid rgba(224,169,85,.4);}
+.tag-free{background:rgba(79,182,168,.15); color:var(--free-tag); border:1px solid rgba(79,182,168,.4);}
+.modal-body p.desc{color:var(--text-dim); font-size:.95rem; line-height:1.6; margin:0 0 18px;}
+.modal-actions{display:flex; gap:10px; flex-wrap:wrap;}
+.btn-small{padding:9px 18px; font-size:.86rem; border-radius:6px;}
+.btn-list{background:rgba(255,255,255,.1); color:var(--text); border:1px solid var(--border);}
+.btn-list.active{background:var(--accent); color:#1a1205; border-color:var(--accent);}
+
+/* ============ footer ============ */
+.footer{padding:40px 4vw 60px; color:var(--text-faint); font-size:.8rem; border-top:1px solid var(--border); margin-top:20px;}
+.footer b{color:var(--text-dim);}
+
+/* ============ responsive ============ */
+@media (max-width:760px){
+  .navlinks{display:none;}
+  .search-wrap input{width:110px;}
+  .hero{min-height:52vh; padding:0 5vw 36px;}
+  .card{width:168px;}
+}
+.visually-hidden{position:absolute; width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<nav class="topnav" id="topnav">
+  <button class="brand" id="logoBtn" aria-label="GLOBAL FUNN TV home"><span class="dot"></span>GLOBAL FUNN TV</button>
+  <ul class="navlinks" id="navlinks">
+    <li><button class="active" data-filter="all">Home</button></li>
+    <li><button data-filter="original">GLOBAL FUNN Originals</button></li>
+    <li><button data-filter="webseries">Web Series</button></li>
+    <li><button data-filter="free">Free Movies</button></li>
+    <li><button data-filter="mylist">My List</button></li>
+  </ul>
+  <div class="navright">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="searchInput" type="search" placeholder="Search titles..." aria-label="Search titles">
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="heroSection">
+  <div class="hero-inner">
+    <span class="hero-tag" id="heroTag">GLOBAL FUNN Original</span>
+    <h1 id="heroTitle">GLOBAL FUNN TV</h1>
+    <p id="heroDesc">Aapke channel ke real videos, web-series, aur free legal movies — sab ek jagah, bina kisi doosre platform ki copy kiye.</p>
+    <div class="hero-actions">
+      <button class="btn btn-play" id="heroPlayBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Play
+      </button>
+      <button class="btn btn-ghost" id="heroInfoBtn">More Info</button>
+    </div>
+  </div>
+</header>
+
+<main class="rows" id="rowsContainer"></main>
+
+<div class="empty-state" id="emptyState" style="display:none;">
+  <h3>Kuch nahi mila</h3>
+  <p>Doosra search try karein ya filter badlein.</p>
+</div>
+
+<footer class="footer">
+  <p><b>GLOBAL FUNN TV</b> — ek original fan-made streaming-style page. Channel ke videos YouTube se, aur classic/open movies Blender Foundation (Creative Commons BY) aur Internet Archive (public domain) se, officially embed ke through dikhaye gaye hain. Koi bhi content download/host nahi kiya gaya — sab original sources par hi chalta hai.</p>
+  <p>Real content open karne ke liye is file ko apne browser (Chrome/Edge) me seedha open karein.</p>
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
+    <div class="modal-player" id="modalPlayer"></div>
+    <div class="modal-body">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-tags" id="modalTags"></div>
+      <p class="desc" id="modalDesc"></p>
+      <div class="modal-actions">
+        <button class="btn-small btn-list" id="modalListBtn">+ My List</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+// Real videos from the user's own YouTube channel: @niteshkumar0326 (GLOBAL FUNN)
+const CHANNEL_ID = "UCLXPISTr2HJnusqycn4Wyog";
+
+const originals = [
+  {id:"8L2SA5jUHXE", title:"WELCOME TO GLOBAL FUNN 4K — Official Channel Intro", cat:"original", series:"Channel Intro", desc:"GLOBAL FUNN channel ka official welcome/intro video — 24 category hub ka parichay."},
+  {id:"vu3E6dPrDrA", title:"Global Funn Reseller Partner Program — ₹0 Capital, 20–30% Commission", cat:"original", series:"Earning & Business", desc:"₹0 pooji me judkar reseller partner bankar commission kamane ka plan."},
+  {id:"pIYUJj-S0dc", title:"Top Global AI Affiliate Programs 2026", cat:"original", series:"Earning & Business", desc:"Har mahine 20-60% dollar recurring commission dene wale global AI affiliate programs."},
+  {id:"KhD9DZhPx4Q", title:"Doctors, Coaching & Showroom ke liye 48 Ghante me AI Website + WhatsApp Lead System", cat:"original", series:"Earning & Business", desc:"Local business ke liye tez AI website aur lead system banane ka tarika."},
+  {id:"mwDXmHrLxKo", title:"AI Yug me 10 Sub-Websites se Worldwide Digital Marketing & Commission Kamai", cat:"original", series:"Earning & Business", desc:"Multiple sub-websites se worldwide digital marketing kaise set karein."},
+  {id:"RCQe2DT9NCs", title:"AI Digital Products se Kamai ka 100% Sach — ₹0 Ad Spend Store Blueprint", cat:"original", series:"Earning & Business", desc:"Bina ad spend ke digital product store ka honest breakdown."},
+  {id:"ikU3xZ8Uphg", title:"1-Click Sarkari Yojana (myScheme.gov.in) — ₹1.25 Lakh tak Labh", cat:"original", series:"Govt Schemes", desc:"myScheme.gov.in se sarkari yojana check karne ka asaan tarika."},
+  {id:"RWGIFtmzbJY", title:"₹0 me IIT AI & Python Certificate (SWAYAM)", cat:"original", series:"Govt Schemes", desc:"SWAYAM platform se free IIT-level certificate kaise lein."},
+  {id:"I2WWqotWcuw", title:"Muft Sarkari Vakil (NALSA 15100) + Cyber Thagi 1930 Helpline", cat:"original", series:"Govt Schemes", desc:"Free legal help aur cyber fraud helpline numbers ki jaankari."},
+  {id:"60TBOHno4eY", title:"Sasta Kiraya Hub 4K — Bina Broker Ghar/Kamra, Gaadi", cat:"original", series:"Govt Schemes", desc:"Bina broker ke sasta rent aur vehicle dhoondne ke government/free resources."},
+  {id:"yUkeLY5z8w8", title:"Muft Kaam & Rozgar Seva 4K — NCS.gov.in Sarkari Naukri", cat:"original", series:"Govt Schemes", desc:"National Career Service portal se free job search kaise karein."},
+  {id:"Kw1FEBczAU8", title:"Muft aur Sabse Badhiya Ilaj Guide — Cancer, Heart", cat:"original", series:"Govt Schemes", desc:"Sarkari free treatment schemes ki jaankari."},
+  {id:"QZQJUoLHz5U", title:"Digital Kheti-Baadi 4K — Kisan Drone, Israeli Drip", cat:"original", series:"Govt Schemes", desc:"Modern farming tech aur sarkari kisan schemes."},
+  {id:"WAm76JssKyo", title:"Sookhti Tulsi aur Gulaab ke Paudhe ko 7 Din me Ghana aur Hara-Bhara Kaise Banayein", cat:"original", series:"Home & Garden", desc:"Ghar ke paudhon ki dekhbhal ka simple tareeka."},
+  {id:"QeEOHVz9iiw", title:"Chhat aur Balcony ke Gamlon me Dher Saare Tamatar, Mirch, Dhaniya aur Gulaab Kaise Ugayein", cat:"original", series:"Home & Garden", desc:"Terrace gardening tips — sabzi aur phool dono."},
+  {id:"2AtDcPRiLsw", title:"Pahadi Dhalaan, Baarish aur Raat ke Highway par Solo Riding ke 4 Jeevanrakshak Niyam", cat:"original", series:"Travel & Safety", desc:"Solo bike riding safety rules — hill, rain, night highway."},
+  {id:"sSopcjW6WU0", title:"Sachcha Car & Bike Review (NCAP • Mileage) + Pro Highway Safety Tips", cat:"original", series:"Travel & Safety", desc:"Honest vehicle review aur highway safety advice."},
+  {id:"AiBdmhS52vo", title:"Dhabe Jaisi Khushboodar Dal Tadka aur Kadak Adrak-Elaichi Chai ka 2-Minute Ubaal Niyam", cat:"original", series:"Food & Recipes", desc:"Dhaba-style dal tadka aur chai ki recipe."},
+  {id:"1e5E8JFFfXY", title:"Kam Tel Dhaba Paneer Tikka Masala — Bihar-Jharkhand Litti-Chokha", cat:"original", series:"Food & Recipes", desc:"Kam tel me dhaba-style paneer tikka aur litti-chokha."},
+  {id:"deDWZGT_Oow", title:"Salary Aane ke 5 Minute Baad ka Sach aur Rishtedaaron ka Muft Gyaan", cat:"original", series:"Family & Comedy", desc:"Ek relatable family-comedy take salary din par."},
+  {id:"DQ0NDgPanG0", title:"Sharma Ji ka AI Smart-Home vs Desi Dadi Ji + Shaadi Waale Phoophaji", cat:"original", series:"Family & Comedy", desc:"AI smart-home vs traditional family — comedy skit."},
+  {id:"ZUTuZmeELNo", title:"Gulliver's Travels: Nanhe Logon ka Desh Lilliput", cat:"original", series:"Kids & Stories", desc:"Bachchon ke liye classic kahani ka retelling."},
+  {id:"MPLs0jJucYk", title:"Shrimad Bhagavad Gita Karmayog (2.47) aur Shri Ram-Hanuman", cat:"original", series:"Spiritual", desc:"Gita aur Ramayan se jeevan sutra."},
+  {id:"jbQZTUkx4YM", title:"LIVE Cricket & World Sports Hub — Bharat ki 3-2 Jeet", cat:"original", series:"Sports", desc:"Sports highlights aur updates hub."},
+  {id:"qaPYDYlb1pc", title:"Nifty • Sensex • Gold • S&P 500 Candlestick Breakdown", cat:"original", series:"Markets", desc:"Market indices ka candlestick-level breakdown — sirf educational."},
+  {id:"7X2aURkdij4", title:"Sahi Product Tips + Ghar Baithe Social Media se Kamai", cat:"original", series:"Earning & Business", desc:"Smart shopping tips aur social media earning ideas."},
+  {id:"Zmb0j2aQMKo", title:"Nanha Dragon Scales aur Jaadui Udaan", cat:"original", series:"Kids & Stories", desc:"Bachchon ke liye short animated-style story."},
+];
+
+const webseries = [
+  {id:"9ITuTkRQo1w", title:"Chakravyuh Rahasya Files (Ep-02): Prachin Bharat ke Adbhut Vaigyanik Rahasya", cat:"webseries", series:"Chakravyuh Rahasya Files", desc:"Mystery web-series — prachin Bharat ke vigyan aur rahasya."},
+  {id:"P0OqGnnjl4w", title:"Chanakya Niti: Rashtra Dharm aur Akhand Nyay ke Jeevan Sutra (Ep-01)", cat:"webseries", series:"Chanakya Niti", desc:"Historical web-series — Chanakya ke jeevan sutra."},
+  {id:"_ddIyHdxdRE", title:"Ghar-Aangan ke Rishtey (Ep-01): Maa ka Swabhimaan aur Sanyukt Parivar ki Taakat", cat:"webseries", series:"Ghar-Aangan ke Rishtey", desc:"Family-drama web-series — sanyukt parivar ki kahani."},
+];
+
+// Verified free legal content: Blender Foundation (CC BY 3.0) + public domain classics via Internet Archive.
+// Titles/IDs verified via YouTube oEmbed and Internet Archive metadata.
+const freeContent = [
+  {id:"aqz-KE-bpKQ", src:"youtube", title:"Big Buck Bunny (2008)", cat:"free", series:"Blender Open Movies", tagline:"Creative Commons BY 3.0 — Blender Foundation", desc:"Blender Foundation ki official animated short film — CC BY 3.0 license ke saath free-to-share."},
+  {id:"eRsGyueVLvQ", src:"youtube", title:"Sintel (2010)", cat:"free", series:"Blender Open Movies", tagline:"Creative Commons BY 3.0 — Blender Foundation", desc:"Blender Institute ki third open movie — ek ladki aur ajgar jaisi creature ki kahani."},
+  {id:"R6MlUcmOul8", src:"youtube", title:"Tears of Steel (2012)", cat:"free", series:"Blender Open Movies", tagline:"Creative Commons BY 3.0 — Blender Foundation", desc:"Blender ka live-action/VFX open movie — Amsterdam me sci-fi."},
+  {id:"TLkA0RELQ1g", src:"youtube", title:"Elephants Dream (2006)", cat:"free", series:"Blender Open Movies", tagline:"Creative Commons BY — Blender Foundation", desc:"Blender Foundation ki pehli open movie — pehla fully open-source animated film."},
+  {id:"Nosferatu_most_complete_version_93_mins.", src:"archive", title:"Nosferatu (1922)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"F.W. Murnau ki silent horror classic — copyright notice na hone ki wajah se public domain me."},
+  {id:"ATripToTheMoonGeorgeMelies", src:"archive", title:"A Trip to the Moon (1902)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"Georges Méliès ki pioneering silent sci-fi short film."},
+];
+
+const allItems = [...originals, ...webseries, ...freeContent];
+
+/* ===================== STATE ===================== */
+let myList = [];
+try{ myList = JSON.parse(localStorage.getItem('gftv_mylist') || '[]'); }catch(e){ myList = []; }
+function saveMyList(){ try{ localStorage.setItem('gftv_mylist', JSON.stringify(myList)); }catch(e){} }
+
+let activeFilter = 'all';
+let searchQuery = '';
+
+/* ===================== HELPERS ===================== */
+function thumbUrl(item){
+  if(item.src === 'archive'){
+    return `https://archive.org/services/img/${encodeURIComponent(item.id)}`;
+  }
+  return `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`;
+}
+function embedUrl(item){
+  if(item.src === 'archive'){
+    return `https://archive.org/embed/${encodeURIComponent(item.id)}`;
+  }
+  return `https://www.youtube.com/embed/${item.id}?autoplay=1&rel=0`;
+}
+function watchUrl(item){
+  if(item.src === 'archive'){
+    return `https://archive.org/details/${encodeURIComponent(item.id)}`;
+  }
+  return `https://www.youtube.com/watch?v=${item.id}`;
+}
+function badgeClass(item){ return item.cat === 'free' ? 'badge-free' : 'badge-original'; }
+function badgeText(item){ return item.cat === 'free' ? 'FREE' : 'ORIGINAL'; }
+
+function groupBySeries(items){
+  const map = new Map();
+  items.forEach(it=>{
+    const key = it.series || 'Other';
+    if(!map.has(key)) map.set(key, []);
+    map.get(key).push(it);
+  });
+  return map;
+}
+
+function matchesSearch(item, q){
+  if(!q) return true;
+  const hay = (item.title + ' ' + (item.series||'') + ' ' + (item.desc||'')).toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function visibleItemsForFilter(){
+  if(activeFilter === 'mylist'){
+    return allItems.filter(it => myList.includes(it.id) && matchesSearch(it, searchQuery));
+  }
+  if(activeFilter === 'all'){
+    return allItems.filter(it => matchesSearch(it, searchQuery));
+  }
+  return allItems.filter(it => it.cat === activeFilter && matchesSearch(it, searchQuery));
+}
+
+/* ===================== RENDER ===================== */
+const rowsContainer = document.getElementById('rowsContainer');
+const emptyState = document.getElementById('emptyState');
+
+function cardHTML(item){
+  const inList = myList.includes(item.id);
+  return `
+  <div class="card" tabindex="0" role="button" data-id="${item.id}" aria-label="${escapeHtml(item.title)}">
+    <div class="card-thumb">
+      <img src="${thumbUrl(item)}" alt="" loading="lazy">
+      <span class="card-badge ${badgeClass(item)}">${badgeText(item)}</span>
+      <div class="card-play" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="card-title">${escapeHtml(item.title)}</p>
+      <div class="card-meta"><span>${escapeHtml(item.series||'')}</span></div>
+    </div>
+  </div>`;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderRows(){
+  const items = visibleItemsForFilter();
+  rowsContainer.innerHTML = '';
+  if(items.length === 0){
+    emptyState.style.display = 'block';
+    return;
+  }
+  emptyState.style.display = 'none';
+
+  const groups = groupBySeries(items);
+  let rowIndex = 0;
+  groups.forEach((groupItems, seriesName) => {
+    rowIndex++;
+    const rowId = 'row-' + rowIndex;
+    const section = document.createElement('section');
+    section.className = 'row';
+    section.innerHTML = `
+      <div class="row-head">
+        <h2>${escapeHtml(seriesName)}</h2>
+        <span class="count">${groupItems.length} title${groupItems.length>1?'s':''}</span>
+      </div>
+      <div class="row-scroll-wrap">
+        <button class="row-nav left" aria-label="Scroll left" data-row="${rowId}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="row-track" id="${rowId}">
+          ${groupItems.map(cardHTML).join('')}
+        </div>
+        <button class="row-nav right" aria-label="Scroll right" data-row="${rowId}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    `;
+    rowsContainer.appendChild(section);
+  });
+
+  // wire card clicks
+  rowsContainer.querySelectorAll('.card').forEach(card=>{
+    const id = card.getAttribute('data-id');
+    const item = allItems.find(it=>it.id===id);
+    card.addEventListener('click', ()=>openModal(item));
+    card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(item);} });
+  });
+  // wire row nav scroll
+  rowsContainer.querySelectorAll('.row-nav').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const track = document.getElementById(btn.getAttribute('data-row'));
+      const dir = btn.classList.contains('right') ? 1 : -1;
+      track.scrollBy({left: dir * track.clientWidth * 0.85, behavior:'smooth'});
+    });
+  });
+}
+
+/* ===================== MODAL ===================== */
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalPlayer = document.getElementById('modalPlayer');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalTags = document.getElementById('modalTags');
+const modalListBtn = document.getElementById('modalListBtn');
+let currentModalItem = null;
+
+function openModal(item){
+  currentModalItem = item;
+  modalTitle.textContent = item.title;
+  modalDesc.textContent = item.desc || '';
+  modalTags.innerHTML = item.cat === 'free'
+    ? `<span class="tag tag-free">${escapeHtml(item.tagline || 'Free Content')}</span>`
+    : `<span class="tag tag-original">GLOBAL FUNN Original</span>`;
+  modalPlayer.innerHTML = `<iframe src="${embedUrl(item)}" title="${escapeHtml(item.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+  updateListBtn();
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalBackdrop.classList.remove('open');
+  modalPlayer.innerHTML = '';
+  document.body.style.overflow = '';
+  currentModalItem = null;
+}
+function updateListBtn(){
+  if(!currentModalItem) return;
+  const inList = myList.includes(currentModalItem.id);
+  modalListBtn.textContent = inList ? '✓ In My List' : '+ My List';
+  modalListBtn.classList.toggle('active', inList);
+}
+document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', e=>{ if(e.target === modalBackdrop) closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal(); });
+modalListBtn.addEventListener('click', ()=>{
+  if(!currentModalItem) return;
+  const idx = myList.indexOf(currentModalItem.id);
+  if(idx === -1) myList.push(currentModalItem.id); else myList.splice(idx,1);
+  saveMyList();
+  updateListBtn();
+  if(activeFilter === 'mylist') renderRows();
+});
+
+/* ===================== HERO ===================== */
+function setHero(item){
+  document.getElementById('heroTag').textContent = item.cat === 'free' ? (item.tagline || 'Free Content') : ('GLOBAL FUNN Original · ' + (item.series||''));
+  document.getElementById('heroTitle').textContent = item.title;
+  document.getElementById('heroDesc').textContent = item.desc || '';
+  document.getElementById('heroPlayBtn').onclick = ()=>openModal(item);
+  document.getElementById('heroInfoBtn').onclick = ()=>openModal(item);
+}
+setHero(originals[0]);
+
+/* ===================== NAV FILTER ===================== */
+document.getElementById('navlinks').addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-filter]');
+  if(!btn) return;
+  activeFilter = btn.getAttribute('data-filter');
+  document.querySelectorAll('#navlinks button').forEach(b=>b.classList.toggle('active', b===btn));
+  renderRows();
+});
+
+/* ===================== SEARCH ===================== */
+document.getElementById('searchInput').addEventListener('input', e=>{
+  searchQuery = e.target.value.trim();
+  renderRows();
+});
+
+/* ===================== SCROLL NAV STYLE ===================== */
+const topnav = document.getElementById('topnav');
+window.addEventListener('scroll', ()=>{
+  topnav.classList.toggle('scrolled', window.scrollY > 30);
+});
+
+document.getElementById('logoBtn').addEventListener('click', ()=>{
+  window.scrollTo({top:0, behavior:'smooth'});
+  activeFilter = 'all'; searchQuery=''; document.getElementById('searchInput').value='';
+  document.querySelectorAll('#navlinks button').forEach(b=>b.classList.toggle('active', b.getAttribute('data-filter')==='all'));
+  renderRows();
+});
+
+/* ===================== INIT ===================== */
+renderRows();
+</script>
+</body>
+</html>
