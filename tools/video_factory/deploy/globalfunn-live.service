@@ -1,0 +1,23 @@
+# 24x7 live stream for one channel.  Install:
+#   sudo cp deploy/globalfunn-live.service /etc/systemd/system/globalfunn-live@.service
+#   sudo systemctl daemon-reload && sudo systemctl enable --now globalfunn-live@live_news
+# Stream key goes in /etc/globalfunn/live_news.env (chmod 600):   YT_STREAM_KEY_LIVE_NEWS=xxxx-xxxx-xxxx-xxxx
+[Unit]
+Description=GLOBAL FUNN live stream (%i)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=globalfunn
+WorkingDirectory=/opt/global-funn-live-news/tools/video_factory
+EnvironmentFile=/etc/globalfunn/%i.env
+ExecStart=/opt/global-funn-live-news/venv/bin/python -m factory live --channel %i
+Restart=always
+RestartSec=5
+Nice=10
+CPUQuota=60%
+MemoryMax=900M
+
+[Install]
+WantedBy=multi-user.target

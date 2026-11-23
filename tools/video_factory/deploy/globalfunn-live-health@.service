@@ -1,0 +1,9 @@
+# Watchdog: exits non-zero (and restarts the stream unit) when status.json is stale or not on-air.
+[Unit]
+Description=GLOBAL FUNN live health check for %i
+
+[Service]
+Type=oneshot
+User=globalfunn
+WorkingDirectory=/opt/global-funn-live-news/tools/video_factory
+ExecStart=/bin/sh -c '/opt/global-funn-live-news/venv/bin/python -m factory live-health --channel %i || systemctl restart globalfunn-live@%i.service'
