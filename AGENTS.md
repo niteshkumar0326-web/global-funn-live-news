@@ -44,3 +44,6 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Multi-AI session protocol
+Start: read the newest entry in `docs/HANDOFF.md`. End: add a new entry at the top and push. GitHub is the single source of truth across Claude, Codex, Antigravity and VS Code.
