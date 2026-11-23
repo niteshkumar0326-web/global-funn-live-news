@@ -345,7 +345,7 @@ function embedUrl(item){
   if(item.src === 'archive'){
     return `https://archive.org/embed/${encodeURIComponent(item.id)}`;
   }
-  return `https://www.youtube.com/embed/${item.id}?autoplay=1&rel=0`;
+  return `https://www.youtube.com/embed/${item.id}?rel=0&playsinline=1`;
 }
 function watchUrl(item){
   if(item.src === 'archive'){
