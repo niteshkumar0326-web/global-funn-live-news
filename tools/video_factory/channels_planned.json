@@ -1,0 +1,546 @@
+{
+ "_note": "PLANNED channels only. status=planned means NOT created on YouTube. Create only after the owner logs in and approves. Trend/keyword ideas are seeds to verify with vidIQ, not verified facts.",
+ "_risk": "YouTube may treat many similar AI-voice channels as repetitious/inauthentic content. Start with a small batch of 3-5, add original value (own script, sources, human review). 1 active strike exists (expires 2027-01-04).",
+ "channels": {
+  "movies": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "MOVIES",
+   "category_id": "1",
+   "language": "hi",
+   "tagline": "फ़िल्म रिव्यू, बॉक्स ऑफिस, OTT रिलीज़",
+   "seed_keywords": [
+    "movie review hindi",
+    "box office",
+    "ott release"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "serial": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "SERIAL",
+   "category_id": "24",
+   "language": "hi",
+   "tagline": "टीवी सीरियल अपडेट और कहानी",
+   "seed_keywords": [
+    "serial update",
+    "tv serial story",
+    "trp"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "ott": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "OTT",
+   "category_id": "24",
+   "language": "hi",
+   "tagline": "वेब सीरीज़ और OTT गाइड",
+   "seed_keywords": [
+    "web series hindi",
+    "ott new release",
+    "what to watch"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "tech_reviews": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "TECH REVIEWS",
+   "category_id": "28",
+   "language": "hi",
+   "tagline": "स्मार्टफोन और गैजेट रिव्यू",
+   "seed_keywords": [
+    "phone review hindi",
+    "best phone under 20000",
+    "gadget review"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "ai_tools": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "AI TOOLS",
+   "category_id": "28",
+   "language": "hi",
+   "tagline": "फ्री AI टूल्स हिंदी में",
+   "seed_keywords": [
+    "ai tools hindi",
+    "free ai tools",
+    "chatgpt hindi"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "mobile_tips": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "MOBILE TIPS",
+   "category_id": "26",
+   "language": "hi",
+   "tagline": "मोबाइल ट्रिक्स और सेटिंग्स",
+   "seed_keywords": [
+    "android tricks hindi",
+    "phone hidden settings",
+    "whatsapp tricks"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "education": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "EDUCATION",
+   "category_id": "27",
+   "language": "hi",
+   "tagline": "पढ़ाई, एग्ज़ाम और करियर",
+   "seed_keywords": [
+    "exam tips hindi",
+    "study tips",
+    "career guidance"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "govt_jobs": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "GOVT JOBS",
+   "category_id": "27",
+   "language": "hi",
+   "tagline": "सरकारी नौकरी और रिज़ल्ट अपडेट",
+   "seed_keywords": [
+    "sarkari naukri",
+    "railway recruitment",
+    "ssc update"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "english": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "ENGLISH",
+   "category_id": "27",
+   "language": "hi",
+   "tagline": "स्पोकन इंग्लिश आसान तरीक़े से",
+   "seed_keywords": [
+    "spoken english hindi",
+    "english grammar",
+    "english speaking practice"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "gk": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "GK",
+   "category_id": "27",
+   "language": "hi",
+   "tagline": "सामान्य ज्ञान और रोचक तथ्य",
+   "seed_keywords": [
+    "gk hindi",
+    "interesting facts hindi",
+    "quiz"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "health": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "HEALTH",
+   "category_id": "26",
+   "language": "hi",
+   "tagline": "स्वास्थ्य जानकारी (सामान्य, डॉक्टर की सलाह नहीं)",
+   "seed_keywords": [
+    "health tips hindi",
+    "healthy lifestyle",
+    "sleep tips"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "fitness": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "FITNESS",
+   "category_id": "17",
+   "language": "hi",
+   "tagline": "घर पर फ़िटनेस और योग",
+   "seed_keywords": [
+    "home workout hindi",
+    "yoga for beginners",
+    "weight loss tips"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "food": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "FOOD",
+   "category_id": "26",
+   "language": "hi",
+   "tagline": "आसान रेसिपी और खाना",
+   "seed_keywords": [
+    "easy recipe hindi",
+    "street food",
+    "tiffin ideas"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "news_india": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "INDIA NEWS",
+   "category_id": "25",
+   "language": "hi",
+   "tagline": "देश की ताज़ा ख़बरें",
+   "seed_keywords": [
+    "india news hindi",
+    "breaking news",
+    "today headlines"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "world_news": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "WORLD NEWS",
+   "category_id": "25",
+   "language": "hi",
+   "tagline": "दुनिया की बड़ी ख़बरें",
+   "seed_keywords": [
+    "world news hindi",
+    "international news",
+    "global update"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "politics": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "POLITICS",
+   "category_id": "25",
+   "language": "hi",
+   "tagline": "राजनीति: तथ्य आधारित सार",
+   "seed_keywords": [
+    "rajneeti update",
+    "election news",
+    "policy explained"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "crime_alert": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "SAFETY ALERT",
+   "category_id": "25",
+   "language": "hi",
+   "tagline": "सावधान रहें: ठगी और साइबर सेफ़्टी",
+   "seed_keywords": [
+    "online fraud alert",
+    "cyber safety hindi",
+    "upi scam"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "devotional": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "DEVOTIONAL",
+   "category_id": "22",
+   "language": "hi",
+   "tagline": "भजन, आरती और धार्मिक जानकारी",
+   "seed_keywords": [
+    "bhajan hindi",
+    "aarti",
+    "ekadashi vrat"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "astrology": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "JYOTISH",
+   "category_id": "22",
+   "language": "hi",
+   "tagline": "पंचांग और राशिफल",
+   "seed_keywords": [
+    "aaj ka rashifal",
+    "panchang",
+    "festival date"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "travel": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "TRAVEL",
+   "category_id": "19",
+   "language": "hi",
+   "tagline": "भारत में घूमने की जगहें",
+   "seed_keywords": [
+    "india travel guide",
+    "budget trip",
+    "hill station"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "tour_guide": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "TOUR GUIDE",
+   "category_id": "19",
+   "language": "hi",
+   "tagline": "टूर प्लान और बजट गाइड",
+   "seed_keywords": [
+    "tour plan hindi",
+    "trip budget",
+    "irctc tour"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "finance": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "MONEY",
+   "category_id": "25",
+   "language": "hi",
+   "tagline": "पैसा, बचत और टैक्स की बेसिक जानकारी",
+   "seed_keywords": [
+    "savings tips hindi",
+    "tax basics",
+    "sip explained"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "stock_market": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "MARKET",
+   "category_id": "25",
+   "language": "hi",
+   "tagline": "शेयर बाज़ार की रोज़ की ख़बरें (सलाह नहीं)",
+   "seed_keywords": [
+    "share market news hindi",
+    "nifty today",
+    "ipo update"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "business_ideas": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "BUSINESS",
+   "category_id": "22",
+   "language": "hi",
+   "tagline": "छोटे बिज़नेस आइडिया",
+   "seed_keywords": [
+    "small business ideas hindi",
+    "startup india",
+    "side income"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "auto": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "AUTO",
+   "category_id": "2",
+   "language": "hi",
+   "tagline": "कार और बाइक की जानकारी",
+   "seed_keywords": [
+    "new bike launch",
+    "car review hindi",
+    "ev india"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "sports": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "CRICKET",
+   "category_id": "17",
+   "language": "hi",
+   "tagline": "क्रिकेट स्कोर और विश्लेषण",
+   "seed_keywords": [
+    "cricket news hindi",
+    "ipl update",
+    "match preview"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "gaming": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "GAMING",
+   "category_id": "20",
+   "language": "hi",
+   "tagline": "मोबाइल गेमिंग न्यूज़ और टिप्स",
+   "seed_keywords": [
+    "bgmi update",
+    "free fire tips",
+    "mobile games hindi"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "kids": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "KIDS",
+   "category_id": "27",
+   "language": "hi",
+   "tagline": "बच्चों की कहानियाँ और कविताएँ (मौलिक)",
+   "seed_keywords": [
+    "kids story hindi",
+    "moral stories",
+    "hindi rhymes original"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "facts": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "FACTS",
+   "category_id": "27",
+   "language": "hi",
+   "tagline": "विज्ञान और रोचक तथ्य",
+   "seed_keywords": [
+    "science facts hindi",
+    "amazing facts",
+    "space news hindi"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  },
+  "motivation": {
+   "name": "GLOBAL FUNN",
+   "sub_name": "MOTIVATION",
+   "category_id": "22",
+   "language": "hi",
+   "tagline": "प्रेरणा और अच्छी आदतें",
+   "seed_keywords": [
+    "motivation hindi",
+    "success habits",
+    "book summary hindi"
+   ],
+   "status": "planned",
+   "publish_mode": "private",
+   "ai_label_required": true,
+   "live": {
+    "enabled": false
+   }
+  }
+ }
+}
