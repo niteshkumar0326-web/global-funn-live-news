@@ -195,6 +195,14 @@ def cmd_live(a) -> int:
     return 0
 
 
+def cmd_live_health(a) -> int:
+    from .live import health
+
+    ok, msg = health(config.ROOT / "live" / a.channel / "status.json", a.max_age)
+    print(("OK  " if ok else "FAIL ") + msg)
+    return 0 if ok else 2
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="factory", description=__doc__)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -217,6 +225,8 @@ def main(argv=None) -> int:
     p = sub.add_parser("live"); p.add_argument("--channel", default="live_news"); p.add_argument("--target")
     p.add_argument("--max-age-hours", type=float, default=12.0); p.add_argument("--prepare-only", action="store_true")
     p.set_defaults(fn=cmd_live)
+    p = sub.add_parser("live-health"); p.add_argument("--channel", default="live_news")
+    p.add_argument("--max-age", type=float, default=120.0); p.set_defaults(fn=cmd_live_health)
     a = ap.parse_args(argv)
     return a.fn(a)
 

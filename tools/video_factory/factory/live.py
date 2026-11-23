@@ -19,6 +19,7 @@ import random
 import re
 import shutil
 import subprocess
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -36,6 +37,40 @@ def safe_name(stem: str) -> str:
 
 def redact(text: str, secret: str | None) -> str:
     return text.replace(secret, "****") if secret else text
+
+
+class StderrTail:
+    """Drain a pipe continuously (so ffmpeg can never block on a full stderr pipe) and keep only the tail."""
+
+    def __init__(self, stream, keep: int = 2000):
+        self.keep, self.buf = keep, ""
+        self.t = threading.Thread(target=self._pump, args=(stream,), daemon=True)
+        self.t.start()
+
+    def _pump(self, stream):
+        try:
+            for line in stream:
+                self.buf = (self.buf + line)[-self.keep:]
+        except (ValueError, OSError):
+            pass
+
+    def text(self) -> str:
+        self.t.join(timeout=2)
+        return self.buf
+
+
+def health(status_file: Path, max_age: float = 120.0, now: float | None = None) -> tuple[bool, str]:
+    """Used by the watchdog timer: is the live supervisor alive and on air?"""
+    try:
+        st = json.loads(Path(status_file).read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return False, "no status file: supervisor never started"
+    age = (now or time.time()) - float(st.get("updated", 0))
+    if age > max_age:
+        return False, f"status is {int(age)}s old: supervisor stuck or dead"
+    if st.get("state") != "on-air":
+        return False, f"state={st.get('state')} restarts={st.get('restarts')} err={st.get('last_error', '')[-200:]}"
+    return True, f"on-air restarts={st.get('restarts')} playlist={len(st.get('playlist', []))} parts"
 
 
 @dataclass
@@ -153,6 +188,14 @@ class LiveRunner:
         self._save_state()
         return out
 
+    def safe_collect(self) -> list[Path]:
+        """collect() must never take the channel off air: on any error fall back to the standby card."""
+        try:
+            return self.collect()
+        except Exception as e:  # noqa: BLE001
+            self._status("degraded", self.state.get("restarts", 0), [], f"collect failed: {str(e)[-300:]}")
+            return [self.ensure_standby()]
+
     def write_playlist(self, parts: list[Path]) -> None:
         # Relative paths on purpose: the nested self-include is parsed in ffconcat "safe" mode,
         # which rejects absolute paths.
@@ -196,21 +239,23 @@ class LiveRunner:
         secret = target.rsplit("/", 1)[-1]
         backoff, restarts = 2.0, 0
         while True:
-            parts = self.collect()
+            parts = self.safe_collect()
             self.write_playlist(parts)
             started = time.time()
             proc = subprocess.Popen(["nice", "-n", media.NICE] + self.command(target),
                                     stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            tail = StderrTail(proc.stderr) if proc.stderr else None
             last_list = started
             while proc.poll() is None:
                 sleep(poll)
                 if time.time() - last_list >= PASS_SECONDS / 2:  # refresh list so fresh items air soon
-                    self.write_playlist(self.collect())
+                    parts = self.safe_collect()
+                    self.write_playlist(parts)
                     last_list = time.time()
                 if self._stalled(started):
                     proc.kill()
                 self._status("on-air", restarts, parts)
-            err = redact((proc.stderr.read() if proc.stderr else "")[-600:], secret)
+            err = redact(tail.text()[-600:] if tail else "", secret)
             restarts += 1
             self._status("restarting", restarts, parts, err)
             backoff = 2.0 if time.time() - started > 120 else min(backoff * 2, 60.0)

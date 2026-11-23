@@ -1,4 +1,6 @@
 import json
+import sys
+import types
 from datetime import datetime, timezone
 
 import pytest
@@ -103,3 +105,51 @@ def test_real_upload_path_with_fake_service(tmp_path):
     assert svc.v.last["body"]["status"]["containsSyntheticMedia"] is True
     assert led.used(now) == uploader.UPLOAD_COST
     assert uploader.upload_one(svc, p, Ledger(tmp_path / "led.json"), now=now)["status"] == "skipped"
+
+
+def test_token_path_is_per_channel_and_inside_secrets(tmp_path, monkeypatch):
+    from factory import config
+
+    monkeypatch.setattr(config, "SECRETS", tmp_path / "secrets")
+    p = uploader.token_path("tech")
+    assert p == tmp_path / "secrets" / "tech.token.json" and p != uploader.token_path("sports")
+
+
+def test_authorize_saves_token_only_in_secrets(tmp_path, monkeypatch):
+    from factory import config
+
+    monkeypatch.setattr(config, "SECRETS", tmp_path / "secrets")
+    seen = {}
+
+    class FakeFlow:
+        @classmethod
+        def from_client_secrets_file(cls, path, scopes):
+            seen["cs"], seen["scopes"] = path, scopes
+            return cls()
+
+        def run_local_server(self, port=0):
+            return types.SimpleNamespace(to_json=lambda: '{"refresh_token": "r"}')
+
+    mod = types.ModuleType("google_auth_oauthlib.flow")
+    mod.InstalledAppFlow = FakeFlow
+    monkeypatch.setitem(sys.modules, "google_auth_oauthlib", types.ModuleType("google_auth_oauthlib"))
+    monkeypatch.setitem(sys.modules, "google_auth_oauthlib.flow", mod)
+    tp = uploader.authorize("business")
+    assert tp.read_text() == '{"refresh_token": "r"}' and tp.parent == tmp_path / "secrets"
+    assert seen["scopes"] == ["https://www.googleapis.com/auth/youtube.upload"]   # upload-only, nothing broader
+
+
+def test_build_service_without_token_explains_how_to_auth(tmp_path, monkeypatch):
+    from factory import config
+
+    monkeypatch.setattr(config, "SECRETS", tmp_path / "secrets")
+    with pytest.raises(FileNotFoundError, match="factory auth --channel sports"):
+        uploader.build_service("sports")
+
+
+def test_cmd_auth_cli(tmp_path, monkeypatch, capsys):
+    from factory import __main__ as cli
+
+    monkeypatch.setattr(uploader, "authorize", lambda ch, cs=None: tmp_path / f"{ch}.token.json")
+    assert cli.main(["auth", "--channel", "podcast"]) == 0
+    assert "podcast.token.json" in capsys.readouterr().out
