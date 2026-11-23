@@ -59,3 +59,9 @@ def test_chat_bad_shape(monkeypatch):
 def test_available_false_when_nothing_listens(monkeypatch):
     monkeypatch.setenv("GF_LLM_BASE_URL", "http://127.0.0.1:9/v1")
     assert llm.available(timeout=0.5) is False
+
+
+def test_think_blocks_are_stripped(monkeypatch):
+    monkeypatch.setenv("GF_LLM_MODEL", "qwen3:8b")
+    body = json.dumps({"choices": [{"message": {"content": "<think>soch raha hu\nlambi</think>\nनमस्ते"}}]}).encode()
+    assert llm.chat("x", opener=lambda req, timeout: FakeResp(body)) == "नमस्ते"

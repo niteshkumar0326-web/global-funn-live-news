@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import urllib.error
 import urllib.request
 
@@ -55,7 +56,9 @@ def chat(prompt: str, system: str = "", *, model: str | None = None, temperature
     try:
         with opener(req, timeout=timeout) as r:
             data = json.loads(r.read().decode("utf-8"))
-        return data["choices"][0]["message"]["content"].strip()
+        text = data["choices"][0]["message"]["content"]
+        # reasoning models (qwen3, deepseek-r1) may inline their thinking: never let it reach a script
+        return re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()
     except (urllib.error.URLError, OSError) as e:
         raise LLMError(f"LLM endpoint {s['base_url']} not reachable: {e}") from e
     except (KeyError, IndexError, ValueError) as e:
