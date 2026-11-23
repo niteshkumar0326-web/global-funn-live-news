@@ -13,6 +13,7 @@ from .hindi import srt_time
 
 TICKER_SPEED = {"short": 110, "wide": 140}
 TICKER_Y = {"short": 1450, "wide": 1000}
+CAPTION_Y = {"short": 1590, "wide": 270}   # burned-in Hindi captions (also uploaded as .srt)
 DEFAULT_OUTRO = "ताज़ा खबरों के लिए चैनल को सब्सक्राइब करें। धन्यवाद।"
 
 
@@ -82,6 +83,21 @@ def story_assets(sc: Scene, spec: dict, ch: dict, fmt: str):
     if sc.kind != "story" or sc.story is None or sc.story.get("visuals") is False:
         return None
     return visuals_mod.resolve_story(sc.story, fmt, ch, seed_text=f"{spec.get('date','')}-{sc.name}-{sc.story.get('headline','')}")
+
+
+def caption_inputs(cards, sentences, D: float, work: Path, name: str, first_idx: int, cur: str, fmt: str):
+    """ffmpeg inputs + overlay chain that burn each spoken sentence on screen. Returns (inputs, chains, last_label)."""
+    ins, chains = [], []
+    for k, (text, a, b) in enumerate(sentences):
+        p = work / f"{name}.cap{k}.png"
+        cards.caption_png(text).save(p)
+        ins += ["-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(p)]
+        end = sentences[k + 1][1] if k + 1 < len(sentences) else D + 1
+        nxt = f"cap{k}"
+        chains.append(f"[{cur}][{first_idx + k}:v]overlay=0:{CAPTION_Y[fmt]}:"
+                      f"enable='between(t,{max(0.0, a - 0.05):.3f},{max(end, b):.3f})'[{nxt}]")
+        cur = nxt
+    return ins, chains, cur
 
 
 def slideshow_filter(items: list, D: float, W: int, H: int, work: Path, scrim_idx: int):
@@ -173,20 +189,24 @@ def render_bulletin(spec: dict, fmt: str, out_root: Path | None = None, chapters
                 chains.append(f"[{cur}][{ci + 1 + k}:v]overlay=0:0:enable='between(t,{s0:.3f},{s1:.3f})'[c{k+1}]")
                 cur = f"c{k+1}"
             ti, ai_ = ci + 1 + n, ci + 2 + n
+            cap_ins, cap_chains, cur = caption_inputs(cards, seg.sentences, D, work, sc.name, ai_ + 1, cur, fmt)
+            chains += cap_chains
             chains.append(f"[{cur}][{ti}:v]{tick}[v]")
             chains.append(f"[{ai_}:a]{media.AUDIO_FILTER}{','+afade if afade else ''}[a]")
             media.ffmpeg(*ins, "-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(work / "ticker.png"),
-                         "-i", str(wav), "-filter_complex", ";".join(chains), "-map", "[v]", "-map", "[a]",
+                         "-i", str(wav), *cap_ins, "-filter_complex", ";".join(chains), "-map", "[v]", "-map", "[a]",
                          *media.VIDEO_ARGS, *media.AUDIO_ARGS, "-shortest", str(clip))
             all_credits.extend(visuals_mod.credits(items))
         else:
             card_for(cards, sc).save(png)
+            cap_ins, cap_chains, cur = caption_inputs(cards, seg.sentences, D, work, sc.name, 3, "bg", fmt)
             vf = (f"[0:v]scale={W*2}:{H*2}:flags=lanczos,zoompan=z='1+0.003*on/30':x='iw/2-(iw/zoom/2)':"
-                  f"y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30[bg];[bg][1:v]{tick}[v];"
+                  f"y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30[bg];" + "".join(c + ";" for c in cap_chains) +
+                  f"[{cur}][1:v]{tick}[v];"
                   f"[2:a]{media.AUDIO_FILTER}{','+afade if afade else ''}[a]")
             media.ffmpeg("-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(png),
                          "-loop", "1", "-framerate", "30", "-t", str(D), "-i", str(work / "ticker.png"),
-                         "-i", str(wav), "-filter_complex", vf, "-map", "[v]", "-map", "[a]",
+                         "-i", str(wav), *cap_ins, "-filter_complex", vf, "-map", "[v]", "-map", "[a]",
                          *media.VIDEO_ARGS, *media.AUDIO_ARGS, "-shortest", str(clip))
         clips.append(clip)
         title = {"intro": "शुरुआत", "outro": "समापन"}.get(sc.kind) or sc.card_args["headline"][:60]
@@ -201,10 +221,17 @@ def render_bulletin(spec: dict, fmt: str, out_root: Path | None = None, chapters
     video = out_dir / f"{slug}_{fmt}.mp4"
     media.ffmpeg("-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", "-movflags", "+faststart", str(video))
 
+    thumb = out_dir / f"{slug}_{fmt}.thumb.jpg"
+    try:  # first story card as the thumbnail (readable headline + numbers)
+        at = timeline[1]["start"] + 2.0 if len(timeline) > 1 else 1.0
+        tw, th = (1280, 720) if fmt == "wide" else (720, 1280)
+        media.ffmpeg("-ss", f"{at:.2f}", "-i", str(video), "-frames:v", "1", "-vf", f"scale={tw}:{th}", "-q:v", "3", str(thumb))
+    except Exception:
+        thumb = None
     srt = out_dir / f"{slug}_{fmt}.hi.srt"
     srt.write_text("".join(f"{i}\n{srt_time(a)} --> {srt_time(b)}\n{t}\n\n"
                            for i, (a, b, t) in enumerate(srt_lines, 1)), encoding="utf-8")
-    pkg = meta.build_package(spec, ch, fmt, video, gate, chapters, srt, credits=sorted(set(all_credits)))
+    pkg = meta.build_package(spec, ch, fmt, video, gate, chapters, srt, credits=sorted(set(all_credits)), thumbnail=thumb)
     pkg_path = out_dir / f"{slug}_{fmt}.upload.json"
     pkg_path.write_text(json.dumps(pkg, ensure_ascii=False, indent=2), encoding="utf-8")
     dur = media.duration(video)

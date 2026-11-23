@@ -80,3 +80,9 @@ def test_story_with_photos_renders_slideshow(tmp_path, monkeypatch):
     assert media.stream_signature(r["video"])[1:3] == (1080, 1920)
     pkg = json.loads(r["package"].read_text(encoding="utf-8"))
     assert "चित्र / क्लिप क्रेडिट" in pkg["description"]
+
+
+def test_hindi_hashtag_keeps_matras():
+    from factory.meta import _hashtag
+    assert _hashtag("शेयर बाज़ार") == "#शेयरबाज़ार"
+    assert _hashtag("क्रिकेट") == "#क्रिकेट"
