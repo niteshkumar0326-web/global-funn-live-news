@@ -152,6 +152,7 @@ button{font-family:inherit;}
 .badge-original{background:var(--accent-strong);}
 .badge-free{background:var(--free-tag); color:#06201c;}
 .badge-live{background:#ff1e1e; color:#fff;}
+.badge-trending{background:#2dd4bf; color:#06201c;}
 .card-play{
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   background:rgba(0,0,0,0); opacity:0; transition:opacity .15s, background .15s;
@@ -222,6 +223,7 @@ button{font-family:inherit;}
     <li><button data-filter="webseries">Web Series</button></li>
     <li><button data-filter="free">Free Movies</button></li>
     <li><button data-filter="live">Live TV</button></li>
+    <li><button data-filter="trending">Trending (Watch on App)</button></li>
     <li><button data-filter="mylist">My List</button></li>
   </ul>
   <div class="navright">
@@ -326,6 +328,19 @@ const freeContent = [
   {id:"ATripToTheMoonGeorgeMelies", src:"archive", title:"A Trip to the Moon (1902)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"Georges Méliès ki pioneering silent sci-fi short film."},
   {id:"night_of_the_living_dead", src:"archive", title:"Night of the Living Dead (1968)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"George A. Romero ki horror classic — copyright lapse hone ki wajah se ab public domain me."},
   {id:"HisGirlFriday", src:"archive", title:"His Girl Friday (1940)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"Cary Grant starrer newspaper comedy classic — Columbia Pictures, ab public domain me."},
+  {id:"thecabinetofdrcaligari", src:"archive", title:"The Cabinet of Dr. Caligari (1920)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"Robert Wiene ki German Expressionist horror classic — ek somnambulist jo future predict karta hai."},
+  {id:"metropolis-1927-english-titles", src:"archive", title:"Metropolis (1927)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"Fritz Lang ki landmark sci-fi silent epic — 2023 me US copyright khatam hone ke baad public domain me."},
+];
+
+// "Watch on" cards: real shows/movies the user asked for (TMKOC, Bigg Boss, Pushpa) that are
+// commercially licensed to SonyLIV/JioHotstar/Netflix/Prime. We never host or embed these —
+// doing so would be piracy. Instead these cards deep-link out to the show's real, official
+// platform page so the viewer can watch legally with their own subscription/login there.
+const trendingExternal = [
+  {id:"ext-tmkoc", src:"external", title:"Taarak Mehta Ka Ooltah Chashmah", cat:"trending", series:"Trending Shows", platform:"SonyLIV", tagline:"Watch on SonyLIV (official)", url:"https://www.sonyliv.com/shows/taarak-mehta-ka-ooltah-chashmah-1700000084", desc:"Gokuldham Society ki hit sitcom — Sony SAB ka show, legally sirf SonyLIV par available. Yahan se official SonyLIV page khulega."},
+  {id:"ext-biggboss", src:"external", title:"Bigg Boss", cat:"trending", series:"Trending Shows", platform:"JioHotstar", tagline:"Watch on JioHotstar (official)", url:"https://www.jiohotstar.com/search?q=bigg%20boss", desc:"Colors TV ka reality show — legally sirf JioHotstar par stream hota hai. Yahan se official JioHotstar search khulega."},
+  {id:"ext-pushpa2", src:"external", title:"Pushpa 2: The Rule", cat:"trending", series:"Trending Shows", platform:"Netflix", tagline:"Watch on Netflix (official)", url:"https://www.netflix.com/search?q=Pushpa%202", desc:"Allu Arjun starrer blockbuster — digital rights Netflix ke paas hain. Yahan se official Netflix search khulega."},
+  {id:"ext-pushpa1", src:"external", title:"Pushpa: The Rise", cat:"trending", series:"Trending Shows", platform:"Prime Video", tagline:"Watch on Prime Video (official)", url:"https://www.primevideo.com/search/ref=atv_nb_sr?phrase=Pushpa", desc:"Pushpa franchise ka pehla part — Amazon Prime Video par legally stream hota hai."},
 ];
 
 // Verified free, officially-operated 24/7 YouTube live news channels.
@@ -335,9 +350,11 @@ const liveChannels = [
   {id:"UCknLrEdhRCp1aegoMqRaCZg", src:"live", title:"DW News (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — DW News (Germany)", desc:"Deutsche Welle ka official 24/7 English news live stream — free, legal YouTube broadcast."},
   {id:"UCNye-wNBqNL5ZzHSJj3l8Bg", src:"live", title:"Al Jazeera English (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — Al Jazeera English", desc:"Al Jazeera English ka official 24/7 live news stream — free, legal YouTube broadcast."},
   {id:"UCQfwfsi5VrQ8yKZ-UWmAEFg", src:"live", title:"France 24 English (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — France 24 English", desc:"France 24 ka official 24/7 English news live stream — free, legal YouTube broadcast."},
+  {id:"UCttspZesZIDEwwpVIgoZtWQ", src:"live", title:"India TV (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — India TV", desc:"India TV ka official 24X7 Hindi news live stream — politics, entertainment, sports — free, legal YouTube broadcast."},
+  {id:"UCRWFSbif-RFENbBrSiez1DA", src:"live", title:"ABP News (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — ABP News", desc:"ABP News ka official Hindi news live stream — free, legal YouTube broadcast."},
 ];
 
-const allItems = [...originals, ...webseries, ...freeContent, ...liveChannels];
+const allItems = [...originals, ...webseries, ...freeContent, ...liveChannels, ...trendingExternal];
 
 /* ===================== STATE ===================== */
 let myList = [];
@@ -366,6 +383,17 @@ function thumbUrl(item){
     </svg>`;
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
   }
+  if(item.src === 'external'){
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270">
+      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#1a1a1a"/><stop offset="1" stop-color="#2e2e2e"/>
+      </linearGradient></defs>
+      <rect width="480" height="270" fill="url(#g2)"/>
+      <text x="240" y="130" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">${escapeHtml(item.title)}</text>
+      <text x="240" y="165" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" fill="#2dd4bf" text-anchor="middle">▶ Watch on ${escapeHtml(item.platform||'Official App')}</text>
+    </svg>`;
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
   return `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`;
 }
 function embedUrl(item){
@@ -386,8 +414,16 @@ function watchUrl(item){
   }
   return `https://www.youtube.com/watch?v=${item.id}`;
 }
-function badgeClass(item){ return item.cat === 'live' ? 'badge-live' : (item.cat === 'free' ? 'badge-free' : 'badge-original'); }
-function badgeText(item){ return item.cat === 'live' ? 'LIVE' : (item.cat === 'free' ? 'FREE' : 'ORIGINAL'); }
+function badgeClass(item){
+  if(item.cat === 'live') return 'badge-live';
+  if(item.cat === 'trending') return 'badge-trending';
+  return item.cat === 'free' ? 'badge-free' : 'badge-original';
+}
+function badgeText(item){
+  if(item.cat === 'live') return 'LIVE';
+  if(item.cat === 'trending') return 'OPEN APP';
+  return item.cat === 'free' ? 'FREE' : 'ORIGINAL';
+}
 
 function groupBySeries(items){
   const map = new Map();
@@ -481,8 +517,12 @@ function renderRows(){
   rowsContainer.querySelectorAll('.card').forEach(card=>{
     const id = card.getAttribute('data-id');
     const item = allItems.find(it=>it.id===id);
-    card.addEventListener('click', ()=>openModal(item));
-    card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(item);} });
+    const activate = ()=>{
+      if(item.src === 'external'){ window.open(item.url, '_blank', 'noopener'); }
+      else { openModal(item); }
+    };
+    card.addEventListener('click', activate);
+    card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); } });
   });
   // wire row nav scroll
   rowsContainer.querySelectorAll('.row-nav').forEach(btn=>{
