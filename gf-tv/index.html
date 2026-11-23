@@ -151,6 +151,7 @@ button{font-family:inherit;}
 }
 .badge-original{background:var(--accent-strong);}
 .badge-free{background:var(--free-tag); color:#06201c;}
+.badge-live{background:#ff1e1e; color:#fff;}
 .card-play{
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   background:rgba(0,0,0,0); opacity:0; transition:opacity .15s, background .15s;
@@ -220,6 +221,7 @@ button{font-family:inherit;}
     <li><button data-filter="original">GLOBAL FUNN Originals</button></li>
     <li><button data-filter="webseries">Web Series</button></li>
     <li><button data-filter="free">Free Movies</button></li>
+    <li><button data-filter="live">Live TV</button></li>
     <li><button data-filter="mylist">My List</button></li>
   </ul>
   <div class="navright">
@@ -326,7 +328,16 @@ const freeContent = [
   {id:"HisGirlFriday", src:"archive", title:"His Girl Friday (1940)", cat:"free", series:"Classic Public Domain", tagline:"Public Domain — Internet Archive", desc:"Cary Grant starrer newspaper comedy classic — Columbia Pictures, ab public domain me."},
 ];
 
-const allItems = [...originals, ...webseries, ...freeContent];
+// Verified free, officially-operated 24/7 YouTube live news channels.
+// Channel IDs cross-checked via official channel pages / socialcounts / vidIQ before adding.
+// No pirated cable/satellite/paid-TV feeds — only each broadcaster's own free YouTube live stream.
+const liveChannels = [
+  {id:"UCknLrEdhRCp1aegoMqRaCZg", src:"live", title:"DW News (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — DW News (Germany)", desc:"Deutsche Welle ka official 24/7 English news live stream — free, legal YouTube broadcast."},
+  {id:"UCNye-wNBqNL5ZzHSJj3l8Bg", src:"live", title:"Al Jazeera English (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — Al Jazeera English", desc:"Al Jazeera English ka official 24/7 live news stream — free, legal YouTube broadcast."},
+  {id:"UCQfwfsi5VrQ8yKZ-UWmAEFg", src:"live", title:"France 24 English (Live)", cat:"live", series:"Free Live News", tagline:"Official Free Live Stream — France 24 English", desc:"France 24 ka official 24/7 English news live stream — free, legal YouTube broadcast."},
+];
+
+const allItems = [...originals, ...webseries, ...freeContent, ...liveChannels];
 
 /* ===================== STATE ===================== */
 let myList = [];
@@ -341,11 +352,28 @@ function thumbUrl(item){
   if(item.src === 'archive'){
     return `https://archive.org/services/img/${encodeURIComponent(item.id)}`;
   }
+  if(item.src === 'live'){
+    const label = (item.title||'LIVE').replace(/\s*\(Live\)\s*$/i,'');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#1a0000"/><stop offset="1" stop-color="#3a0000"/>
+      </linearGradient></defs>
+      <rect width="480" height="270" fill="url(#g)"/>
+      <circle cx="36" cy="36" r="8" fill="#ff1e1e"/>
+      <text x="56" y="43" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" fill="#ff1e1e" letter-spacing="2">LIVE</text>
+      <text x="240" y="150" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">${escapeHtml(label)}</text>
+      <text x="240" y="185" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#cccccc" text-anchor="middle">24/7 Free YouTube Stream</text>
+    </svg>`;
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
   return `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`;
 }
 function embedUrl(item){
   if(item.src === 'archive'){
     return `https://archive.org/embed/${encodeURIComponent(item.id)}`;
+  }
+  if(item.src === 'live'){
+    return `https://www.youtube.com/embed/live_stream?channel=${item.id}&rel=0&playsinline=1`;
   }
   return `https://www.youtube.com/embed/${item.id}?rel=0&playsinline=1`;
 }
@@ -353,10 +381,13 @@ function watchUrl(item){
   if(item.src === 'archive'){
     return `https://archive.org/details/${encodeURIComponent(item.id)}`;
   }
+  if(item.src === 'live'){
+    return `https://www.youtube.com/channel/${item.id}/live`;
+  }
   return `https://www.youtube.com/watch?v=${item.id}`;
 }
-function badgeClass(item){ return item.cat === 'free' ? 'badge-free' : 'badge-original'; }
-function badgeText(item){ return item.cat === 'free' ? 'FREE' : 'ORIGINAL'; }
+function badgeClass(item){ return item.cat === 'live' ? 'badge-live' : (item.cat === 'free' ? 'badge-free' : 'badge-original'); }
+function badgeText(item){ return item.cat === 'live' ? 'LIVE' : (item.cat === 'free' ? 'FREE' : 'ORIGINAL'); }
 
 function groupBySeries(items){
   const map = new Map();
@@ -476,9 +507,11 @@ function openModal(item){
   currentModalItem = item;
   modalTitle.textContent = item.title;
   modalDesc.textContent = item.desc || '';
-  modalTags.innerHTML = item.cat === 'free'
-    ? `<span class="tag tag-free">${escapeHtml(item.tagline || 'Free Content')}</span>`
-    : `<span class="tag tag-original">GLOBAL FUNN Original</span>`;
+  modalTags.innerHTML = item.cat === 'live'
+    ? `<span class="tag tag-free">🔴 ${escapeHtml(item.tagline || 'Live Now')}</span>`
+    : (item.cat === 'free'
+      ? `<span class="tag tag-free">${escapeHtml(item.tagline || 'Free Content')}</span>`
+      : `<span class="tag tag-original">GLOBAL FUNN Original</span>`);
   modalPlayer.innerHTML = `<iframe src="${embedUrl(item)}" title="${escapeHtml(item.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
   updateListBtn();
   modalBackdrop.classList.add('open');
@@ -510,7 +543,7 @@ modalListBtn.addEventListener('click', ()=>{
 
 /* ===================== HERO ===================== */
 function setHero(item){
-  document.getElementById('heroTag').textContent = item.cat === 'free' ? (item.tagline || 'Free Content') : ('GLOBAL FUNN Original · ' + (item.series||''));
+  document.getElementById('heroTag').textContent = item.cat === 'live' ? ('🔴 ' + (item.tagline || 'Live Now')) : (item.cat === 'free' ? (item.tagline || 'Free Content') : ('GLOBAL FUNN Original · ' + (item.series||'')));
   document.getElementById('heroTitle').textContent = item.title;
   document.getElementById('heroDesc').textContent = item.desc || '';
   document.getElementById('heroPlayBtn').onclick = ()=>openModal(item);
